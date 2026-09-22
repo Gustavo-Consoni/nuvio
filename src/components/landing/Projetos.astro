@@ -1,9 +1,5 @@
 ---
 import { projetos } from "../../data/landing";
-
-/** Prefixo da subpasta na prévia do GitHub Pages; "" em domínio próprio. */
-const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-const comBase = (url: string) => (/^https?:\/\//.test(url) ? url : `${base}${url}`);
 ---
 
 <section id="projetos" class="relative py-16 lg:py-32">
@@ -17,8 +13,7 @@ const comBase = (url: string) => (/^https?:\/\//.test(url) ? url : `${base}${url
     <div class="gap-8 grid md:grid-cols-2 lg:grid-cols-3 mt-16">
       {
         projetos.map((p) => {
-          const url = comBase(p.url);
-          const shot = comBase(p.shot);
+          const { url, shot } = p;
           return (
             <article
               data-projeto

@@ -141,39 +141,10 @@ export const produtos = [
 ];
 
 /**
- * Demo "Teste agora": cada peça abre um destino. `tela` diz o que o celular
- * mostra: uma página demo (iframe) ou a tela de avaliação do Google (mock).
- */
-export const teste = [
-  {
-    id: "espera",
-    peca: "Cartão na sala de espera",
-    abre: "Cardápio de cortes",
-    notificacao: "Toque para abrir o cardápio",
-    tela: "/demos/barbearia/cortes/",
-  },
-  {
-    id: "caixa",
-    peca: "Plaquinha no caixa",
-    abre: "Avaliação no Google",
-    notificacao: "Toque para avaliar no Google",
-    tela: "google",
-  },
-  {
-    id: "bio",
-    peca: "Cartão na carteira",
-    abre: "Linktree customizado",
-    notificacao: "Toque para abrir os links",
-    tela: "/demos/barbearia/links/",
-  },
-];
-
-/**
  * Exemplos (portfólio).
  *
  * `url`: o que abre no visualizador (e o link para quem está sem JS).
- *        Página local: caminho a partir da raiz, sem o `base` (ele é somado no
- *        componente). URL externa: começa com http.
+ *        Página local: caminho a partir da raiz. URL externa: começa com http.
  * `shot`: print em `public/images/projetos/`.
  * `resultado.destaque: false` pinta o rótulo de âmbar (demonstrativo);
  *        `true` pinta de verde (resultado real de cliente).
@@ -253,66 +224,6 @@ export const projetos = [
     url: "/demos/eventos/index.html",
     shot: "/images/projetos/eventos.webp",
     resultado: { texto: "Projeto demonstrativo", detalhe: "Navegável", destaque: false },
-  },
-];
-
-/**
- * Depoimentos: a seção só aparece com `mostrarDepoimentos = true`.
- * Os textos abaixo são inventados (vieram do template). Troque por
- * depoimentos reais de clientes antes de ligar.
- */
-export const mostrarDepoimentos = false;
-
-export const depoimentos = [
-  {
-    texto: "Em três semanas o site já tinha pago o próprio investimento. O time entendeu o meu público melhor do que eu conseguia explicar.",
-    nome: "Juliana Mendes",
-    cargo: "Sócia · Bellafit Studio",
-  },
-  {
-    texto: "O site antigo demorava uma eternidade para abrir e a gente perdia gente no meio do caminho. Depois da reconstrução, os contatos dobraram.",
-    nome: "André Ferreira",
-    cargo: "CEO · Vitali Suplementos",
-  },
-  {
-    texto: "Antes o paciente ligava para perguntar o que já devia estar no site. Agora ele chega sabendo. Prazo cumprido à risca e suporte que responde de verdade.",
-    nome: "Renata Castro",
-    cargo: "Diretora · Odonto Prime",
-  },
-  {
-    texto: "Eu já tinha sido queimado por duas agências antes. Aqui foi a primeira vez que o entregue bateu com o prometido.",
-    nome: "Lucas Siqueira",
-    cargo: "Fundador · Craft & Co.",
-  },
-  {
-    texto: "Precisava de um site que passasse seriedade sem ficar datado em dois anos. Recebi a primeira versão em cinco dias e mudei duas frases. Só isso.",
-    nome: "Marina Villela",
-    cargo: "Sócia · Lumen Advocacia",
-  },
-  {
-    texto: "Eu vendia só pelo Instagram e vivia repetindo preço no direct. Hoje mando o link e a pessoa chega decidida.",
-    nome: "Bruno Tavares",
-    cargo: "Fundador · Studio Raiz",
-  },
-  {
-    texto: "O cliente acha horário, endereço e valor sem falar com ninguém. Isso sozinho cortou metade das ligações que chegavam na recepção.",
-    nome: "Camila Reis",
-    cargo: "Proprietária · Espaço Aurora",
-  },
-  {
-    texto: "Cardápio em PDF no celular era um castigo. Virou uma página que abre na hora, e hoje a maioria das reservas entra pelo site.",
-    nome: "Paulo Miranda",
-    cargo: "Chef · Cantina do Porto",
-  },
-  {
-    texto: "Pedi três ajustes depois de entregue e não vi cara feia em nenhum. Isso pesa mais do que qualquer proposta bonita.",
-    nome: "Fernanda Duarte",
-    cargo: "Gerente · Clínica Vera Luz",
-  },
-  {
-    texto: "A gente só aparecia para quem já sabia o nome da loja. Dois meses depois começou a ligar gente que nunca tinha ouvido falar da gente.",
-    nome: "Ricardo Sampaio",
-    cargo: "Sócio · Marcenaria Norte",
   },
 ];
 

@@ -4,7 +4,7 @@
  * páginas contarem a mesma história numa visita de venda.
  */
 
-/** Fotos do demo estático, reaproveitadas. Caminho sem o `base`. */
+/** Fotos do demo estático, reaproveitadas. */
 const foto = (arquivo: string) => `/demos/barbearia/static/images/${arquivo}`;
 
 export const blade = {

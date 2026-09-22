@@ -1,9 +1,9 @@
-# Template base para sites de clientes
+# Site da Nuvio Studio
 
-Projeto Astro usado como ponto de partida para sites de clientes. Ao criar
-código novo, prefira padrões reutilizáveis e parametrizáveis (props com
-defaults, componentes genéricos) em vez de valores fixos de um cliente
-específico.
+Site da Nuvio Studio, no ar em `nuviostudio.com.br`. Foi criado a partir do
+template Astro próprio, mas não é o template: valores fixos da Nuvio são
+esperados aqui. Generalize só onde há reuso real (ex.: `Landing.astro`, que
+serve a home e as páginas de segmento).
 
 ## Stack
 
@@ -34,8 +34,7 @@ resolvendo para a mesma versão (deduped). Deixe o Astro controlar isso.
 
 ```sh
 npm run dev            # servidor local em :4321
-npm run build          # build de ENTREGA (domínio do cliente)
-npm run build:preview  # build de PRÉVIA (GitHub Pages, com noindex)
+npm run build          # build de produção (o mesmo que o deploy roda)
 npm run preview        # pré-visualiza o build local
 npm run check          # type-check (sai com código 1 se houver erro)
 ```
@@ -85,57 +84,35 @@ Código que precisa rodar a cada navegação deve escutar `astro:page-load`, nã
 Na v7 o componente chama-se `ClientRouter`. `ViewTransitions` foi removido —
 tutoriais antigos que o usam não funcionam.
 
-**Tailwind v4.** Configurado pelo plugin Vite em `astro.config.mjs`. Não existe
+**Tailwind v4.** Configurado pelo plugin Vite em `astro.config.ts`. Não existe
 `tailwind.config.js` nem PostCSS — isso é intencional. Todo o Tailwind entra
 por `@import "tailwindcss"` em `src/styles/global.css`; customização de tema se
 faz com `@theme` nesse mesmo arquivo.
 
 **TypeScript.** `tsconfig.json` estende `astro/tsconfigs/strict`. O
 `astro build` **não** verifica tipos por si (o esbuild apenas remove as
-anotações), por isso os scripts `build` e `build:preview` rodam `astro check`
-antes — erro de tipo barra o build.
+anotações), por isso o script `build` roda `astro check` antes — erro de tipo
+barra o build e, com ele, o deploy.
 
-## Configuração por cliente
+## Configuração e deploy
 
-`src/config.ts` é o **único arquivo a editar** ao iniciar um cliente novo: nome
-da marca, descrição padrão, locale, imagem OG, domínio final e dados da prévia.
-O `astro.config.ts` importa dali — não duplique esses valores.
+`src/config.ts` concentra os dados do site: nome, descrição padrão, locale,
+imagem OG, domínio e rotas `noindex`. O `astro.config.ts` importa dali — não
+duplique esses valores.
 
-Além dele, trocar `public/favicon.svg`, `public/favicon.ico` e
-`public/og-image.png`.
+**Deploy.** Push na `main` dispara `.github/workflows/deploy.yml`, que roda
+`npm run build` e publica no GitHub Pages, servido em `nuviostudio.com.br`
+(o domínio vem de `public/CNAME`; sem ele um deploy pode derrubar o domínio).
 
-### Dois modos de deploy
-
-| | `npm run build` | `npm run build:preview` |
-| --- | --- | --- |
-| Destino | domínio do cliente | `github.io/<repo>/` |
-| `base` | nenhum | subpasta do repositório |
-| Indexação | sitemap + `Allow: /` | `<meta robots="noindex">` |
-| Sitemap | gerado | desligado |
-
-A prévia é marcada como `noindex` de propósito: indexada, ela viraria conteúdo
-duplicado concorrendo com o site final do cliente.
-
-Quem garante isso é a **meta tag `robots`** no `Base.astro`. O `robots.txt` da
-prévia (`Disallow: /`) é apenas reforço e na prática é decorativo: ele é servido
-em `github.io/<repo>/robots.txt`, e buscadores só leem o da raiz do domínio, que
-pertence ao perfil e não ao repositório.
-
-**Caminhos com `base`.** O Astro prefixa sozinho apenas os assets empacotados
-(CSS/JS). Arquivos de `public/` e links internos escritos à mão **não** são
-prefixados e quebram na prévia. Use sempre o prefixo:
-
-```astro
-const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-<img src={`${base}/imagem.png`} />
-<a href={`${base}/contato`}>Contato</a>
-```
+O site fica na **raiz do domínio**: links e arquivos de `public/` usam caminho
+absoluto a partir de `/`, sem prefixo de `base`. Não existe build de prévia em
+subpasta: um `base` como `/nuvio` prefixa o CSS e ele dá 404 no domínio.
 
 ## Estrutura
 
 ```
 src/
-├── config.ts                 # dados do cliente + semIndice() — editar a cada projeto
+├── config.ts                 # dados do site (nome, domínio, noindex) + semIndice()
 ├── data/landing.ts           # preços, produtos, textos (conteudoPadrao)
 ├── data/nichos.ts            # texto do topo por segmento (barbearia...)
 ├── data/demo-barbearia.ts    # serviços e dados da Blade & Co. (fictícia)
@@ -144,7 +121,7 @@ src/
 ├── layouts/DemoBlade.astro   # visual das páginas demo da barbearia
 ├── layouts/DemoOlivia.astro  # visual das páginas demo do restaurante
 ├── components/landing/       # uma seção por arquivo + Landing.astro que monta
-├── components/icons/         # SVGs reaproveitados (check, estrelas, WhatsApp)
+├── components/icons/         # SVGs reaproveitados (check, seta, WhatsApp)
 ├── scripts/pagina.ts         # aCadaPagina(): ciclo de vida com o ClientRouter
 ├── pages/index.astro         # landing completa
 ├── pages/barbearia.astro     # landing com os textos do segmento barbearia
@@ -182,14 +159,12 @@ no site troca de destino à distância.
 um segmento novo, copie o bloco da barbearia em `nichos.ts` e crie a página
 igual a `barbearia.astro`.
 
-**"Teste agora"** (`TesteCartao.astro`, o que está no ar): animação em loop
+**"Teste agora"** (`TesteCartao.astro`): animação em loop
 só com o cartão (encosta, notificação, dedo toca, cardápio abre e rola). Não
 tem botão nem recebe clique; roda só com o celular na tela e a aba à vista, e
 com `prefers-reduced-motion` mostra o cardápio aberto parado. Estado em
 `data-estado` na raiz, visual por `group-data-[estado=...]`. A demo abre num
-iframe desenhado em 390px e encolhido para a tela do celular. A versão antiga,
-em que o visitante escolhe a peça (`Teste.astro`), segue disponível pela prop
-`teste="escolha"` do `Landing.astro`.
+iframe desenhado em 390px e encolhido para a tela do celular.
 
 **`noindexPaths` aceita prefixo** (`/demos/*`); use sempre `semIndice()` do
 `config.ts`, que é o que o Base e o sitemap consultam.
@@ -200,8 +175,8 @@ componente.
 
 **Conteúdo mora em `src/data/landing.ts`, não em JavaScript de cliente.** Os
 arrays são renderizados no build e viram HTML estático, então a página é
-legível e indexável sem JS. Para adicionar um depoimento, projeto ou pergunta,
-acrescente um item no array: dots do carrossel, links e contagens se ajustam.
+legível e indexável sem JS. Para adicionar um projeto ou pergunta, acrescente
+um item no array: links e contagens se ajustam.
 
 **Scripts de componente usam `aCadaPagina()`** (`src/scripts/pagina.ts`), que
 roda no `astro:page-load` e entrega um `AbortSignal` abortado antes da próxima
@@ -210,11 +185,11 @@ limpe timers no `abort`, senão eles acumulam a cada navegação.
 
 **A classe `.js` no `<html>`.** Um script inline (em `Landing.astro`) põe a
 classe e a remove se `data-pronto` não aparecer em 3s. O CSS só esconde algo
-(menu mobile, slides inativos, preço que não vale, `.reveal`) sob `.js`. Sem
+(menu mobile, `.reveal`, itens fora do filtro das demos) sob `.js`. Sem
 isso, uma falha de JS deixaria conteúdo invisível.
 
 **Estado via atributo, visual via Tailwind.** Os scripts só ligam atributos
-(`data-rolou`, `data-aberto`, `aria-pressed`, `aria-current`) e o estilo sai de
+(`data-rolou`, `data-aberto`, `aria-pressed`) e o estilo sai de
 variantes (`data-rolou:py-3`, `aria-pressed:bg-brand-600`). Quando o elemento
 precisa sumir, o `display` fica no `global.css`, nunca como utilitária no
 HTML: utilitária vence `@layer components` no v4.
@@ -262,18 +237,16 @@ nem versionar.
 - **Sem `apple-touch-icon.png`** (180×180) em `public/`. A tag só deve ser
   adicionada ao `Base.astro` depois que o arquivo existir — apontar para um
   arquivo ausente é pior que não ter a tag.
-- **Projeto não é um repositório git.** O workflow em `.github/workflows/` só
-  roda depois de `git init` + remote no GitHub.
 - **Formulário de contato só simula o envio** (bloqueante). O `submit` em
   `Contato.astro` precisa apontar para Formspree, Web3Forms ou um webhook; o
   `fetch` comentado mostra onde.
 - **Dados de exemplo da landing**: WhatsApp `5511999999999`, redes sociais com
-  `href="#"`, domínio `nuviostudio.com.br` (suposto) em `src/config.ts`.
-- **Depoimentos desligados** (`mostrarDepoimentos = false`): os textos são
-  inventados. Ligar só com depoimentos reais.
+  `href="#"`.
+- **Sem depoimentos.** A seção (carrossel em `Depoimentos.astro`) foi removida
+  porque os textos eram inventados. Com depoimentos reais, recupere do git:
+  `git show e444012:src/components/landing/Depoimentos.astro` (e o array
+  `depoimentos` em `src/data/landing.ts` do mesmo commit).
 - **Prints do portfólio** eram gerados por `scripts/shots.mjs` no projeto
   original (puppeteer). Não foi portado; os `.webp` foram copiados.
 - **Sem JSON-LD.** Dados estruturados (`LocalBusiness`, `Organization`) rendem
-  rich snippets e dependem do ramo do cliente. Adicionar via `<slot name="head" />`.
-- **`astro check` não roda no build.** O script `build` é só `astro build`.
-  Para barrar erro de tipo no deploy: `"build": "astro check && astro build"`.
+  rich snippets. Adicionar via `<slot name="head" />`.

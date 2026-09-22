@@ -3,7 +3,7 @@
  * As fotos são as do demo estático em public/demos/restaurante, reaproveitadas.
  */
 
-/** Caminho sem o `base`. */
+/** Fotos do demo estático, reaproveitadas. */
 const foto = (arquivo: string) => `/demos/restaurante/static/images/${arquivo}`;
 
 export const olivia = {

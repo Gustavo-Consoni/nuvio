@@ -17,7 +17,6 @@ interface Props {
 }
 const { title, description } = Astro.props;
 
-const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
 <Base title={title} description={description} marca={blade.nome}>
@@ -30,7 +29,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
     <p class="px-4 py-8 border-white/5 border-t text-[11px] text-white/35 text-center">
       Projeto demonstrativo feito pela{" "}
-      <a href={`${base}/`} target="_top" class="text-blade-gold/80 hover:text-blade-gold underline underline-offset-2">{site.name}</a>.
+      <a href="/" target="_top" class="text-blade-gold/80 hover:text-blade-gold underline underline-offset-2">{site.name}</a>.
       A Blade & Co. é uma barbearia fictícia.
     </p>
   </div>

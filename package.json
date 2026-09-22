@@ -10,7 +10,6 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "build:preview": "PUBLIC_PREVIEW=true astro check && PUBLIC_PREVIEW=true astro build",
     "check": "astro check"
   },
   "dependencies": {

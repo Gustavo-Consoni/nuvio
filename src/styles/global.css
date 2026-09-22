@@ -284,9 +284,6 @@
   }
   .js .menu-mobile:not([data-aberto]) { grid-template-rows: 0fr; }
 
-  /* Carrossel de depoimentos: só o slide ativo aparece. */
-  .js .slide:not([data-ativo]) { display: none; }
-
   /* Catálogos das demos: item fora do filtro escolhido some. */
   .js [data-servico][data-fora] { display: none; }
 

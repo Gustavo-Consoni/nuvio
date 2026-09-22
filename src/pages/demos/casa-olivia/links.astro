@@ -5,11 +5,10 @@
 import DemoOlivia from "../../../layouts/DemoOlivia.astro";
 import { olivia, whatsapp } from "../../../data/demo-restaurante";
 
-const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 const links = [
   { rotulo: "Reservar mesa", detalhe: "Pelo WhatsApp, sem fila na porta", href: whatsapp("Olá! Quero reservar uma mesa na Casa Olívia."), externo: true, destaque: true },
-  { rotulo: "Cardápio", detalhe: "Pratos com foto e preço", href: `${base}/demos/casa-olivia/cardapio/`, externo: false, destaque: false },
+  { rotulo: "Cardápio", detalhe: "Pratos com foto e preço", href: "/demos/casa-olivia/cardapio/", externo: false, destaque: false },
   { rotulo: "Pedir para levar", detalhe: "Retire no balcão ou peça entrega", href: whatsapp("Olá! Quero fazer um pedido para levar."), externo: true, destaque: false },
   { rotulo: "Avalie a gente no Google", detalhe: "Leva 30 segundos", href: "#", externo: true, destaque: false },
   { rotulo: "Instagram", detalhe: "O prato do dia sai lá primeiro", href: "#", externo: true, destaque: false },
@@ -20,7 +19,7 @@ const links = [
 <DemoOlivia title="Links" description="Reserve, veja o cardápio, peça para levar e encontre a Casa Olívia.">
   <main class="flex flex-col items-center mx-auto px-4 pt-16 pb-8 max-w-md">
     <img
-      src={`${base}${olivia.capa}`}
+      src={olivia.capa}
       alt="Prato da Casa Olívia"
       width="112"
       height="112"

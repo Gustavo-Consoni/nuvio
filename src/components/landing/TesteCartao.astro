@@ -14,11 +14,10 @@
  * `prefers-reduced-motion` não há animação: o celular fica com o cardápio
  * aberto, parado. Sem JavaScript, fica a tela bloqueada e a lista de passos.
  */
-import { teste } from "../../data/landing";
-
-const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-const cartao = teste.find((t) => t.id === "espera")!;
-const link = `${base}${cartao.tela}`;
+/** Página demo que o celular abre ao encostar no cartão, e o texto da
+ *  notificação que aparece antes. */
+const link = "/demos/barbearia/cortes/";
+const notificacao = "Toque para abrir o cardápio";
 
 const ondas = "M8.5 8.5a5 5 0 0 1 0 7M12 5.5a9.5 9.5 0 0 1 0 13M15.5 2.5a14 14 0 0 1 0 19";
 
@@ -95,7 +94,7 @@ const passos = [
               </span>
               <span class="min-w-0">
                 <span class="block font-semibold text-[11px] text-white">Blade & Co.</span>
-                <span class="block text-[11px] text-slate-300 truncate">{cartao.notificacao}</span>
+                <span class="block text-[11px] text-slate-300 truncate">{notificacao}</span>
               </span>
             </span>
           </div>

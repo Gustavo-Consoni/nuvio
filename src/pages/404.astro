@@ -1,7 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
 
-const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
 <Base title="Página não encontrada" noindex>
@@ -11,7 +10,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     <p class="text-slate-400 text-lg">
       O endereço que você acessou não existe ou foi movido.
     </p>
-    <a href={`${base}/`} class="self-start mt-4 btn-primary">
+    <a href="/" class="self-start mt-4 btn-primary">
       Voltar para a página inicial
     </a>
   </main>

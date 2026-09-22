@@ -49,7 +49,7 @@ export const site = {
   ] as { name: "Instagram" | "TikTok"; href: string }[],
 
   /**
-   * Rotas que não devem ser indexadas (ex.: "/obrigado").
+   * Rotas que não devem ser indexadas.
    * Fonte única: o Base.astro marca `noindex` e o sitemap exclui a rota,
    * evitando o sinal contraditório de "noindex na página, indexe no sitemap".
    *
@@ -57,21 +57,14 @@ export const site = {
    *
    * `/demos/*` são negócios fictícios.
    */
-  noindexPaths: ["/obrigado", "/demos/*"] as string[],
+  noindexPaths: ["/demos/*"] as string[],
 
-  /** Domínio final do cliente. Usado em `npm run build`. */
+  /** Domínio do site (canonical, Open Graph, sitemap e robots.txt). */
   url: "https://nuviostudio.com.br",
-
-  /** Prévia no GitHub Pages. Usada em `npm run build:preview`. */
-  preview: {
-    url: "https://gustavo-consoni.github.io",
-    /** Nome do repositório, servido como subpasta. */
-    base: "/nuvio",
-  },
 } as const;
 
 /**
- * Diz se a rota (sem `base` e sem barra final, ex.: "/obrigado") está em
+ * Diz se a rota (sem barra final, ex.: "/demos/barbearia/cortes") está em
  * `site.noindexPaths`. Usada pelo Base.astro e pelo filtro do sitemap.
  */
 export function semIndice(rota: string) {

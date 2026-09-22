@@ -16,7 +16,6 @@ interface Props {
 }
 const { title, description } = Astro.props;
 
-const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
 <Base title={title} description={description} marca={olivia.nome}>
@@ -29,7 +28,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
     <p class="px-4 py-8 border-olivia-tinta/10 border-t text-[11px] text-olivia-tinta/50 text-center">
       Projeto demonstrativo feito pela{" "}
-      <a href={`${base}/`} target="_top" class="text-olivia-terra hover:text-olivia-tinta underline underline-offset-2">{site.name}</a>.
+      <a href="/" target="_top" class="text-olivia-terra hover:text-olivia-tinta underline underline-offset-2">{site.name}</a>.
       A Casa Olívia é um restaurante fictício.
     </p>
   </div>
