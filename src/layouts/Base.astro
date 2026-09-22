@@ -1,0 +1,109 @@
+---
+import { ClientRouter } from "astro:transitions";
+
+import { semIndice, site } from "../config";
+import "../styles/global.css";
+
+interface Props {
+  /** Título da página. Vira "Título | Nome da Marca". Omita na home. */
+  title?: string;
+  /** Descrição para SEO. Usa a padrão do config quando omitida. */
+  description?: string;
+  /** Imagem de compartilhamento, dentro de `public/`. */
+  ogImage?: string;
+  /** Marca a página como noindex (obrigado, rascunhos, área restrita). */
+  noindex?: boolean;
+  lang?: string;
+  /** Marca no título e no og:site_name. Padrão: `site.name`. Útil em demos
+   *  de outro negócio hospedadas aqui. */
+  marca?: string;
+}
+
+const {
+  title,
+  description = site.description,
+  ogImage = site.ogImage,
+  noindex = false,
+  lang = site.locale,
+  marca = site.name,
+} = Astro.props;
+
+/** Prefixo da subpasta quando publicado no GitHub Pages; "" em domínio próprio. */
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+/** A prévia no GitHub Pages nunca deve ser indexada: viraria conteúdo
+ *  duplicado concorrendo com o site final do cliente. */
+const isPreview = import.meta.env.PUBLIC_PREVIEW === "true";
+
+/** Rota sem barra final, para casar com `site.noindexPaths`. */
+const route = Astro.url.pathname.replace(base, "").replace(/\/$/, "") || "/";
+
+const blockIndex = noindex || isPreview || semIndice(route);
+
+const pageTitle = title ? `${title} | ${marca}` : marca;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = new URL(`${base}${ogImage}`, Astro.site);
+---
+
+<!doctype html>
+<html class="antialiased scroll-smooth" lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content={site.themeColor} />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+    <link rel="icon" type="image/x-icon" href={`${base}/favicon.ico`} />
+    <link rel="canonical" href={canonical} />
+
+    {
+      site.googleFonts && (
+        <>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+          <link rel="stylesheet" href={site.googleFonts} />
+        </>
+      )
+    }
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    {blockIndex && <meta name="robots" content="noindex, nofollow" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={marca} />
+    <meta property="og:locale" content={lang.replace("-", "_")} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={site.ogImageAlt} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={site.ogImageAlt} />
+
+    <slot name="head" />
+
+    <ClientRouter />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  html {
+    /* o iOS não aumenta o texto sozinho ao girar a tela */
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    /* 16px a partir de 400px de tela; abaixo disso encolhe junto (mínimo 12px).
+       Como o Tailwind v4 mede tudo em rem, espaçamentos e textos acompanham. */
+    font-size: clamp(12px, 4vw, 16px);
+  }
+</style>

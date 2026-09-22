@@ -1,0 +1,64 @@
+---
+/**
+ * Demo: página de links da barbearia, no lugar de um linktree genérico.
+ */
+import DemoBlade from "../../../layouts/DemoBlade.astro";
+import { blade, whatsapp } from "../../../data/demo-barbearia";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const links = [
+  { rotulo: "Agendar horário", detalhe: "Pelo WhatsApp, em 1 minuto", href: whatsapp("Olá! Quero agendar um horário na Blade & Co."), externo: true, destaque: true },
+  { rotulo: "Cortes e preços", detalhe: "Fotos, valores e duração", href: `${base}/demos/barbearia/cortes/`, externo: false, destaque: false },
+  { rotulo: "Avalie a gente no Google", detalhe: "Leva 30 segundos", href: "#", externo: true, destaque: false },
+  { rotulo: "Instagram", detalhe: "Cortes da semana", href: "#", externo: true, destaque: false },
+  { rotulo: "Como chegar", detalhe: blade.endereco, href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(blade.endereco)}`, externo: true, destaque: false },
+  { rotulo: "Conheça a barbearia", detalhe: "Nossa história e os barbeiros", href: `${base}/demos/barbearia/index.html`, externo: false, destaque: false },
+];
+---
+
+<DemoBlade title="Links" description="Agende, veja cortes e preços, avalie e encontre a Blade & Co.">
+  <main class="flex flex-col items-center mx-auto px-4 pt-16 pb-8 max-w-md">
+    <img
+      src={`${base}${blade.capa}`}
+      alt="Interior da Blade & Co."
+      width="112"
+      height="112"
+      class="shadow-2xl rounded-full ring-2 ring-blade-gold/60 ring-offset-4 ring-offset-blade-void w-28 h-28 object-cover"
+    />
+    <h1 class="mt-8 font-bebas text-5xl tracking-[0.15em]">
+      BLADE <em class="font-playfair text-blade-gold normal-case">&</em> CO.
+    </h1>
+    <p class="mt-1 text-white/60 text-sm">{blade.bio}</p>
+
+    <ul class="space-y-4 mt-8 w-full">
+      {
+        links.map((l) => (
+          <li>
+            <a
+              href={l.href}
+              target={l.externo ? "_blank" : undefined}
+              rel={l.externo ? "noopener" : undefined}
+              class:list={[
+                "group flex justify-between items-center gap-4 px-4 py-4 border transition duration-300",
+                l.destaque
+                  ? "bg-blade-gold border-blade-gold text-blade-void hover:bg-blade-cream hover:border-blade-cream"
+                  : "bg-blade-surface border-white/8 hover:border-blade-gold/60",
+              ]}>
+              <span class="min-w-0">
+                <span class="block font-semibold text-sm">{l.rotulo}</span>
+                <span class:list={["block text-xs truncate", l.destaque ? "text-blade-void/70" : "text-white/45"]}>{l.detalhe}</span>
+              </span>
+              <span aria-hidden="true" class="transition-transform group-hover:translate-x-1 duration-300 shrink-0">→</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="mt-8 text-center">
+      <p class="text-[10px] text-blade-gold uppercase tracking-[0.3em]">Horários</p>
+      {blade.horarios.map((h) => <p class="mt-2 text-white/60 text-sm">{h}</p>)}
+    </div>
+  </main>
+</DemoBlade>

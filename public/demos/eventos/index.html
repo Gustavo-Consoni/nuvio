@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Casa Vértice | Direção de eventos de alto padrão</title>
+  <meta name="description" content="Ateliê de produção completa para celebrações privadas, lançamentos de marca e encontros executivos. Do briefing à despedida do último convidado." />
+  <meta name="theme-color" content="#f6f0e8" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Casa Vértice | Direção de eventos de alto padrão" />
+  <meta property="og:description" content="Do briefing à despedida do último convidado. Celebrações privadas, marca e encontros executivos." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script>
+    document.documentElement.classList.add('js');
+    setTimeout(function () { if (!window.Alpine) document.documentElement.classList.remove('js'); }, 3000);
+  </script>
+
+  <link rel="stylesheet" href="./static/output.css" />
+  <!-- Fonte base fluida, igual à do site principal (html em src/styles/global.css). -->
+  <style>
+    html {
+      text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
+      font-size: clamp(12px, 4vw, 16px);
+    }
+  </style>
+  <script defer src="./app.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body x-data="vertice()">
+
+  <!-- a folha branca central, com respiro do papel em volta -->
+  <main class="relative mx-auto my-0 min-h-screen w-full max-w-[1480px] bg-white sombra-folha md:my-8">
+
+    <!-- ================= BARRA DE TOPO ================= -->
+    <div class="hidden border-b border-linha bg-creme lg:block">
+      <div class="flex h-10 items-center justify-between gap-6 px-6 text-[10px] uppercase tracking-[0.22em] text-mudo lg:px-12">
+        <div class="flex items-center gap-6">
+          <span class="flex items-center gap-2"><span class="h-1.5 w-1.5 bg-ouro"></span>São Paulo &middot; Rio &middot; Trancoso</span>
+          <span>Celebrações privadas &middot; marca &middot; encontros executivos</span>
+        </div>
+        <div class="flex items-center gap-6">
+          <span>Agenda de 2027 já aberta</span>
+          <a href="#contato" class="text-ouro transition duration-300 hover:text-ouro-esc">Consultar disponibilidade</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= HEADER ================= -->
+    <header class="sticky top-0 z-50 border-b border-linha bg-folha/90 backdrop-blur-xl">
+      <div class="flex h-20 items-center justify-between gap-6 px-6 lg:px-12">
+        <a href="#topo" class="flex items-center gap-3 border border-linha bg-folha px-4 py-2.5">
+          <span class="grid h-8 w-8 place-items-center bg-ouro text-white">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l8 15H4l8-15z"/></svg>
+          </span>
+          <span class="text-xs uppercase tracking-[0.24em] text-tinta">Casa Vértice</span>
+        </a>
+
+        <nav class="hidden items-center gap-3 lg:flex">
+          <a href="#capacidades" class="link-pilula">Capacidades <span class="text-ouro">↗</span></a>
+          <a href="#producoes" class="link-pilula">Produções <span class="text-ouro">↗</span></a>
+          <a href="#metodo" class="link-pilula">Método <span class="text-ouro">↗</span></a>
+          <a href="#notas" class="link-pilula">Notas <span class="text-ouro">↗</span></a>
+        </nav>
+
+        <a href="#contato" class="btn-ouro hidden lg:inline-flex">
+          Iniciar um briefing privado
+          <span class="btn-ponta">
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M4 11h16M5 21h14a1 1 0 001-1V7a1 1 0 00-1-1H5a1 1 0 00-1 1v13a1 1 0 001 1z"/></svg>
+          </span>
+        </a>
+
+        <button @click="menu = !menu" :aria-expanded="menu" aria-label="Abrir menu"
+                class="grid h-10 w-10 cursor-pointer place-items-center border border-linha text-tinta lg:hidden">
+          <svg x-show="!menu" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg x-show="menu" x-cloak class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+
+      <div x-show="menu" x-collapse x-cloak class="lg:hidden">
+        <div class="space-y-1 border-t border-linha px-6 py-5">
+          <a href="#capacidades" @click="menu = false" class="block py-2.5 text-xs uppercase tracking-[0.2em] text-mudo hover:text-ouro">Capacidades</a>
+          <a href="#producoes"   @click="menu = false" class="block py-2.5 text-xs uppercase tracking-[0.2em] text-mudo hover:text-ouro">Produções</a>
+          <a href="#metodo"      @click="menu = false" class="block py-2.5 text-xs uppercase tracking-[0.2em] text-mudo hover:text-ouro">Método</a>
+          <a href="#notas"       @click="menu = false" class="block py-2.5 text-xs uppercase tracking-[0.2em] text-mudo hover:text-ouro">Notas</a>
+          <a href="#contato"     @click="menu = false" class="btn-ouro mt-3 !pr-1">Iniciar um briefing privado<span class="btn-ponta">→</span></a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ================= HERO ================= -->
+    <section id="topo" class="relative overflow-hidden px-6 py-12 lg:px-12 lg:py-20">
+      <div class="grid gap-12 lg:grid-cols-[1fr_auto] lg:gap-10">
+
+        <div class="max-w-3xl">
+          <p class="flex items-center gap-3 text-[10px] uppercase tracking-[0.24em] text-mudo">
+            <span class="h-2 w-2 bg-ouro"></span>Direção de eventos de alto padrão
+          </p>
+
+          <h1 class="mt-8 text-[2.2rem] font-extralight uppercase leading-[1.05] tracking-[-0.01em] text-tinta sm:text-5xl lg:text-[4.2rem]">
+            Eventos curados<br />para marcas, líderes<br />e círculos privados
+          </h1>
+
+          <div class="mt-10 flex items-center gap-5">
+            <span class="grid h-14 w-14 shrink-0 place-items-center bg-ouro/15 text-ouro">
+              <svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l8 15H4l8-15zM8.5 18l3.5-6.5L15.5 18"/></svg>
+            </span>
+            <p class="text-xs uppercase tracking-[0.24em] text-ouro">Ateliê de produção completa</p>
+          </div>
+
+          <p class="mt-10 max-w-lg text-[15px] leading-relaxed text-mudo">
+            Planejamos e produzimos encontros com a precisão de uma central de comando
+            e o cuidado de uma casa particular. O convidado só percebe o resultado.
+          </p>
+
+          <div class="mt-10 flex flex-wrap items-center gap-8">
+            <a href="#contato" class="btn-escuro">
+              Planejar o momento
+              <span class="btn-ponta">
+                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+              </span>
+            </a>
+            <ul class="flex flex-wrap items-center gap-6 text-[10px] uppercase tracking-[0.22em] text-mudo">
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 bg-ouro"></span>Estratégia</li>
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 bg-ouro"></span>Design</li>
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 bg-ouro"></span>Produção</li>
+            </ul>
+          </div>
+
+          <dl class="mt-12 grid max-w-xl grid-cols-3 border-t border-linha">
+            <div class="border-r border-linha py-7 pr-6">
+              <dt class="sr-only">Eventos dirigidos</dt>
+              <dd class="text-3xl font-extralight text-tinta">140<span class="text-ouro">+</span></dd>
+              <p class="mt-2 text-[10px] uppercase tracking-[0.2em] text-mudo">Eventos dirigidos</p>
+            </div>
+            <div class="border-r border-linha px-6 py-7">
+              <dt class="sr-only">Cidades atendidas</dt>
+              <dd class="text-3xl font-extralight text-tinta">12</dd>
+              <p class="mt-2 text-[10px] uppercase tracking-[0.2em] text-mudo">Cidades atendidas</p>
+            </div>
+            <div class="px-6 py-7">
+              <dt class="sr-only">Universos de evento</dt>
+              <dd class="text-3xl font-extralight text-tinta">3</dd>
+              <p class="mt-2 text-[10px] uppercase tracking-[0.2em] text-mudo">Universos de evento</p>
+            </div>
+          </dl>
+        </div>
+
+        <!-- tríptico escalonado, como na referência -->
+        <div class="flex h-[420px] items-start gap-3 sm:h-[540px] lg:h-[760px] lg:w-[520px]">
+          <div class="painel mt-[18%] h-[62%] w-1/3 sombra-folha">
+            <img src="./static/images/hero-salao.webp" alt="Salão privado montado para um jantar" width="420" height="1180" decoding="async" fetchpriority="high" />
+            <div class="absolute inset-x-0 bottom-0 p-4">
+              <p class="text-[9px] uppercase tracking-[0.2em] text-white/70">01 / Privado</p>
+              <p class="mt-1.5 text-sm font-light text-white">Salão privado</p>
+            </div>
+          </div>
+
+          <div class="painel h-[92%] w-1/3 sombra-funda">
+            <img src="./static/images/hero-gala.webp" alt="Gala sob um lustre de cristal" width="420" height="1180" decoding="async" fetchpriority="high" />
+            <div class="absolute inset-x-0 bottom-0 p-4">
+              <p class="text-[9px] uppercase tracking-[0.2em] text-white/70">02 / Gala</p>
+              <p class="mt-1.5 text-sm font-light text-white">Gala beneficente</p>
+              <p class="mt-2 hidden text-[11px] leading-relaxed text-white/70 sm:block">Produção multiambiente, mesas editoriais e transição de convidados controlada.</p>
+            </div>
+          </div>
+
+          <div class="painel mt-[30%] h-[70%] w-1/3 sombra-folha">
+            <img src="./static/images/hero-marca.webp" alt="Lançamento de marca com convidados no ambiente" width="420" height="1180" decoding="async" fetchpriority="high" />
+            <div class="absolute inset-x-0 bottom-0 p-4">
+              <p class="text-[9px] uppercase tracking-[0.2em] text-white/70">03 / Marca</p>
+              <p class="mt-1.5 text-sm font-light text-white">Lançamento de marca</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- três passos, embaixo do hero -->
+      <div class="mt-16 grid gap-4 sm:grid-cols-3">
+        <article class="group border border-linha bg-creme p-6 transition duration-300 hover:border-ouro">
+          <p class="text-[10px] uppercase tracking-[0.22em] text-ouro">01 / Briefing</p>
+          <h2 class="mt-5 text-lg font-light text-tinta">Briefing estratégico</h2>
+          <p class="mt-3 text-sm leading-relaxed text-mudo">Propósito, perfil do convidado, jornada e o conceito do encontro.</p>
+        </article>
+        <article class="group border border-linha bg-creme p-6 transition duration-300 hover:border-ouro">
+          <p class="text-[10px] uppercase tracking-[0.22em] text-ouro">02 / Atmosfera</p>
+          <h2 class="mt-5 text-lg font-light text-tinta">Direção de atmosfera</h2>
+          <p class="mt-3 text-sm leading-relaxed text-mudo">Linguagem visual, luz, som, sinais de serviço e detalhes sensoriais.</p>
+        </article>
+        <article class="group border border-linha bg-creme p-6 transition duration-300 hover:border-ouro">
+          <p class="text-[10px] uppercase tracking-[0.22em] text-ouro">03 / Comando</p>
+          <h2 class="mt-5 text-lg font-light text-tinta">Produção ao vivo</h2>
+          <p class="mt-3 text-sm leading-relaxed text-mudo">Fornecedores, logística, timing e a equipe de comando no local.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= MARQUEE ================= -->
+    <section class="bg-white py-10 md:py-12" aria-label="O que fazemos">
+      <div class="overflow-hidden border-y border-linha bg-creme">
+        <div class="marquee flex w-max py-4 text-[10px] uppercase tracking-[0.28em] text-mudo">
+          <div class="flex shrink-0 items-center">
+            <span class="px-8">Mapa da jornada do convidado</span><span class="text-ouro">◆</span>
+            <span class="px-8">Transformação de espaço</span><span class="text-ouro">◆</span>
+            <span class="px-8">Direção gastronômica</span><span class="text-ouro">◆</span>
+            <span class="px-8">Comando de produção</span><span class="text-ouro">◆</span>
+            <span class="px-8">Design de atmosfera</span><span class="text-ouro">◆</span>
+          </div>
+          <div class="flex shrink-0 items-center" aria-hidden="true">
+            <span class="px-8">Mapa da jornada do convidado</span><span class="text-ouro">◆</span>
+            <span class="px-8">Transformação de espaço</span><span class="text-ouro">◆</span>
+            <span class="px-8">Direção gastronômica</span><span class="text-ouro">◆</span>
+            <span class="px-8">Comando de produção</span><span class="text-ouro">◆</span>
+            <span class="px-8">Design de atmosfera</span><span class="text-ouro">◆</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CAPACIDADES ================= -->
+    <section id="capacidades" class="bg-white px-6 py-24 lg:px-12">
+      <div class="mx-auto max-w-7xl">
+        <div class="text-center rv" x-intersect.once="$el.classList.add('rv-in')">
+          <p class="selo">/ Capacidades /</p>
+          <h2 class="titulo mt-6">Planejamento completo para<br /><em>momentos decisivos</em></h2>
+        </div>
+
+        <div class="mt-16 grid gap-6 lg:grid-cols-2">
+          <article class="relative border border-linha bg-creme p-8 sm:p-10 rv" x-intersect.once="$el.classList.add('rv-in')">
+            <div class="quadriculado pointer-events-none absolute inset-0 opacity-60"></div>
+            <div class="relative">
+              <div class="flex items-start justify-between gap-6 text-[10px] uppercase tracking-[0.22em]">
+                <span class="text-ouro">01 / Privado</span>
+                <span class="text-mudo">Escala íntima</span>
+              </div>
+              <h3 class="mt-10 text-2xl font-light text-tinta sm:text-3xl">Celebrações privadas</h3>
+              <p class="mt-5 text-sm leading-relaxed text-mudo">
+                Encontros íntimos conduzidos com plano de produção de evento grande.
+                Cada detalhe é desenhado em torno do fluxo dos convidados, do tempo
+                de serviço e da lembrança que fica.
+              </p>
+              <ul class="mt-8 grid gap-3 text-sm text-tinta sm:grid-cols-2">
+                <li class="flex items-center gap-3"><span class="h-1.5 w-1.5 bg-ouro"></span>Jantares e salões privados</li>
+                <li class="flex items-center gap-3"><span class="h-1.5 w-1.5 bg-ouro"></span>Celebrações de marco</li>
+                <li class="flex items-center gap-3"><span class="h-1.5 w-1.5 bg-ouro"></span>Fins de semana em destino</li>
+                <li class="flex items-center gap-3"><span class="h-1.5 w-1.5 bg-ouro"></span>Hospitalidade sob medida</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="bg-tinta p-8 text-white sm:p-10 rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 110)">
+            <div class="flex items-start justify-between gap-6 text-[10px] uppercase tracking-[0.22em]">
+              <span class="text-ouro">02 / Marca</span>
+              <span class="text-suave">Momentos públicos</span>
+            </div>
+            <h3 class="mt-10 text-2xl font-light sm:text-3xl">Momentos de marca e cultura</h3>
+            <p class="mt-5 text-sm leading-relaxed text-suave">
+              Lançamentos, prévias de imprensa e experiências culturais construídos para
+              parecerem cinema: controlados por dentro, memoráveis por fora. A estratégia
+              vira ambiente, ritual e ritmo.
+            </p>
+            <ul class="mt-8 grid gap-3 text-sm sm:grid-cols-2">
+              <li class="flex items-center gap-3"><span class="h-1.5 w-1.5 bg-ouro"></span>Lançamento de produto</li>
+              <li class="flex items-center gap-3"><span class="h-1.5 w-1.5 bg-ouro"></span>Prévia de imprensa e VIP</li>
+              <li class="flex items-center gap-3"><span class="h-1.5 w-1.5 bg-ouro"></span>Salões culturais</li>
+              <li class="flex items-center gap-3"><span class="h-1.5 w-1.5 bg-ouro"></span>Hospitalidade premium</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <article class="painel min-h-[340px] sombra-funda rv" x-intersect.once="$el.classList.add('rv-in')">
+            <img src="./static/images/cupula.webp" alt="Sala de reunião executiva com vista para a serra" width="810" height="720" loading="lazy" decoding="async" />
+            <div class="absolute inset-x-0 bottom-0 p-7">
+              <p class="text-[10px] uppercase tracking-[0.22em] text-white/70">Executivo</p>
+              <h3 class="mt-2 text-xl font-light text-white">Cúpulas de liderança</h3>
+              <p class="mt-3 text-sm leading-relaxed text-white/70">Encontros fechados de conselho e diretoria, com agenda e logística sob controle.</p>
+            </div>
+          </article>
+          <article class="painel min-h-[340px] sombra-funda rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 110)">
+            <img src="./static/images/hospitalidade.webp" alt="Convidados circulando entre arranjos de flores" width="810" height="720" loading="lazy" decoding="async" />
+            <div class="absolute inset-x-0 bottom-0 p-7">
+              <p class="text-[10px] uppercase tracking-[0.22em] text-white/70">Hospitalidade</p>
+              <h3 class="mt-2 text-xl font-light text-white">Experiência do convidado</h3>
+              <p class="mt-3 text-sm leading-relaxed text-white/70">Da chegada ao carro de volta: cada ponto de contato tem alguém responsável.</p>
+            </div>
+          </article>
+          <article class="painel min-h-[340px] sombra-funda rv sm:col-span-2 lg:col-span-1" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 220)">
+            <img src="./static/images/gastronomia.webp" alt="Prato sendo servido em mesa posta com cristais" width="810" height="720" loading="lazy" decoding="async" />
+            <div class="absolute inset-x-0 bottom-0 p-7">
+              <p class="text-[10px] uppercase tracking-[0.22em] text-white/70">Gastronomia</p>
+              <h3 class="mt-2 text-xl font-light text-white">Design de mesa e serviço</h3>
+              <p class="mt-3 text-sm leading-relaxed text-white/70">Menu, tempo de cada prato e desenho de mesa pensados como uma coisa só.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PRODUÇÕES ================= -->
+    <section id="producoes" class="bg-creme px-6 py-24 lg:px-12">
+      <div class="mx-auto max-w-7xl">
+        <div class="text-center rv" x-intersect.once="$el.classList.add('rv-in')">
+          <p class="selo">/ Produções recentes /</p>
+          <h2 class="titulo mt-6">Produções curadas<br /><em>universos de evento</em></h2>
+        </div>
+
+        <div class="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+
+          <article class="border border-linha bg-folha p-5 rv" x-intersect.once="$el.classList.add('rv-in')">
+            <div class="painel relative h-56">
+              <img src="./static/images/prod-1.webp" alt="Jantar de lançamento em galeria" width="540" height="450" loading="lazy" decoding="async" />
+              <span class="absolute right-3 top-3 z-10 bg-folha px-2 py-1 text-[10px] tracking-[0.14em] text-tinta">01 / 04</span>
+            </div>
+            <p class="mt-5 text-[10px] uppercase tracking-[0.22em] text-ouro">Lançamento de marca</p>
+            <h3 class="mt-2 text-xl font-light text-tinta">Casa Aurora</h3>
+            <p class="mt-1.5 text-sm text-mudo">Jantar de coleção &middot; São Paulo</p>
+            <dl class="mt-5 grid grid-cols-3 gap-2 border-t border-linha pt-4 text-[10px] uppercase tracking-[0.16em] text-mudo">
+              <div><dt>Convidados</dt><dd class="mt-1.5 text-sm normal-case tracking-normal text-tinta">180</dd></div>
+              <div><dt>Ambientes</dt><dd class="mt-1.5 text-sm normal-case tracking-normal text-tinta">04</dd></div>
+              <div><dt>Prazo</dt><dd class="mt-1.5 text-sm normal-case tracking-normal text-tinta">10 sem</dd></div>
+            </dl>
+            <div class="mt-5 flex items-center justify-between border-t border-linha pt-4">
+              <span class="text-[10px] uppercase tracking-[0.2em] text-mudo">Prévia de imprensa</span>
+              <span class="grid h-8 w-8 place-items-center border border-linha text-ouro">→</span>
+            </div>
+          </article>
+
+          <article class="bg-tinta p-5 text-white rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 90)">
+            <div class="painel relative h-56">
+              <img src="./static/images/prod-2.webp" alt="Gala beneficente em salão iluminado" width="540" height="450" loading="lazy" decoding="async" />
+              <span class="absolute right-3 top-3 z-10 bg-folha px-2 py-1 text-[10px] tracking-[0.14em] text-tinta">02 / 04</span>
+            </div>
+            <p class="mt-5 text-[10px] uppercase tracking-[0.22em] text-ouro">Gala beneficente</p>
+            <h3 class="mt-2 text-xl font-light">Noite do Instituto</h3>
+            <p class="mt-1.5 text-sm text-suave">Jantar de arrecadação &middot; Rio de Janeiro</p>
+            <dl class="mt-5 grid grid-cols-3 gap-2 border-t border-white/15 pt-4 text-[10px] uppercase tracking-[0.16em] text-suave">
+              <div><dt>Convidados</dt><dd class="mt-1.5 text-sm normal-case tracking-normal text-white">420</dd></div>
+              <div><dt>Atos</dt><dd class="mt-1.5 text-sm normal-case tracking-normal text-white">03</dd></div>
+              <div><dt>Prazo</dt><dd class="mt-1.5 text-sm normal-case tracking-normal text-white">16 sem</dd></div>
+            </dl>
+            <div class="mt-5 flex items-center justify-between border-t border-white/15 pt-4">
+              <span class="text-[10px] uppercase tracking-[0.2em] text-suave">Noite de arrecadação</span>
+              <span class="grid h-8 w-8 place-items-center border border-white/20 text-ouro">→</span>
+            </div>
+          </article>
+
+          <article class="bg-tinta p-5 text-white rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 180)">
+            <div class="painel relative h-56">
+              <img src="./static/images/prod-3.webp" alt="Mesa posta à beira do lago no fim da tarde" width="540" height="450" loading="lazy" decoding="async" />
+              <span class="absolute right-3 top-3 z-10 bg-folha px-2 py-1 text-[10px] tracking-[0.14em] text-tinta">03 / 04</span>
+            </div>
+            <p class="mt-5 text-[10px] uppercase tracking-[0.22em] text-ouro">Salão privado</p>
+            <h3 class="mt-2 text-xl font-light">Casa da Represa</h3>
+            <p class="mt-1.5 text-sm text-suave">Fim de semana privado &middot; Trancoso</p>
+            <dl class="mt-5 grid grid-cols-3 gap-2 border-t border-white/15 pt-4 text-[10px] uppercase tracking-[0.16em] text-suave">
+              <div><dt>Convidados</dt><dd class="mt-1.5 text-sm normal-case tracking-normal text-white">64</dd></div>
+              <div><dt>Dias</dt><dd class="mt-1.5 text-sm normal-case tracking-normal text-white">03</dd></div>
+              <div><dt>Prazo</dt><dd class="mt-1.5 text-sm normal-case tracking-normal text-white">12 sem</dd></div>
+            </dl>
+            <div class="mt-5 flex items-center justify-between border-t border-white/15 pt-4">
+              <span class="text-[10px] uppercase tracking-[0.2em] text-suave">Fim de semana em destino</span>
+              <span class="grid h-8 w-8 place-items-center border border-white/20 text-ouro">→</span>
+            </div>
+          </article>
+
+          <article class="border border-linha bg-folha p-5 rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 270)">
+            <div class="painel relative h-56">
+              <img src="./static/images/prod-4.webp" alt="Sala de reunião com vista para as montanhas" width="540" height="450" loading="lazy" decoding="async" />
+              <span class="absolute right-3 top-3 z-10 bg-folha px-2 py-1 text-[10px] tracking-[0.14em] text-tinta">04 / 04</span>
+            </div>
+            <p class="mt-5 text-[10px] uppercase tracking-[0.22em] text-ouro">Retiro executivo</p>
+            <h3 class="mt-2 text-xl font-light text-tinta">Encontro de Sócios</h3>
+            <p class="mt-1.5 text-sm text-mudo">Retiro de liderança &middot; Campos do Jordão</p>
+            <dl class="mt-5 grid grid-cols-3 gap-2 border-t border-linha pt-4 text-[10px] uppercase tracking-[0.16em] text-mudo">
+              <div><dt>Convidados</dt><dd class="mt-1.5 text-sm normal-case tracking-normal text-tinta">96</dd></div>
+              <div><dt>Trilhas</dt><dd class="mt-1.5 text-sm normal-case tracking-normal text-tinta">05</dd></div>
+              <div><dt>Prazo</dt><dd class="mt-1.5 text-sm normal-case tracking-normal text-tinta">8 sem</dd></div>
+            </dl>
+            <div class="mt-5 flex items-center justify-between border-t border-linha pt-4">
+              <span class="text-[10px] uppercase tracking-[0.2em] text-mudo">Programa de liderança</span>
+              <span class="grid h-8 w-8 place-items-center border border-linha text-ouro">→</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="mt-14 flex justify-center">
+          <a href="#contato" class="btn-escuro">
+            Ver todas as produções
+            <span class="btn-ponta">
+              <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= MÉTODO ================= -->
+    <section id="metodo" class="bg-white px-6 py-24 lg:px-12">
+      <div class="mx-auto max-w-7xl">
+        <div class="text-center rv" x-intersect.once="$el.classList.add('rv-in')">
+          <p class="selo">/ Abordagem /</p>
+          <h2 class="titulo mt-6">Do briefing à<br /><em>despedida do último convidado</em></h2>
+        </div>
+
+        <div class="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <article class="relative overflow-hidden border border-linha bg-creme p-7 rv" x-intersect.once="$el.classList.add('rv-in')">
+            <span aria-hidden="true" class="pointer-events-none absolute -top-4 right-2 select-none text-8xl font-extralight leading-none text-tinta/[0.06]">01</span>
+            <p class="relative text-[10px] uppercase tracking-[0.22em] text-ouro">Descoberta</p>
+            <h3 class="relative mt-10 text-xl font-light text-tinta">Definir o momento</h3>
+            <p class="relative mt-4 text-sm leading-relaxed text-mudo">Propósito, perfil do convidado, tom, restrições e o que vai contar como sucesso.</p>
+          </article>
+
+          <article class="relative overflow-hidden bg-tinta p-7 text-white rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 90)">
+            <span aria-hidden="true" class="pointer-events-none absolute -top-4 right-2 select-none text-8xl font-extralight leading-none text-white/[0.07]">02</span>
+            <p class="relative text-[10px] uppercase tracking-[0.22em] text-ouro">Direção</p>
+            <h3 class="relative mt-10 text-xl font-light">Construir o universo</h3>
+            <p class="relative mt-4 text-sm leading-relaxed text-suave">Conceito, lógica do espaço, linguagem visual, ritmo e o mapa de produção.</p>
+          </article>
+
+          <article class="relative overflow-hidden bg-tinta p-7 text-white rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 180)">
+            <span aria-hidden="true" class="pointer-events-none absolute -top-4 right-2 select-none text-8xl font-extralight leading-none text-white/[0.07]">03</span>
+            <p class="relative text-[10px] uppercase tracking-[0.22em] text-ouro">Produção</p>
+            <h3 class="relative mt-10 text-xl font-light">Comandar o ambiente</h3>
+            <p class="relative mt-4 text-sm leading-relaxed text-suave">Fornecedores, equipe, ensaio, roteiro e as decisões ao vivo que ninguém percebe.</p>
+          </article>
+
+          <article class="relative overflow-hidden border border-linha bg-creme p-7 rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 270)">
+            <span aria-hidden="true" class="pointer-events-none absolute -top-4 right-2 select-none text-8xl font-extralight leading-none text-tinta/[0.06]">04</span>
+            <p class="relative text-[10px] uppercase tracking-[0.22em] text-ouro">Pós-evento</p>
+            <h3 class="relative mt-10 text-xl font-light text-tinta">Encerrar a memória</h3>
+            <p class="relative mt-4 text-sm leading-relaxed text-mudo">Saída dos convidados, material pós-evento, balanço com o cliente e o que fica depois.</p>
+          </article>
+        </div>
+
+        <div class="mt-14 flex justify-center">
+          <a href="#contato" class="btn-ouro">
+            Começar o planejamento
+            <span class="btn-ponta">
+              <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= NOTAS DE CLIENTES ================= -->
+    <section class="relative overflow-hidden bg-tinta px-6 py-24 text-white lg:px-12">
+      <div class="quadriculado pointer-events-none absolute inset-0 opacity-10"></div>
+
+      <div class="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
+        <div class="rv" x-intersect.once="$el.classList.add('rv-in')">
+          <p class="text-[10px] uppercase tracking-[0.24em] text-suave">/ Notas de clientes /</p>
+          <h2 class="mt-6 text-[2rem] font-extralight uppercase leading-[1.05] sm:text-5xl">
+            O ambiente<br /><span class="text-ouro">parecia inevitável.</span>
+          </h2>
+          <p class="mt-7 max-w-sm text-sm leading-relaxed text-suave">
+            O melhor retorno não é dizer que estava bonito. É dizer que tudo pareceu
+            combinado, da primeira chegada até a despedida.
+          </p>
+          <a href="#contato" class="mt-8 inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.22em] text-ouro transition duration-300 hover:text-white">
+            Ler mais notas
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          </a>
+        </div>
+
+        <div class="space-y-5">
+          <figure class="bg-folha p-8 text-tinta sm:p-10 rv" x-intersect.once="$el.classList.add('rv-in')">
+            <div class="flex items-start justify-between gap-6 text-[10px] uppercase tracking-[0.22em]">
+              <span class="text-ouro">01 / Privado</span>
+              <span class="text-mudo">Casa da Represa</span>
+            </div>
+            <blockquote class="mt-8 text-xl font-light leading-snug sm:text-2xl">
+              “Eles transformaram um briefing complicado numa noite que pareceu calma.
+              Nenhum convidado percebeu o tamanho da operação.”
+            </blockquote>
+            <p class="mt-6 text-sm leading-relaxed text-mudo">
+              Cada transição aconteceu antes da gente notar que precisava. Meses depois
+              os convidados ainda comentam o ritmo do fim de semana.
+            </p>
+            <figcaption class="mt-8 flex flex-wrap items-end justify-between gap-4 border-t border-linha pt-6">
+              <div>
+                <p class="text-sm font-medium text-tinta">Cliente privado</p>
+                <p class="mt-1 text-sm text-mudo">Celebração de marco &middot; Trancoso</p>
+              </div>
+              <p class="text-[10px] uppercase tracking-[0.2em] text-mudo">64 convidados &middot; 3 dias</p>
+            </figcaption>
+          </figure>
+
+          <figure class="border border-white/12 bg-white/[0.04] p-8 sm:p-10 rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 110)">
+            <div class="flex items-start justify-between gap-6 text-[10px] uppercase tracking-[0.22em]">
+              <span class="text-ouro">02 / Marca</span>
+              <span class="text-suave">Casa Aurora</span>
+            </div>
+            <blockquote class="mt-8 text-xl font-light leading-snug sm:text-2xl">
+              “A produção ficou invisível a noite inteira. Era exatamente isso que
+              a gente estava comprando.”
+            </blockquote>
+            <p class="mt-6 text-sm leading-relaxed text-suave">
+              Tinha imprensa, executivo, talento e um cronograma apertado. Mesmo assim
+              o ambiente pareceu leve do começo ao fim.
+            </p>
+            <figcaption class="mt-8 flex flex-wrap items-end justify-between gap-4 border-t border-white/12 pt-6">
+              <div>
+                <p class="text-sm font-medium text-white">Diretora de marca</p>
+                <p class="mt-1 text-sm text-suave">Lançamento de coleção &middot; São Paulo</p>
+              </div>
+              <p class="text-[10px] uppercase tracking-[0.2em] text-suave">180 convidados &middot; prévia de imprensa</p>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= NOTAS DE CAMPO ================= -->
+    <section id="notas" class="bg-white px-6 py-24 lg:px-12">
+      <div class="mx-auto max-w-7xl">
+        <div class="text-center rv" x-intersect.once="$el.classList.add('rv-in')">
+          <p class="selo">/ Notas de campo /</p>
+          <h2 class="titulo mt-6">Notas sobre como criar<br /><em>ambientes que ficam</em></h2>
+        </div>
+
+        <div class="mt-16 grid gap-6 md:grid-cols-3">
+          <article class="border border-linha bg-folha p-5 rv" x-intersect.once="$el.classList.add('rv-in')">
+            <div class="painel relative h-72">
+              <img src="./static/images/nota-1.webp" alt="Serviço à mesa durante um jantar" width="740" height="576" loading="lazy" decoding="async" />
+              <span class="absolute right-3 top-3 z-10 bg-folha px-2 py-1 text-[10px] tracking-[0.14em] text-tinta">01 / 03</span>
+            </div>
+            <div class="mt-6 flex items-center justify-between text-[10px] uppercase tracking-[0.22em]">
+              <span class="text-ouro">Hospitalidade</span><span class="text-mudo">08 min</span>
+            </div>
+            <h3 class="mt-4 text-xl font-light leading-snug text-tinta">Como o ritmo molda a memória de um jantar</h3>
+            <p class="mt-4 text-sm leading-relaxed text-mudo">
+              Os jantares mais lembrados não se resolvem na mesa. Eles se resolvem na
+              chegada, no tempo entre um prato e outro e na hora de ir embora.
+            </p>
+            <div class="mt-6 flex items-center justify-between border-t border-linha pt-5">
+              <span class="text-[10px] uppercase tracking-[0.2em] text-mudo">Jornada do convidado</span>
+              <span class="grid h-8 w-8 place-items-center border border-linha text-ouro">→</span>
+            </div>
+          </article>
+
+          <article class="bg-tinta p-5 text-white rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 110)">
+            <div class="painel relative h-72">
+              <img src="./static/images/nota-2.webp" alt="Convidados numa exposição de lançamento" width="740" height="576" loading="lazy" decoding="async" />
+              <span class="absolute right-3 top-3 z-10 bg-folha px-2 py-1 text-[10px] tracking-[0.14em] text-tinta">02 / 03</span>
+            </div>
+            <div class="mt-6 flex items-center justify-between text-[10px] uppercase tracking-[0.22em]">
+              <span class="text-ouro">Marca</span><span class="text-suave">06 min</span>
+            </div>
+            <h3 class="mt-4 text-xl font-light leading-snug">Por que lançamento precisa de um plano de revelação</h3>
+            <p class="mt-4 text-sm leading-relaxed text-suave">
+              Lançamento não é sala com palco. Os momentos que pegam são construídos
+              com antecipação, atenção e tempo bem medido.
+            </p>
+            <div class="mt-6 flex items-center justify-between border-t border-white/15 pt-5">
+              <span class="text-[10px] uppercase tracking-[0.2em] text-suave">Estratégia de revelação</span>
+              <span class="grid h-8 w-8 place-items-center border border-white/20 text-ouro">→</span>
+            </div>
+          </article>
+
+          <article class="border border-linha bg-folha p-5 rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 220)">
+            <div class="painel relative h-72">
+              <img src="./static/images/nota-3.webp" alt="Sala de estar com poltronas e vista para a mata" width="740" height="576" loading="lazy" decoding="async" />
+              <span class="absolute right-3 top-3 z-10 bg-folha px-2 py-1 text-[10px] tracking-[0.14em] text-tinta">03 / 03</span>
+            </div>
+            <div class="mt-6 flex items-center justify-between text-[10px] uppercase tracking-[0.22em]">
+              <span class="text-ouro">Executivo</span><span class="text-mudo">05 min</span>
+            </div>
+            <h3 class="mt-4 text-xl font-light leading-snug text-tinta">Retiros que geram conversa de verdade</h3>
+            <p class="mt-4 text-sm leading-relaxed text-mudo">
+              Retiro executivo funciona quando o ambiente tira atrito, dá estrutura para
+              pensar e abre espaço para uma conversa honesta.
+            </p>
+            <div class="mt-6 flex items-center justify-between border-t border-linha pt-5">
+              <span class="text-[10px] uppercase tracking-[0.2em] text-mudo">Design de conversa</span>
+              <span class="grid h-8 w-8 place-items-center border border-linha text-ouro">→</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= RODAPÉ ================= -->
+    <footer id="contato" class="relative overflow-hidden bg-tinta px-6 py-14 text-white lg:px-12">
+      <div class="quadriculado pointer-events-none absolute inset-0 opacity-10"></div>
+
+      <div class="relative mx-auto max-w-7xl">
+        <div class="grid gap-10 border-b border-white/10 pb-10 lg:grid-cols-12">
+
+          <div class="lg:col-span-4">
+            <div class="flex items-center gap-3">
+              <span class="grid h-9 w-9 place-items-center bg-ouro text-white">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l8 15H4l8-15z"/></svg>
+              </span>
+              <span class="text-xs uppercase tracking-[0.24em]">Casa Vértice</span>
+            </div>
+            <p class="mt-6 max-w-sm text-sm leading-relaxed text-suave">
+              Direção de eventos de alto padrão para clientes privados, marcas,
+              instituições culturais e times executivos.
+            </p>
+            <a href="mailto:estudio@casavertice.com.br" class="btn-ouro mt-8">
+              estudio@casavertice.com.br
+              <span class="btn-ponta">
+                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9 6 9-6M4 5h16a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V6a1 1 0 011-1z"/></svg>
+              </span>
+            </a>
+          </div>
+
+          <div class="lg:col-span-2">
+            <h2 class="text-sm font-light">Estúdio</h2>
+            <ul class="mt-5 space-y-3 text-xs text-suave">
+              <li><a href="#capacidades" class="transition duration-300 hover:text-ouro">Capacidades</a></li>
+              <li><a href="#producoes" class="transition duration-300 hover:text-ouro">Produções</a></li>
+              <li><a href="#metodo" class="transition duration-300 hover:text-ouro">Método</a></li>
+              <li><a href="#notas" class="transition duration-300 hover:text-ouro">Notas de campo</a></li>
+            </ul>
+          </div>
+
+          <div class="lg:col-span-2">
+            <h2 class="text-sm font-light">Eventos</h2>
+            <ul class="mt-5 space-y-3 text-xs text-suave">
+              <li>Celebrações privadas</li>
+              <li>Lançamentos de marca</li>
+              <li>Retiros executivos</li>
+              <li>Galas culturais</li>
+            </ul>
+          </div>
+
+          <div class="lg:col-span-4">
+            <h2 class="text-sm font-light">Consultar disponibilidade</h2>
+
+            <div x-show="form.sent" x-cloak x-transition.duration.300ms class="mt-5 border border-ouro/40 p-6">
+              <p class="text-sm font-light text-white">Pedido recebido.</p>
+              <p class="mt-3 text-xs leading-relaxed text-suave">
+                Respondemos em até um dia útil com as datas livres para o formato escolhido.
+              </p>
+              <button @click="resetForm()" class="mt-5 cursor-pointer text-[10px] uppercase tracking-[0.22em] text-ouro transition duration-300 hover:text-white">Enviar outro pedido</button>
+            </div>
+
+            <form x-show="!form.sent" @submit.prevent="enviar()" novalidate class="mt-5 max-w-md">
+              <label for="tipo" class="sr-only">Tipo de evento</label>
+              <select id="tipo" x-model="form.tipo" class="campo mb-1 cursor-pointer">
+                <option>Celebração privada</option>
+                <option>Lançamento de marca</option>
+                <option>Retiro executivo</option>
+                <option>Gala cultural</option>
+              </select>
+
+              <div class="flex bg-white p-1">
+                <label for="email" class="sr-only">Seu e-mail</label>
+                <input id="email" type="email" x-model="form.email" placeholder="Seu e-mail"
+                       class="flex-1 px-4 py-3 text-sm text-tinta outline-none placeholder-mudo/70" :class="erro && 'text-red-700'" />
+                <button type="submit" :disabled="form.loading"
+                        class="cursor-pointer bg-ouro px-5 text-xs uppercase tracking-[0.18em] text-white transition duration-300 hover:bg-ouro-esc disabled:opacity-60">
+                  <span x-text="form.loading ? 'Enviando…' : 'Enviar'">Enviar</span>
+                </button>
+              </div>
+              <p x-show="erro" x-cloak class="mt-2 text-[11px] text-ouro" x-text="erro"></p>
+
+              <p class="mt-4 text-xs leading-relaxed text-suave">
+                Na consulta, conte o tipo de evento, a cidade, a data pretendida e
+                quantos convidados você espera.
+              </p>
+            </form>
+          </div>
+        </div>
+
+        <div class="mt-8 flex flex-col gap-3 text-[10px] uppercase tracking-[0.2em] text-suave sm:flex-row sm:items-center sm:justify-between">
+          <p>© <span x-text="new Date().getFullYear()">2026</span> Casa Vértice. Projeto demonstrativo.</p>
+          <p>Feito por <a href="#" class="text-ouro transition duration-300 hover:text-white">Nexo Studio</a></p>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+</body>
+</html>

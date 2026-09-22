@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SpacePro | Plataforma de treino para resultados consistentes</title>
+  <meta name="description" content="Treinos profissionais prontos para seguir na academia, com periodização, progressão de carga e renovação a cada 45 dias." />
+  <meta name="theme-color" content="#101010" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="SpacePro | Plataforma de treino" />
+  <meta property="og:description" content="Treinos profissionais prontos para seguir na academia, renovados a cada 45 dias." />
+
+  <link rel="icon" href="./static/images/logo.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    document.documentElement.classList.add('js');
+    setTimeout(function () { if (!window.Alpine) document.documentElement.classList.remove('js'); }, 3000);
+  </script>
+
+  <link rel="stylesheet" href="./static/output.css" />
+  <!-- Fonte base fluida, igual à do site principal (html em src/styles/global.css). -->
+  <style>
+    html {
+      text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
+      font-size: clamp(12px, 4vw, 16px);
+    }
+  </style>
+  <script defer src="./app.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body x-data="space()">
+
+  <!-- ================= HEADER ================= -->
+  <header class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
+          :class="scrolled ? 'bg-breu/95 backdrop-blur-md py-3' : 'py-5'">
+    <div class="wrap flex items-center justify-between gap-6">
+      <a href="#topo" class="flex shrink-0 items-center gap-3">
+        <img src="./static/images/logo.png" alt="" width="48" height="48" class="h-9 w-9 object-contain" />
+        <span class="font-display text-2xl font-medium uppercase tracking-[0.14em] text-white">SpacePro</span>
+      </a>
+
+      <nav class="hidden items-center gap-1 rounded-full border border-linha bg-carvao/80 px-2 py-1.5 backdrop-blur lg:flex">
+        <a href="#aplicativo" class="rounded-full px-5 py-2 text-sm text-mudo transition duration-300 hover:bg-white/5 hover:text-white">Aplicativo</a>
+        <a href="#transformacoes" class="rounded-full px-5 py-2 text-sm text-mudo transition duration-300 hover:bg-white/5 hover:text-white">Transformações</a>
+        <a href="#planos" class="rounded-full px-5 py-2 text-sm text-mudo transition duration-300 hover:bg-white/5 hover:text-white">Planos</a>
+        <a href="#duvidas" class="rounded-full px-5 py-2 text-sm text-mudo transition duration-300 hover:bg-white/5 hover:text-white">Dúvidas</a>
+      </nav>
+
+      <div class="flex shrink-0 items-center gap-3">
+        <a href="#planos" class="btn-azul hidden sm:inline-flex">Área de Alunos</a>
+        <button @click="menu = !menu" :aria-expanded="menu" aria-label="Abrir menu"
+                class="grid h-10 w-10 cursor-pointer place-items-center rounded-xl border border-linha text-white lg:hidden">
+          <svg x-show="!menu" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg x-show="menu" x-cloak class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div x-show="menu" x-collapse x-cloak class="lg:hidden">
+      <div class="wrap mt-4">
+        <div class="cartao space-y-1 p-3">
+          <a href="#aplicativo"     @click="menu = false" class="block rounded-xl px-4 py-3 text-sm text-mudo hover:bg-white/5 hover:text-white">Aplicativo</a>
+          <a href="#transformacoes" @click="menu = false" class="block rounded-xl px-4 py-3 text-sm text-mudo hover:bg-white/5 hover:text-white">Transformações</a>
+          <a href="#planos"         @click="menu = false" class="block rounded-xl px-4 py-3 text-sm text-mudo hover:bg-white/5 hover:text-white">Planos</a>
+          <a href="#duvidas"        @click="menu = false" class="block rounded-xl px-4 py-3 text-sm text-mudo hover:bg-white/5 hover:text-white">Dúvidas</a>
+          <a href="#planos"         @click="menu = false" class="btn-azul mt-2 w-full">Área de Alunos</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section id="topo" class="relative min-h-screen overflow-hidden">
+    <!-- No site original aqui roda um vídeo de fundo. Num demo que abre dentro
+         de um modal, 4,5 MB de vídeo custa caro, então usamos um quadro dele. -->
+    <img src="./static/images/hero.webp" alt="" width="1600" height="900"
+         decoding="async" fetchpriority="high" class="absolute inset-0 h-full w-full object-cover" />
+    <div class="absolute inset-0 bg-breu/70"></div>
+    <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-breu to-transparent"></div>
+
+    <div class="wrap relative flex min-h-screen flex-col items-center justify-center py-32 text-center">
+      <p class="inline-flex items-center gap-2 rounded-full border border-amarelo/40 bg-amarelo/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-amarelo">
+        <span class="h-1.5 w-1.5 rounded-full bg-amarelo"></span>
+        Disponível para Android e iOS
+      </p>
+
+      <h1 class="titulo mt-8 max-w-4xl !text-5xl sm:!text-6xl lg:!text-7xl">
+        Treinos profissionais prontos para você seguir na academia
+      </h1>
+
+      <p class="mt-7 max-w-xl text-[15px] leading-relaxed text-mudo">
+        Programação completa com periodização e renovação a cada 45 dias, seja
+        qual for o seu nível de condicionamento físico.
+      </p>
+
+      <a href="#planos" class="btn-azul mt-9">Comece agora</a>
+    </div>
+  </section>
+
+  <!-- ================= PILARES ================= -->
+  <section class="relative z-10 -mt-24 pb-20">
+    <div class="wrap grid gap-6 md:grid-cols-3">
+      <article class="cartao p-7 rv" x-intersect.once="$el.classList.add('rv-in')">
+        <span class="grid h-12 w-12 place-items-center rounded-xl bg-azul/15 text-azul-cl">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4L2 9l10 5 10-5-10-5zM5 11v5c0 1.5 3 3 7 3s7-1.5 7-3v-5"/></svg>
+        </span>
+        <h2 class="mt-6 font-display text-2xl font-medium uppercase text-white">Experiência</h2>
+        <span class="mt-3 block h-0.5 w-10 bg-amarelo"></span>
+        <p class="mt-5 text-sm leading-relaxed text-mudo">
+          Treinar com a gente é contar com profissionais altamente qualificados,
+          capacitados e realmente apaixonados pelo que fazem.
+        </p>
+      </article>
+
+      <article class="cartao p-7 rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 110)">
+        <span class="grid h-12 w-12 place-items-center rounded-xl bg-azul/15 text-azul-cl">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 19l3-3m0 0a9 9 0 0111-11 9 9 0 01-11 11zm0 0l-3 3m10-13a2 2 0 100 4 2 2 0 000-4z"/></svg>
+        </span>
+        <h2 class="mt-6 font-display text-2xl font-medium uppercase text-white">Resultado</h2>
+        <span class="mt-3 block h-0.5 w-10 bg-amarelo"></span>
+        <p class="mt-5 text-sm leading-relaxed text-mudo">
+          Nosso plano de ação combina periodização, progressão de carga e renovação
+          de treino para que seu corpo nunca entre em estagnação.
+        </p>
+      </article>
+
+      <article class="cartao p-7 rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 220)">
+        <span class="grid h-12 w-12 place-items-center rounded-xl bg-azul/15 text-azul-cl">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg>
+        </span>
+        <h2 class="mt-6 font-display text-2xl font-medium uppercase text-white">Acessibilidade</h2>
+        <span class="mt-3 block h-0.5 w-10 bg-amarelo"></span>
+        <p class="mt-5 text-sm leading-relaxed text-mudo">
+          Seja qual for sua rotina, local ou disponibilidade, nossa plataforma está
+          sempre ao seu alcance, garantindo que você nunca perca o ritmo.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= APLICATIVO ================= -->
+  <section id="aplicativo" class="overflow-hidden py-20 lg:py-28">
+    <div class="wrap grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+
+      <div class="rv" x-intersect.once="$el.classList.add('rv-in')">
+        <div class="relative mx-auto w-full max-w-[300px]">
+          <div class="pointer-events-none absolute -inset-10 rounded-full bg-azul/20 blur-3xl"></div>
+          <div class="relative overflow-hidden rounded-[2.2rem] border-[6px] border-linha bg-carvao">
+            <img src="./static/images/app.webp" alt="Tela do aplicativo SpacePro com a frequência de treinos"
+                 width="560" height="1115" loading="lazy" decoding="async" class="block w-full" />
+          </div>
+        </div>
+      </div>
+
+      <div class="rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 120)">
+        <p class="rotulo">Aplicativo exclusivo</p>
+        <h2 class="titulo mt-6">Seu treino na palma<br />de suas mãos</h2>
+
+        <ul class="mt-9 divide-y divide-linha">
+          <li class="check py-3.5">Vídeos demonstrativos dos exercícios</li>
+          <li class="check py-3.5">Cronômetro para descansos entre séries</li>
+          <li class="check py-3.5">Registro de carga dos exercícios</li>
+          <li class="check py-3.5">Histórico de frequência de treinos</li>
+          <li class="check py-3.5">Metodologias descritas com exemplos</li>
+          <li class="check py-3.5">Níveis iniciante, intermediário e avançado</li>
+          <li class="check py-3.5">Treinos renovados a cada 45 dias</li>
+          <li class="check py-3.5">Acesso à comunidade SpacePro</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= COMUNIDADE ================= -->
+  <section class="py-20 lg:py-28">
+    <div class="wrap grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+
+      <div class="rv" x-intersect.once="$el.classList.add('rv-in')">
+        <p class="rotulo">Comunidade SpacePro</p>
+        <p class="mt-6 font-display text-7xl font-medium leading-none text-white sm:text-8xl">300<span class="text-amarelo">+</span></p>
+        <h2 class="mt-3 font-display text-3xl font-medium uppercase text-white">Alunos satisfeitos</h2>
+
+        <div class="mt-5 flex gap-1 text-amarelo" role="img" aria-label="Nota 5 de 5">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+        </div>
+
+        <p class="mt-6 max-w-md text-sm leading-relaxed text-mudo">
+          Nosso compromisso é oferecer treinos que superem as expectativas,
+          garantindo qualidade, confiança e excelência em cada momento.
+        </p>
+        <a href="#planos" class="btn-azul mt-8">Comece agora</a>
+      </div>
+
+      <div class="text-center rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 120)">
+        <div class="overflow-hidden rounded-2xl">
+          <img src="./static/images/dupla.webp" alt="Dois alunos treinando com halteres na academia"
+               width="900" height="694" loading="lazy" decoding="async" class="block w-full object-cover" />
+        </div>
+        <h2 class="titulo mt-8">Construa seu físico<br />guiado pelos melhores</h2>
+        <p class="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-mudo">
+          Seu objetivo é nossa especialidade. Alcance o físico que você sempre
+          desejou com a orientação de quem realmente entende do assunto.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TRANSFORMAÇÕES ================= -->
+  <section id="transformacoes" class="py-20 lg:py-28">
+    <div class="wrap text-center rv" x-intersect.once="$el.classList.add('rv-in')">
+      <p class="rotulo rotulo-centro">Resultados</p>
+      <h2 class="titulo mt-6">Transformações para você se inspirar</h2>
+      <p class="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-mudo">
+        Cada foto é prova de que nosso método funciona. Veja o que acontece quando
+        disciplina e acompanhamento profissional se encontram.
+      </p>
+    </div>
+
+    <div class="mt-14 overflow-hidden">
+      <div class="marquee flex w-max gap-4">
+        <div class="flex shrink-0 gap-4">
+          <img src="./static/images/t1.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t2.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t3.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t4.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t5.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t6.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t7.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t8.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t9.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t10.webp" alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t11.webp" alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t12.webp" alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t13.webp" alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t14.webp" alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+        </div>
+        <div class="flex shrink-0 gap-4" aria-hidden="true">
+          <img src="./static/images/t1.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t2.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t3.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t4.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t5.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t6.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t7.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t8.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t9.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t10.webp" alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t11.webp" alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t12.webp" alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t13.webp" alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="./static/images/t14.webp" alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PLANOS ================= -->
+  <section id="planos" class="py-20 lg:py-28">
+    <div class="wrap">
+      <div class="text-center rv" x-intersect.once="$el.classList.add('rv-in')">
+        <p class="rotulo rotulo-centro">Planos</p>
+        <h2 class="titulo mt-6">Seu primeiro passo para evolução</h2>
+        <p class="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-mudo">
+          Escolha o plano certo para seus objetivos e cancele quando quiser, sem
+          fidelidade ou burocracia.
+        </p>
+      </div>
+
+      <!-- alternador de ciclo -->
+      <div class="mt-10 flex justify-center">
+        <div class="inline-flex rounded-full border border-amarelo/40 bg-amarelo/10 p-1">
+          <button type="button" @click="ciclo = 'mensal'"
+                  :class="ciclo === 'mensal' ? 'bg-amarelo text-breu' : 'text-mudo hover:text-white'"
+                  class="cursor-pointer rounded-full px-6 py-2 text-sm font-semibold transition duration-300">Mensal</button>
+          <button type="button" @click="ciclo = 'trimestral'"
+                  :class="ciclo === 'trimestral' ? 'bg-amarelo text-breu' : 'text-mudo hover:text-white'"
+                  class="cursor-pointer rounded-full px-6 py-2 text-sm font-semibold transition duration-300">Trimestral</button>
+        </div>
+      </div>
+      <p class="mt-3 text-center text-xs text-mudo2">
+        <span x-show="ciclo === 'trimestral'" x-cloak>20% de desconto no pagamento trimestral</span>
+      </p>
+
+      <div class="mt-12 grid items-start gap-6 lg:grid-cols-3">
+
+        <article class="cartao p-7 rv" x-intersect.once="$el.classList.add('rv-in')">
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-mudo2">Masculino</p>
+          <p class="mt-5 font-display text-5xl font-medium text-white">
+            <span x-text="preco(49.90, 39.90)">R$ 49,90</span>
+            <span class="font-sans text-base font-normal text-mudo2">/ mês</span>
+          </p>
+          <p class="mt-4 text-sm leading-relaxed text-mudo">Projetado para impulsionar a força e vitalidade dos homens.</p>
+          <a href="#topo" class="btn-azul mt-7 w-full">Comece agora</a>
+          <p class="mt-8 border-t border-linha pt-6 text-sm font-semibold text-white">O que está incluso?</p>
+          <ul class="mt-5 space-y-3.5">
+            <li class="check">Treinos masculinos</li>
+            <li class="check">Vídeos demonstrativos</li>
+            <li class="check">Registro de frequência</li>
+            <li class="check">Metodologia descrita</li>
+            <li class="check">Controle de carga</li>
+            <li class="check">Cronômetro de descanso</li>
+          </ul>
+        </article>
+
+        <article class="relative rounded-2xl border-2 border-azul bg-carvao p-7 shadow-2xl shadow-azul/15 rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 110)">
+          <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-azul px-4 py-1 text-[11px] font-semibold text-white">Econômico</span>
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-mudo2">Casal</p>
+          <p class="mt-5 font-display text-5xl font-medium text-white">
+            <span x-text="preco(79.90, 63.90)">R$ 79,90</span>
+            <span class="font-sans text-base font-normal text-mudo2">/ mês</span>
+          </p>
+          <p class="mt-4 text-sm leading-relaxed text-mudo">Ideal para treinar junto com sua companhia de academia.</p>
+          <a href="#topo" class="btn-azul mt-7 w-full">Comece agora</a>
+          <p class="mt-8 border-t border-linha pt-6 text-sm font-semibold text-white">O que está incluso?</p>
+          <ul class="mt-5 space-y-3.5">
+            <li class="check">Treinos masculinos</li>
+            <li class="check">Treinos femininos</li>
+            <li class="check">Vídeos demonstrativos</li>
+            <li class="check">Registro de frequência</li>
+            <li class="check">Metodologia descrita</li>
+            <li class="check">Controle de carga</li>
+            <li class="check">Cronômetro de descanso</li>
+          </ul>
+        </article>
+
+        <article class="cartao p-7 rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 220)">
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-mudo2">Feminino</p>
+          <p class="mt-5 font-display text-5xl font-medium text-white">
+            <span x-text="preco(49.90, 39.90)">R$ 49,90</span>
+            <span class="font-sans text-base font-normal text-mudo2">/ mês</span>
+          </p>
+          <p class="mt-4 text-sm leading-relaxed text-mudo">Desenvolvido especialmente para a fisiologia feminina.</p>
+          <a href="#topo" class="btn-azul mt-7 w-full">Comece agora</a>
+          <p class="mt-8 border-t border-linha pt-6 text-sm font-semibold text-white">O que está incluso?</p>
+          <ul class="mt-5 space-y-3.5">
+            <li class="check">Treinos femininos</li>
+            <li class="check">Vídeos demonstrativos</li>
+            <li class="check">Registro de frequência</li>
+            <li class="check">Metodologia descrita</li>
+            <li class="check">Controle de carga</li>
+            <li class="check">Cronômetro de descanso</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MENTALIDADE ================= -->
+  <section class="py-20 lg:py-28">
+    <div class="wrap grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+      <div class="overflow-hidden rounded-2xl rv" x-intersect.once="$el.classList.add('rv-in')">
+        <img src="./static/images/mentalidade.webp" alt="Dois alunos posando após o treino"
+             width="900" height="694" loading="lazy" decoding="async" class="block w-full object-cover" />
+      </div>
+
+      <div class="rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 120)">
+        <p class="rotulo">Mentalidade</p>
+        <h2 class="titulo mt-6">Transforme seu corpo no reflexo do esforço</h2>
+        <p class="mt-6 max-w-md text-sm leading-relaxed text-mudo">
+          Cada gota de suor, cada repetição a mais, cada dia que você escolheu
+          aparecer quando poderia ter ficado parado. Tudo isso fica escrito no seu corpo.
+        </p>
+        <a href="#planos" class="btn-azul mt-8">Comece agora</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DÚVIDAS ================= -->
+  <section id="duvidas" class="py-20 lg:py-28">
+    <div class="wrap">
+      <div class="text-center rv" x-intersect.once="$el.classList.add('rv-in')">
+        <p class="rotulo rotulo-centro">FAQ</p>
+        <h2 class="titulo mt-6">Ainda restou alguma dúvida?</h2>
+        <p class="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-mudo">
+          Reunimos as perguntas mais frequentes dos nossos alunos para te ajudar a
+          tomar a melhor decisão.
+        </p>
+      </div>
+
+      <div class="mx-auto mt-12 max-w-3xl divide-y divide-linha border-y border-linha">
+
+        <div>
+          <h3>
+            <button type="button" @click="alterna(0)" :aria-expanded="aberta === 0"
+                    class="flex w-full cursor-pointer items-center gap-4 py-6 text-left text-[15px] text-white">
+              <span class="grid h-6 w-6 shrink-0 place-items-center text-xl text-azul-cl transition duration-300" :class="aberta === 0 && 'rotate-45'">+</span>
+              Os treinos são individualizados ou personalizados?
+            </button>
+          </h3>
+          <div x-show="aberta === 0" x-collapse x-cloak>
+            <p class="pb-6 pl-10 text-sm leading-relaxed text-mudo">
+              Os treinos são montados por nível e objetivo, não sob medida para uma
+              pessoa. Você escolhe a trilha que combina com o seu momento e segue a
+              periodização pronta, com progressão de carga já prevista.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <h3>
+            <button type="button" @click="alterna(1)" :aria-expanded="aberta === 1"
+                    class="flex w-full cursor-pointer items-center gap-4 py-6 text-left text-[15px] text-white">
+              <span class="grid h-6 w-6 shrink-0 place-items-center text-xl text-azul-cl transition duration-300" :class="aberta === 1 && 'rotate-45'">+</span>
+              Em quanto tempo posso esperar resultados?
+            </button>
+          </h3>
+          <div x-show="aberta === 1" x-collapse x-cloak>
+            <p class="pb-6 pl-10 text-sm leading-relaxed text-mudo">
+              Depende de constância, alimentação e ponto de partida. Quem treina na
+              frequência indicada costuma notar diferença de condicionamento nas
+              primeiras semanas e mudança visível a partir do segundo ciclo.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <h3>
+            <button type="button" @click="alterna(2)" :aria-expanded="aberta === 2"
+                    class="flex w-full cursor-pointer items-center gap-4 py-6 text-left text-[15px] text-white">
+              <span class="grid h-6 w-6 shrink-0 place-items-center text-xl text-azul-cl transition duration-300" :class="aberta === 2 && 'rotate-45'">+</span>
+              Os treinos são atualizados com frequência?
+            </button>
+          </h3>
+          <div x-show="aberta === 2" x-collapse x-cloak>
+            <p class="pb-6 pl-10 text-sm leading-relaxed text-mudo">
+              Sim. A cada 45 dias entra uma programação nova, para o corpo não
+              acomodar e o estímulo continuar surtindo efeito.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <h3>
+            <button type="button" @click="alterna(3)" :aria-expanded="aberta === 3"
+                    class="flex w-full cursor-pointer items-center gap-4 py-6 text-left text-[15px] text-white">
+              <span class="grid h-6 w-6 shrink-0 place-items-center text-xl text-azul-cl transition duration-300" :class="aberta === 3 && 'rotate-45'">+</span>
+              Posso compartilhar a minha conta com alguém?
+            </button>
+          </h3>
+          <div x-show="aberta === 3" x-collapse x-cloak>
+            <p class="pb-6 pl-10 text-sm leading-relaxed text-mudo">
+              A conta é individual. Para treinar acompanhado existe o plano Casal,
+              que dá acesso às trilhas masculina e feminina em duas contas.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <h3>
+            <button type="button" @click="alterna(4)" :aria-expanded="aberta === 4"
+                    class="flex w-full cursor-pointer items-center gap-4 py-6 text-left text-[15px] text-white">
+              <span class="grid h-6 w-6 shrink-0 place-items-center text-xl text-azul-cl transition duration-300" :class="aberta === 4 && 'rotate-45'">+</span>
+              Posso cancelar meu plano a qualquer momento?
+            </button>
+          </h3>
+          <div x-show="aberta === 4" x-collapse x-cloak>
+            <p class="pb-6 pl-10 text-sm leading-relaxed text-mudo">
+              Pode, sem fidelidade e sem multa. O acesso segue até o fim do período
+              já pago e depois a renovação simplesmente não acontece.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RODAPÉ ================= -->
+  <footer class="border-t border-linha py-14">
+    <div class="wrap">
+      <div class="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
+        <div>
+          <div class="flex items-center gap-3">
+            <img src="./static/images/logo.png" alt="" width="48" height="48" class="h-9 w-9 object-contain" />
+            <span class="font-display text-2xl font-medium uppercase tracking-[0.14em] text-white">SpacePro</span>
+          </div>
+          <p class="mt-5 max-w-xs text-sm leading-relaxed text-mudo">
+            Treinos profissionais prontos para seguir na academia, com metodologia
+            de verdade e renovação a cada 45 dias.
+          </p>
+          <div class="mt-6 flex items-center gap-4 text-mudo">
+            <a href="#" aria-label="WhatsApp" class="transition duration-300 hover:text-white">
+              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.05 2C6.6 2 2.16 6.44 2.16 11.89c0 2.09.55 4.13 1.6 5.93L2.06 24l6.34-1.66a9.86 9.86 0 004.65 1.18h.01c5.45 0 9.89-4.44 9.89-9.89 0-2.64-1.03-5.12-2.9-6.99A9.82 9.82 0 0012.05 2zm5.42 12.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.89-.79-1.48-1.76-1.66-2.06-.17-.3-.02-.46.13-.6.14-.14.3-.35.45-.53.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.87 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.27-.2-.57-.35z"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram" class="transition duration-300 hover:text-white">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="#" aria-label="E-mail" class="transition duration-300 hover:text-white">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 8l9 6 9-6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="text-xs font-semibold uppercase tracking-[0.18em] text-white">Navegação</h2>
+          <ul class="mt-5 space-y-3 text-sm text-mudo">
+            <li><a href="#aplicativo" class="transition duration-300 hover:text-white">Aplicativo</a></li>
+            <li><a href="#transformacoes" class="transition duration-300 hover:text-white">Transformações</a></li>
+            <li><a href="#planos" class="transition duration-300 hover:text-white">Planos</a></li>
+            <li><a href="#duvidas" class="transition duration-300 hover:text-white">Dúvidas</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="text-xs font-semibold uppercase tracking-[0.18em] text-white">Download</h2>
+          <ul class="mt-5 space-y-3 text-sm text-mudo">
+            <li><a href="#" class="flex items-center gap-2.5 transition duration-300 hover:text-white">
+              <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M16.36 12.9c-.02-2.3 1.88-3.4 1.96-3.45-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.83-.81-3.01-.79-1.55.02-2.98.9-3.77 2.28-1.61 2.79-.41 6.92 1.15 9.18.76 1.11 1.67 2.35 2.86 2.31 1.15-.05 1.58-.74 2.97-.74 1.39 0 1.78.74 2.99.72 1.24-.02 2.02-1.13 2.78-2.24.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.39-.92-2.42-3.63zM14.2 5.5c.63-.77 1.06-1.83.94-2.9-.91.04-2.02.61-2.68 1.37-.59.67-1.11 1.76-.97 2.79 1.02.08 2.06-.52 2.71-1.26z"/></svg>
+              App Store</a></li>
+            <li><a href="#" class="flex items-center gap-2.5 transition duration-300 hover:text-white">
+              <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3.6 1.8a1 1 0 00-.6.92v18.56a1 1 0 001.53.85l3.6-2.2-4.53-18.13zM14.9 12l-3.06-3.06L5.6 5.2 14.9 12zm0 0l-9.3 6.8 6.24-3.74L14.9 12zm1.35.98l2.9-1.77a1 1 0 000-1.7l-2.9-1.77-2.1 2.1 2.1 3.14z"/></svg>
+              Google Play</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-12 flex flex-col gap-3 border-t border-linha pt-7 text-xs text-mudo2 sm:flex-row sm:items-center sm:justify-between">
+        <p>© <span x-text="new Date().getFullYear()">2026</span> SpacePro. Todos os direitos reservados.</p>
+        <div class="flex gap-6">
+          <a href="#" class="transition duration-300 hover:text-white">Política de Privacidade</a>
+          <a href="#" class="transition duration-300 hover:text-white">Termos de Uso</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

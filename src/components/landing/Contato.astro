@@ -1,0 +1,234 @@
+---
+import Check from "../icons/Check.astro";
+import WhatsApp from "../icons/WhatsApp.astro";
+import { site } from "../../config";
+import { contato } from "../../data/landing";
+
+/** Limite de caracteres da mensagem. */
+const MAX_MENSAGEM = 500;
+---
+
+<section id="contato" class="relative py-16 lg:py-32 overflow-hidden">
+  <div class="absolute inset-0 grid-bg opacity-40 pointer-events-none"></div>
+  <div class="top-1/2 left-1/2 absolute bg-brand-600/20 blur-[150px] rounded-full w-[900px] h-[520px] -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+
+  <div class="relative container-page">
+    <div class="bg-ink-900/70 backdrop-blur-xl border border-white/10 rounded-4xl overflow-hidden">
+      <div class="grid lg:grid-cols-2">
+        <div class="p-8 sm:p-16 border-white/8 lg:border-r border-b lg:border-b-0">
+          <span class="eyebrow">Último passo</span>
+          <h2 class="mt-4 h-section">Vamos colocar seu negócio no celular do cliente?</h2>
+          <p class="mt-4 text-slate-400 text-lg">
+            Responda 4 campos e devolvemos uma proposta com os itens certos para o seu negócio em até 24h úteis. Sem compromisso, sem letra miúda.
+          </p>
+
+          <ul class="space-y-4 mt-8">
+            {
+              contato.beneficios.map((b) => (
+                <li class="flex items-start gap-4">
+                  <span class="place-items-center grid bg-brand-500/12 rounded-xl ring-1 ring-white/10 w-10 h-10 text-lg shrink-0">{b.icone}</span>
+                  <div>
+                    <p class="font-semibold text-white">{b.titulo}</p>
+                    <p class="text-slate-400 text-sm">{b.texto}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+
+          <div class="flex flex-wrap gap-x-8 gap-y-4 mt-8 pt-8 border-white/8 border-t text-sm">
+            <a href={`mailto:${site.contact.email}`} class="flex items-center gap-2 text-slate-400 hover:text-white transition duration-300">
+              <svg class="w-4 h-4 text-brand-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9 6 9-6M3 8v8a2 2 0 002 2h14a2 2 0 002-2V8M3 8a2 2 0 012-2h14a2 2 0 012 2"></path></svg>
+              {site.contact.email}
+            </a>
+            <a href={`https://wa.me/${site.contact.whatsapp}`} target="_blank" rel="noopener" class="flex items-center gap-2 text-slate-400 hover:text-white transition duration-300">
+              <WhatsApp class="w-4 h-4 text-emerald-400" />
+              {site.contact.phoneDisplay}
+            </a>
+          </div>
+        </div>
+
+        <div class="p-8 sm:p-16">
+          <div data-enviado hidden class="flex flex-col justify-center items-center py-8 h-full text-center transition-opacity duration-300">
+            <span class="place-items-center grid bg-emerald-500/15 rounded-full ring-1 ring-emerald-500/30 w-16 h-16">
+              <Check class="w-8 h-8 text-emerald-400" />
+            </span>
+            <h3 class="mt-8 font-display font-bold text-white text-2xl">Recebemos seu pedido!</h3>
+            <p class="mt-4 max-w-sm text-slate-400">
+              Obrigado, <span data-primeiro-nome class="font-semibold text-white"></span>. Vamos analisar tudo e responder em até 24h úteis no e-mail informado.
+            </p>
+            <button type="button" data-reiniciar class="mt-8 cursor-pointer btn-ghost">Enviar outra solicitação</button>
+          </div>
+
+          <!-- `novalidate`: a validação é do script; sem ele a nativa engoliria o submit -->
+          <form data-form novalidate class="space-y-4">
+            <div>
+              <label for="name" class="block mb-2 font-medium text-slate-300 text-sm">Nome completo</label>
+              <input id="name" name="name" type="text" autocomplete="name" placeholder="Como podemos te chamar?" class="field" />
+              <p data-erro="name" hidden class="mt-2 text-rose-400 text-xs"></p>
+            </div>
+
+            <div class="gap-4 grid sm:grid-cols-2">
+              <div>
+                <label for="email" class="block mb-2 font-medium text-slate-300 text-sm">E-mail</label>
+                <input id="email" name="email" type="email" autocomplete="email" placeholder="voce@empresa.com.br" class="field" />
+                <p data-erro="email" hidden class="mt-2 text-rose-400 text-xs"></p>
+              </div>
+              <div>
+                <label for="phone" class="block mb-2 font-medium text-slate-300 text-sm">WhatsApp</label>
+                <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder={site.contact.phoneDisplay} maxlength="15" class="field" />
+                <p data-erro="phone" hidden class="mt-2 text-rose-400 text-xs"></p>
+              </div>
+            </div>
+
+            <div>
+              <label for="plan" class="block mb-2 font-medium text-slate-300 text-sm">O que te interessa</label>
+              <select id="plan" name="plan" class="field">
+                {contato.tiposDeProjeto.map((t) => <option class="bg-ink-900">{t}</option>)}
+              </select>
+            </div>
+
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label for="message" class="font-medium text-slate-300 text-sm">Conte um pouco sobre o seu negócio</label>
+                <span data-contador data-max={MAX_MENSAGEM} class="text-slate-500 data-estourou:text-rose-400 text-xs">0/{MAX_MENSAGEM}</span>
+              </div>
+              <textarea id="message" name="message" rows="4" maxlength={MAX_MENSAGEM} placeholder="Qual é o seu negócio e o que mais te incomoda no atendimento hoje?" class="resize-none field"></textarea>
+              <p data-erro="message" hidden class="mt-2 text-rose-400 text-xs"></p>
+            </div>
+
+            <label class="flex items-start gap-4 text-slate-400 text-sm">
+              <input type="checkbox" name="terms" class="bg-ink-900 mt-0.5 border-white/20 rounded focus:ring-brand-500 w-4 h-4 text-brand-600" />
+              <span>Autorizo o contato por e-mail e WhatsApp sobre esta solicitação.</span>
+            </label>
+            <p data-erro="terms" hidden class="-mt-4 text-rose-400 text-xs"></p>
+
+            <button type="submit" class="disabled:opacity-60 w-full cursor-pointer disabled:cursor-not-allowed btn-primary btn-lg">
+              <svg data-carregando class="hidden w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+              <span data-rotulo>Quero minha proposta</span>
+            </button>
+
+            <p class="text-slate-500 text-xs text-center">Seus dados ficam com a gente. Sem spam, prometido.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { aCadaPagina } from "../../scripts/pagina";
+
+  type Campo = "name" | "email" | "phone" | "message" | "terms";
+
+  /** Formata como (11) 99999-9999 enquanto a pessoa digita. */
+  const mascaraTelefone = (valor: string) => {
+    const v = valor.replace(/\D/g, "").slice(0, 11);
+    if (v.length > 6) return `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
+    if (v.length > 2) return `(${v.slice(0, 2)}) ${v.slice(2)}`;
+    if (v.length > 0) return `(${v}`;
+    return v;
+  };
+
+  const validar = (d: FormData) => {
+    const texto = (k: string) => String(d.get(k) ?? "");
+    const erros: Partial<Record<Campo, string>> = {};
+    if (texto("name").trim().length < 3) erros.name = "Informe seu nome completo.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(texto("email"))) erros.email = "Informe um e-mail válido.";
+    if (texto("phone").replace(/\D/g, "").length < 10) erros.phone = "Informe um telefone com DDD.";
+    if (texto("message").trim().length < 10) erros.message = "Escreva ao menos uma frase sobre o projeto.";
+    if (!d.get("terms")) erros.terms = "É preciso autorizar o contato para continuar.";
+    return erros;
+  };
+
+  /** Mostra o elemento com uma entrada em fade de 300ms. */
+  const surgir = (el: HTMLElement) => {
+    el.hidden = false;
+    el.classList.add("opacity-0");
+    el.offsetHeight;
+    el.classList.remove("opacity-0");
+  };
+
+  aCadaPagina((signal) => {
+    const form = document.querySelector<HTMLFormElement>("[data-form]");
+    const enviado = document.querySelector<HTMLElement>("[data-enviado]");
+    if (!form || !enviado) return;
+
+    const telefone = form.elements.namedItem("phone") as HTMLInputElement;
+    const mensagem = form.elements.namedItem("message") as HTMLTextAreaElement;
+    const contador = form.querySelector<HTMLElement>("[data-contador]")!;
+    const botao = form.querySelector<HTMLButtonElement>("button[type=submit]")!;
+    const carregando = botao.querySelector<SVGElement>("[data-carregando]")!;
+    const rotulo = botao.querySelector<HTMLElement>("[data-rotulo]")!;
+
+    const mostrarErros = (erros: Partial<Record<Campo, string>>) => {
+      form.querySelectorAll<HTMLElement>("[data-erro]").forEach((p) => {
+        const campo = p.dataset.erro as Campo;
+        const msg = erros[campo];
+        p.textContent = msg ?? "";
+        p.hidden = !msg;
+        const input = form.elements.namedItem(campo) as HTMLElement | null;
+        if (input?.classList.contains("field")) input.classList.toggle("field-error", !!msg);
+        input?.setAttribute("aria-invalid", String(!!msg));
+      });
+    };
+
+    const atualizarContador = () => {
+      const max = Number(contador.dataset.max);
+      contador.textContent = `${mensagem.value.length}/${max}`;
+      contador.toggleAttribute("data-estourou", mensagem.value.length > max);
+    };
+
+    telefone.addEventListener("input", () => (telefone.value = mascaraTelefone(telefone.value)), { signal });
+    mensagem.addEventListener("input", atualizarContador, { signal });
+
+    form.addEventListener(
+      "submit",
+      async (e) => {
+        e.preventDefault();
+        const dados = new FormData(form);
+        const erros = validar(dados);
+        mostrarErros(erros);
+        if (Object.keys(erros).length) return;
+
+        botao.disabled = true;
+        carregando.classList.remove("hidden");
+        rotulo.textContent = "Enviando…";
+
+        // TODO (bloqueante antes de publicar): site estático não tem backend.
+        // Aponte para Formspree, Netlify Forms, Web3Forms ou um webhook seu.
+        // await fetch("https://formspree.io/f/SEU_ID", {
+        //   method: "POST",
+        //   headers: { Accept: "application/json" },
+        //   body: dados,
+        // });
+        await new Promise((r) => setTimeout(r, 1200));
+
+        botao.disabled = false;
+        carregando.classList.add("hidden");
+        rotulo.textContent = "Quero minha proposta";
+
+        const primeiroNome = String(dados.get("name")).trim().split(" ")[0];
+        enviado.querySelector("[data-primeiro-nome]")!.textContent = primeiroNome;
+        form.hidden = true;
+        surgir(enviado);
+      },
+      { signal },
+    );
+
+    enviado.querySelector("[data-reiniciar]")?.addEventListener(
+      "click",
+      () => {
+        form.reset();
+        mostrarErros({});
+        atualizarContador();
+        enviado.hidden = true;
+        form.hidden = false;
+      },
+      { signal },
+    );
+  });
+</script>

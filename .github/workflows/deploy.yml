@@ -1,0 +1,51 @@
+# Publica a PRÉVIA no GitHub Pages a cada push na main.
+# Usa `build:preview`: o site sai com `base` de subpasta e marcado como
+# noindex (ver src/config.ts). O build de entrega, no domínio do cliente,
+# é `npm run build` e não passa por aqui.
+name: Deploy da prévia no GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Um deploy por vez; não cancela o que já está no ar.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # `ci` respeita o package-lock.json; o build roda `astro check` antes,
+      # então erro de tipo barra o deploy.
+      - run: npm ci
+      - run: npm run build:preview
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

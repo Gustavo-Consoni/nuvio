@@ -1,0 +1,26 @@
+---
+/**
+ * Animação de entrada no scroll para todo elemento com a classe `reveal`.
+ * `data-atraso="110"` segura a entrada em milissegundos (para escalonar cards).
+ *
+ * Sem JavaScript o conteúdo simplesmente aparece: o estado escondido do
+ * `.reveal` só vale quando o <html> tem a classe `.js` (ver global.css).
+ */
+---
+
+<script>
+  import { aCadaPagina } from "../../scripts/pagina";
+
+  aCadaPagina((signal) => {
+    const observador = new IntersectionObserver((entradas) => {
+      for (const { isIntersecting, target } of entradas) {
+        if (!isIntersecting) continue;
+        observador.unobserve(target);
+        const atraso = Number((target as HTMLElement).dataset.atraso ?? 0);
+        setTimeout(() => target.classList.add("reveal-in"), atraso);
+      }
+    });
+    document.querySelectorAll(".reveal").forEach((el) => observador.observe(el));
+    signal.addEventListener("abort", () => observador.disconnect());
+  });
+</script>

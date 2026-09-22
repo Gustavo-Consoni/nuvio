@@ -1,0 +1,269 @@
+---
+/**
+ * "Teste agora" só com o cartão, rodando sozinho em loop: o cartão encosta
+ * no celular, surge a notificação, um "dedo" toca nela e o cardápio abre e
+ * rola devagar. É uma animação para assistir: o celular não recebe clique.
+ * A versão anterior, em que o visitante escolhe a peça, é "Teste.astro".
+ *
+ * Atributos na raiz, visual por variantes `group-data-[...]`:
+ * - `data-estado`: parado → encostando → notificando → aberto
+ * - `data-dedo`: "" | indo | tocando
+ * Cada passo da lista ganha `data-ativo` conforme o estado.
+ *
+ * O loop só roda com o celular na tela e a aba à vista. Com
+ * `prefers-reduced-motion` não há animação: o celular fica com o cardápio
+ * aberto, parado. Sem JavaScript, fica a tela bloqueada e a lista de passos.
+ */
+import { teste } from "../../data/landing";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const cartao = teste.find((t) => t.id === "espera")!;
+const link = `${base}${cartao.tela}`;
+
+const ondas = "M8.5 8.5a5 5 0 0 1 0 7M12 5.5a9.5 9.5 0 0 1 0 13M15.5 2.5a14 14 0 0 1 0 19";
+
+const passos = [
+  { titulo: "O cliente encosta o celular no cartão", texto: "Sem baixar nada e sem abrir a câmera." },
+  { titulo: "Aparece uma notificação", texto: "Um toque e ela abre." },
+  { titulo: "O cardápio abre na hora", texto: "Fotos, preços e botão de agendar." },
+];
+---
+
+<section id="teste" class="relative py-16 lg:py-32 overflow-hidden">
+  <div class="top-1/2 right-0 absolute bg-accent-500/10 blur-[150px] rounded-full w-[620px] h-[420px] -translate-y-1/2 pointer-events-none"></div>
+
+  <div data-teste-cartao data-estado="parado" data-dedo="" class="group relative items-center gap-16 grid lg:grid-cols-2 container-page">
+    <div class="reveal">
+      <span class="eyebrow">Teste agora</span>
+      <h2 class="mt-4 h-section">Veja o que o seu cliente vê ao encostar o celular</h2>
+      <p class="mt-4 text-slate-400 text-lg">
+        É exatamente isso que acontece na sua sala de espera.
+      </p>
+
+      <ol class="space-y-4 mt-8">
+        {
+          passos.map((p, i) => (
+            <li data-passo class="group/passo flex items-start gap-4 bg-white/3 data-ativo:bg-brand-500/10 px-4 py-4 border border-white/8 data-ativo:border-brand-400/60 rounded-2xl transition duration-300">
+              <span class="place-items-center grid bg-white/8 group-data-ativo/passo:bg-brand-500 rounded-full w-7 h-7 font-display font-bold text-slate-300 group-data-ativo/passo:text-white text-sm transition duration-300 shrink-0">
+                {i + 1}
+              </span>
+              <span>
+                <span class="block font-display font-bold text-white">{p.titulo}</span>
+                <span class="block mt-0.5 text-slate-400 text-sm">{p.texto}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+    <!-- palco: o cartão e o celular. A altura vem do celular, que segue a
+         proporção de um iPhone (393x852) em qualquer largura. -->
+    <div data-palco class="relative mx-auto w-full max-w-md">
+      <!-- cartão: "encosta" no celular e fica lá até o cardápio abrir -->
+      <div class="bottom-16 left-0 z-20 absolute group-data-[estado=aberto]:opacity-0 transition-all group-data-[estado=encostando]:translate-x-[20%] group-data-[estado=notificando]:translate-x-[20%] sm:group-data-[estado=encostando]:translate-x-[45%] sm:group-data-[estado=notificando]:translate-x-[45%] group-data-[estado=encostando]:-translate-y-[60%] group-data-[estado=notificando]:-translate-y-[60%] duration-700 ease-[cubic-bezier(.16,1,.3,1)] pointer-events-none" aria-hidden="true">
+        <div class="bg-gradient-to-br from-blade-gold to-[#8f7a5a] shadow-2xl shadow-black/50 p-4 border border-white/20 rounded-xl w-64 aspect-[1.586] -rotate-8">
+          <div class="flex justify-between items-start">
+            <span class="font-display font-extrabold text-blade-void text-sm tracking-[0.2em]">BLADE & CO.</span>
+            <svg class="w-6 h-6 text-blade-void/70" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><path d={ondas} /></svg>
+          </div>
+          <p class="bottom-4 left-4 absolute font-semibold text-[9px] text-blade-void/70 uppercase tracking-widest">Cortes e preços</p>
+        </div>
+      </div>
+
+      <!-- celular: centralizado no mobile, à direita a partir do sm. No mobile
+           ocupa 75% do palco para a demo não encolher demais, e o cartão
+           encosta menos (20%) para não passar da borda. -->
+      <div class="relative bg-ink-900 shadow-2xl shadow-black/60 mx-auto sm:mr-0 p-2 border border-white/15 rounded-[2.5rem] w-[75%] sm:w-[270px] max-w-[300px] aspect-[393/852]">
+        <div data-tela-celular class="relative bg-gradient-to-b from-ink-800 to-ink-950 rounded-[2rem] w-full h-full overflow-hidden">
+          <div class="top-2 left-1/2 z-40 absolute bg-black rounded-full w-20 h-5 -translate-x-1/2"></div>
+
+          <!-- tela bloqueada -->
+          <div class="flex flex-col items-center pt-16 h-full text-center">
+            <p class="font-display font-bold text-white/90 text-5xl">9:41</p>
+            <p class="mt-1 text-slate-400 text-xs">quinta-feira</p>
+            <p class="group-data-[estado=aberto]:hidden mt-auto mb-8 px-8 text-slate-500 text-xs">
+              <span class="group-data-[estado=parado]:inline hidden">Encoste o celular no cartão</span>
+            </p>
+          </div>
+
+          <!-- notificação -->
+          <div class="top-10 right-2.5 left-2.5 z-20 absolute bg-white/15 opacity-0 group-data-[estado=notificando]:opacity-100 shadow-xl backdrop-blur-xl p-4 border border-white/15 rounded-2xl transition-all -translate-y-4 group-data-[estado=notificando]:translate-y-0 group-data-[dedo=tocando]:scale-[.97] duration-300">
+            <span class="flex items-center gap-2">
+              <span class="place-items-center grid bg-accent-500 rounded-lg w-8 h-8 text-white shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24" aria-hidden="true"><path d={ondas} /></svg>
+              </span>
+              <span class="min-w-0">
+                <span class="block font-semibold text-[11px] text-white">Blade & Co.</span>
+                <span class="block text-[11px] text-slate-300 truncate">{cartao.notificacao}</span>
+              </span>
+            </span>
+          </div>
+
+          <!-- dedo simulado: sobe até a notificação e toca nela -->
+          <span
+            class="top-[46px] left-[62%] z-30 absolute bg-white/35 opacity-0 group-data-[dedo=indo]:opacity-100 group-data-[dedo=tocando]:opacity-100 shadow-black/30 shadow-lg border-2 border-white/80 rounded-full w-11 h-11 transition-all -translate-x-1/2 translate-y-56 group-data-[dedo=indo]:translate-y-0 group-data-[dedo=tocando]:translate-y-0 group-data-[dedo=tocando]:scale-75 duration-700 group-data-[dedo=tocando]:duration-300 ease-[cubic-bezier(.16,1,.3,1)] pointer-events-none"
+            aria-hidden="true">
+          </span>
+
+          <!-- cardápio aberto: o iframe é criado pelo script quando a seção se
+               aproxima. `inert`: só se assiste, não recebe clique nem foco. -->
+          <div data-app data-link={link} inert class="z-10 absolute inset-0 bg-blade-void opacity-0 group-data-[estado=aberto]:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+        </div>
+      </div>
+
+      <!-- ondas no ponto de contato -->
+      <span class="hidden group-data-[estado=notificando]:block top-[45%] right-[42%] absolute border-2 border-accent-400/60 rounded-full w-16 h-16 animate-ping pointer-events-none"></span>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { aCadaPagina } from "../../scripts/pagina";
+
+  /** Largura em que a demo é desenhada antes de encolher na tela do celular. */
+  const LARGURA_DEMO = 390;
+
+  /** Espera `ms`; rejeita se o ciclo for cancelado no meio. */
+  const espera = (ms: number, s: AbortSignal) =>
+    new Promise<void>((ok, falha) => {
+      const t = setTimeout(ok, ms);
+      s.addEventListener("abort", () => (clearTimeout(t), falha()), { once: true });
+    });
+
+  aCadaPagina((signal) => {
+    const raiz = document.querySelector<HTMLElement>("[data-teste-cartao]");
+    if (!raiz) return;
+    const palco = raiz.querySelector<HTMLElement>("[data-palco]")!;
+    const tela = raiz.querySelector<HTMLElement>("[data-tela-celular]")!;
+    const app = raiz.querySelector<HTMLElement>("[data-app]")!;
+    const passos = [...raiz.querySelectorAll<HTMLElement>("[data-passo]")];
+    const calmo = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let iframe: HTMLIFrameElement | undefined;
+    let ciclo: AbortController | undefined;
+    let visivel = false;
+
+    const passoDo: Record<string, number> = { encostando: 0, notificando: 1, aberto: 2 };
+    const estado = (e: string) => {
+      raiz.dataset.estado = e;
+      passos.forEach((p, i) => p.toggleAttribute("data-ativo", passoDo[e] === i));
+    };
+    const rolarPara = (y: number) => iframe?.contentWindow?.scrollTo({ top: y, behavior: "instant" });
+
+    /** Cria o iframe uma vez só, antes da primeira abertura, para não aparecer em branco. */
+    const prepararDemo = () => {
+      if (iframe) return;
+      iframe = document.createElement("iframe");
+      iframe.src = app.dataset.link ?? "";
+      iframe.title = "Cardápio de cortes da Blade & Co.";
+      iframe.tabIndex = -1;
+      iframe.className = "absolute top-0 left-0 border-0 origin-top-left";
+      app.append(iframe);
+    };
+
+    const abrir = () => {
+      prepararDemo();
+      // a demo é desenhada em 390px e encolhida para caber na tela
+      const escala = tela.clientWidth / LARGURA_DEMO;
+      iframe!.style.width = `${LARGURA_DEMO}px`;
+      iframe!.style.height = `${tela.clientHeight / escala}px`;
+      iframe!.style.transform = `scale(${escala})`;
+      estado("aberto");
+    };
+
+    const reiniciar = () => {
+      raiz.dataset.dedo = "";
+      estado("parado");
+      // volta ao topo depois do fade, para o cardápio não "pular" à vista
+      setTimeout(() => rolarPara(0), 300);
+    };
+
+    /** Rola o cardápio de 0 até `alvo` em `ms`, com aceleração suave. */
+    const rolar = (ms: number, s: AbortSignal) =>
+      new Promise<void>((ok, falha) => {
+        const doc = iframe?.contentDocument?.documentElement;
+        if (!doc) return ok();
+        const alvo = Math.min(doc.scrollHeight - doc.clientHeight, 1100);
+        const inicio = performance.now();
+        let quadro = 0;
+        const passo = (agora: number) => {
+          const t = Math.min((agora - inicio) / ms, 1);
+          rolarPara(alvo * (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2));
+          if (t < 1) quadro = requestAnimationFrame(passo);
+          else ok();
+        };
+        quadro = requestAnimationFrame(passo);
+        s.addEventListener("abort", () => (cancelAnimationFrame(quadro), falha()), { once: true });
+      });
+
+    const rodar = async (s: AbortSignal) => {
+      try {
+        for (;;) {
+          reiniciar();
+          await espera(1200, s);
+          estado("encostando");
+          await espera(900, s);
+          estado("notificando");
+          await espera(900, s);
+          raiz.dataset.dedo = "indo";
+          await espera(900, s);
+          raiz.dataset.dedo = "tocando";
+          await espera(350, s);
+          raiz.dataset.dedo = "";
+          abrir();
+          await espera(900, s);
+          await rolar(5000, s);
+          await espera(1800, s);
+          estado("parado");
+          await espera(600, s);
+        }
+      } catch {
+        // ciclo cancelado: quem cancelou já cuidou do estado
+      }
+    };
+
+    /** Liga o loop com o celular na tela e a aba à vista; desliga fora disso. */
+    const atualizar = () => {
+      const rodando = visivel && !document.hidden;
+      if (rodando && !ciclo) {
+        ciclo = new AbortController();
+        rodar(ciclo.signal);
+      } else if (!rodando && ciclo) {
+        ciclo.abort();
+        ciclo = undefined;
+        reiniciar();
+      }
+    };
+
+    // prepara a demo um pouco antes de a seção aparecer
+    const perto = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return;
+        prepararDemo();
+        perto.disconnect();
+        // sem movimento: o cardápio fica aberto, parado no topo
+        if (calmo) abrir();
+      },
+      { rootMargin: "400px 0px" },
+    );
+    perto.observe(palco);
+    if (calmo) return signal.addEventListener("abort", () => perto.disconnect());
+
+    const vista = new IntersectionObserver(
+      ([e]) => {
+        visivel = e.isIntersecting;
+        atualizar();
+      },
+      { threshold: 0.4 },
+    );
+    vista.observe(palco);
+    document.addEventListener("visibilitychange", atualizar, { signal });
+
+    signal.addEventListener("abort", () => {
+      ciclo?.abort();
+      perto.disconnect();
+      vista.disconnect();
+    });
+  });
+</script>

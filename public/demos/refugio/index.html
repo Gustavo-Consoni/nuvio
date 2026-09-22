@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Noor | Refúgio no deserto em Erg Chigaga, Marrocos</title>
+  <meta name="description" content="Dezoito suítes no fim da estrada, entre as dunas de Erg Chigaga. Hammam, jantar na areia, caravana ao entardecer e um dos céus mais limpos do planeta." />
+  <meta name="theme-color" content="#0a0f1e" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Noor | Refúgio no deserto" />
+  <meta property="og:description" content="Dezoito suítes entre as dunas de Erg Chigaga, no sul do Marrocos." />
+
+  <link rel="icon" href="./static/images/logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <script>
+    document.documentElement.classList.add('js');
+    setTimeout(function () { if (!window.Alpine) document.documentElement.classList.remove('js'); }, 3000);
+  </script>
+
+  <link rel="stylesheet" href="./static/output.css" />
+  <!-- Fonte base fluida, igual à do site principal (html em src/styles/global.css). -->
+  <style>
+    html {
+      text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
+      font-size: clamp(12px, 4vw, 16px);
+    }
+  </style>
+  <script defer src="./app.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body x-data="noor()" class="overflow-x-hidden">
+
+  <!-- ================= NAVEGAÇÃO =================
+       A barra troca de clima junto com a página: transparente sobre o hero,
+       areia depois que rola, azul-noite a partir da faixa de transição. -->
+  <header class="fixed inset-x-0 top-0 z-100 py-4 transition-all duration-500"
+          :class="rolou ? (noite ? 'bg-noite/92 backdrop-blur-lg border-b border-ouro/12'
+                                 : 'bg-areia/92 backdrop-blur-lg border-b border-ouro/12') : ''">
+    <div class="wrap flex items-center justify-between gap-6">
+      <a href="#topo"
+         class="font-display text-[1.1rem] tracking-[0.15em] transition-colors duration-500"
+         :class="rolou && !noite ? 'text-marrom' : 'text-creme drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]'">NOOR</a>
+
+      <nav class="hidden items-center gap-8 md:flex">
+        <a href="#historia"     class="text-[0.78rem] tracking-[0.06em] opacity-85 transition duration-300 hover:opacity-100" :class="rolou && !noite ? 'text-marrom' : 'text-creme drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]'">História</a>
+        <a href="#suites"       class="text-[0.78rem] tracking-[0.06em] opacity-85 transition duration-300 hover:opacity-100" :class="rolou && !noite ? 'text-marrom' : 'text-creme drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]'">Suítes</a>
+        <a href="#bemestar"     class="text-[0.78rem] tracking-[0.06em] opacity-85 transition duration-300 hover:opacity-100" :class="rolou && !noite ? 'text-marrom' : 'text-creme drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]'">Bem-estar</a>
+        <a href="#mesa"         class="text-[0.78rem] tracking-[0.06em] opacity-85 transition duration-300 hover:opacity-100" :class="rolou && !noite ? 'text-marrom' : 'text-creme drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]'">Mesa</a>
+        <a href="#experiencias" class="text-[0.78rem] tracking-[0.06em] opacity-85 transition duration-300 hover:opacity-100" :class="rolou && !noite ? 'text-marrom' : 'text-creme drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]'">Experiências</a>
+      </nav>
+
+      <a href="#reservar" class="btn-linha hidden md:inline-flex"
+         :class="rolou && !noite ? 'border-terracota/30 text-terracota hover:border-terracota hover:bg-terracota/8' : ''">Reservar</a>
+
+      <button @click="menu = !menu" :aria-expanded="menu" aria-label="Abrir menu"
+              class="relative z-101 h-5 w-7 cursor-pointer md:hidden">
+        <span class="absolute left-0 block h-px w-full transition-all duration-300"
+              :class="[menu ? 'top-[9px] rotate-45' : 'top-0', rolou && !noite && !menu ? 'bg-marrom' : 'bg-creme']"></span>
+        <span class="absolute left-0 top-[9px] block h-px w-full transition-all duration-300"
+              :class="[menu ? 'opacity-0' : 'opacity-100', rolou && !noite && !menu ? 'bg-marrom' : 'bg-creme']"></span>
+        <span class="absolute left-0 block h-px w-full transition-all duration-300"
+              :class="[menu ? 'top-[9px] -rotate-45' : 'top-[18px]', rolou && !noite && !menu ? 'bg-marrom' : 'bg-creme']"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- menu de tela cheia no celular -->
+  <div x-show="menu" x-cloak x-transition.opacity.duration.400ms
+       class="fixed inset-0 z-99 flex flex-col items-center justify-center gap-7 bg-noite/96 backdrop-blur-xl md:hidden">
+    <a href="#historia"     @click="menu = false" class="font-display text-[1.6rem] font-light tracking-[0.06em] text-creme transition duration-300 hover:text-ouro">História</a>
+    <a href="#suites"       @click="menu = false" class="font-display text-[1.6rem] font-light tracking-[0.06em] text-creme transition duration-300 hover:text-ouro">Suítes</a>
+    <a href="#bemestar"     @click="menu = false" class="font-display text-[1.6rem] font-light tracking-[0.06em] text-creme transition duration-300 hover:text-ouro">Bem-estar</a>
+    <a href="#mesa"         @click="menu = false" class="font-display text-[1.6rem] font-light tracking-[0.06em] text-creme transition duration-300 hover:text-ouro">Mesa</a>
+    <a href="#experiencias" @click="menu = false" class="font-display text-[1.6rem] font-light tracking-[0.06em] text-creme transition duration-300 hover:text-ouro">Experiências</a>
+    <a href="#reservar"     @click="menu = false" class="btn-linha mt-4">Reservar</a>
+  </div>
+
+  <!-- ================= HERO ================= -->
+  <section id="topo" class="relative flex h-screen items-center justify-center overflow-hidden">
+    <img src="./static/images/hero.webp" alt="Pátio do Noor ao entardecer, com a areia levantada pelo vento"
+         width="1600" height="1100" fetchpriority="high"
+         class="foto-tratada absolute inset-0" x-ref="fundoHero" />
+    <div class="veu-hero absolute inset-0"></div>
+
+    <div class="relative z-2 flex flex-col items-center gap-3 px-6 text-center">
+      <p class="text-[0.72rem] uppercase tracking-[0.15em] text-ouro-cl drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)]">Erg Chigaga, Marrocos</p>
+      <h1 class="font-display text-[clamp(2.8rem,12vw,9rem)] font-light leading-none tracking-[0.2em] text-white drop-shadow-[0_4px_40px_rgba(0,0,0,0.3)]">NOOR</h1>
+      <p class="-mt-1 font-display text-[clamp(1rem,2vw,1.3rem)] font-light italic text-ouro-cl drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)]">Refúgio no fim da estrada</p>
+      <span class="my-3 block h-px w-15 bg-ouro"></span>
+      <a href="#historia" class="btn-vidro">Comece a jornada</a>
+    </div>
+
+    <div class="absolute bottom-7 left-1/2 z-2 flex -translate-x-1/2 flex-col items-center gap-2">
+      <span class="text-[0.62rem] uppercase tracking-[0.2em] text-creme/60">Rolar</span>
+      <span class="risco-rolar block h-9 w-px bg-ouro"></span>
+    </div>
+  </section>
+
+  <!-- ================= HISTÓRIA ================= -->
+  <section id="historia" class="relative overflow-hidden pt-30 pb-20">
+    <div class="pointer-events-none absolute left-[30%] top-0 h-100 w-100 bg-[radial-gradient(ellipse,rgba(212,168,83,0.06),transparent_70%)]"></div>
+
+    <div class="wrap relative">
+      <div class="grid items-center gap-15 lg:grid-cols-[1fr_1.15fr]">
+        <div class="rv-lado" x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
+          <span class="rotulo">Nossa história</span>
+          <h2 class="titulo mb-6">Levantado onde a estrada de terra acaba</h2>
+          <p class="texto mb-4">O Noor começou como uma teimosia: hospedar pouca gente por vez, no lugar mais silencioso que a gente conseguisse alcançar de carro. Erguemos cada parede em taipa, com pedreiros de M'Hamid, no ritmo antigo de quem levanta casa para durar. Portas de cedro, teto de palma, cal que devolve o calor quando o sol cai.</p>
+          <p class="texto">Aqui a paisagem não é enfeite: é ela que organiza o dia. A luz decide a hora do café, o vento decide o caminho da caminhada e o céu, quando escurece, decide que a noite ainda vai render mais um pouco.</p>
+        </div>
+
+        <div class="rv relative overflow-hidden rounded-xl" x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
+          <img src="./static/images/historia.webp" alt="Muro de taipa ocre do Noor recortado pela sombra do fim da tarde"
+               width="1000" height="1250" loading="lazy" class="foto-tratada aspect-4/5" />
+          <span class="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] bg-linear-to-b from-transparent to-areia/60"></span>
+        </div>
+      </div>
+
+      <!-- números: o valor final está no HTML, o Alpine só anima a contagem -->
+      <div class="escada mt-20 grid grid-cols-2 gap-6 border-t border-ouro/15 pt-10 md:grid-cols-4"
+           x-intersect.once="$el.classList.add('rv-in')">
+        <div class="text-center">
+          <span class="block font-display text-[1.8rem] font-light tracking-[-0.02em] text-marrom" x-init="conta($el)">2016</span>
+          <span class="mt-1 block text-[0.68rem] uppercase tracking-[0.1em] text-marrom-med">Aberto desde</span>
+        </div>
+        <div class="text-center">
+          <span class="block font-display text-[1.8rem] font-light tracking-[-0.02em] text-marrom" x-init="conta($el)">18</span>
+          <span class="mt-1 block text-[0.68rem] uppercase tracking-[0.1em] text-marrom-med">Suítes</span>
+        </div>
+        <div class="text-center">
+          <span class="block font-display text-[1.8rem] font-light tracking-[-0.02em] text-marrom" x-init="conta($el)">140</span>
+          <span class="mt-1 block text-[0.68rem] uppercase tracking-[0.1em] text-marrom-med">Hectares</span>
+        </div>
+        <div class="text-center">
+          <span class="block font-display text-[1.8rem] font-light tracking-[-0.02em] text-marrom" x-init="conta($el)">40</span>
+          <span class="mt-1 block text-[0.68rem] uppercase tracking-[0.1em] text-marrom-med">Km até o asfalto</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SUÍTES ================= -->
+  <section id="suites" class="relative overflow-hidden pt-20 pb-30">
+    <div class="pointer-events-none absolute bottom-0 right-[10%] h-125 w-125 bg-[radial-gradient(ellipse,rgba(196,87,42,0.04),transparent_70%)]"></div>
+
+    <div class="wrap relative">
+      <div class="rv" x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
+        <span class="rotulo">Acomodações</span>
+        <h2 class="titulo mb-12">Onde o deserto vira quarto</h2>
+      </div>
+
+      <div class="escada grid gap-6 sm:grid-cols-2 lg:grid-cols-3" x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
+
+        <article class="cartao-suite group">
+          <div class="relative aspect-4/3 overflow-hidden">
+            <img src="./static/images/suite-areia.webp" alt="Suíte Areia, com banheira aberta para o terraço"
+                 width="800" height="600" loading="lazy"
+                 class="foto-tratada transition-transform duration-600 ease-suave group-hover:scale-105" />
+            <span class="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] bg-linear-to-b from-transparent to-white/50"></span>
+          </div>
+          <div class="p-6">
+            <h3 class="mb-2 font-display text-[1.3rem] tracking-[0.02em]">Suíte Areia</h3>
+            <p class="mb-3 text-[0.8rem] leading-relaxed text-marrom-med">Janela do chão ao teto virada para a duna grande, terraço só seu com espreguiçadeira e móvel feito no vilarejo.</p>
+            <p class="text-[0.74rem] font-medium tracking-[0.06em] text-terracota">A partir de R$ 2.480 a diária</p>
+          </div>
+        </article>
+
+        <article class="cartao-suite group">
+          <div class="relative aspect-4/3 overflow-hidden">
+            <img src="./static/images/suite-oasis.webp" alt="Suíte Oásis, com piscina privativa entre as tamareiras"
+                 width="800" height="600" loading="lazy"
+                 class="foto-tratada transition-transform duration-600 ease-suave group-hover:scale-105" />
+            <span class="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] bg-linear-to-b from-transparent to-white/50"></span>
+          </div>
+          <div class="p-6">
+            <h3 class="mb-2 font-display text-[1.3rem] tracking-[0.02em]">Suíte Oásis</h3>
+            <p class="mb-3 text-[0.8rem] leading-relaxed text-marrom-med">Piscina privativa de borda baixa, jardim de tamareiras e chuveiro ao ar livre para a volta da caminhada.</p>
+            <p class="text-[0.74rem] font-medium tracking-[0.06em] text-terracota">A partir de R$ 3.690 a diária</p>
+          </div>
+        </article>
+
+        <article class="cartao-suite group sm:col-span-2 sm:mx-auto sm:max-w-100 lg:col-span-1 lg:max-w-none">
+          <div class="relative aspect-4/3 overflow-hidden">
+            <img src="./static/images/suite-riad.webp" alt="Suíte Riad, em azul profundo, com arcos e mosaico no piso"
+                 width="800" height="600" loading="lazy"
+                 class="foto-tratada transition-transform duration-600 ease-suave group-hover:scale-105" />
+            <span class="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] bg-linear-to-b from-transparent to-white/50"></span>
+          </div>
+          <div class="p-6">
+            <h3 class="mb-2 font-display text-[1.3rem] tracking-[0.02em]">Suíte Riad</h3>
+            <p class="mb-3 text-[0.8rem] leading-relaxed text-marrom-med">Pátio interno com fonte, terraço de vista aberta nos quatro lados e banheiro em pedra, no desenho do hammam.</p>
+            <p class="text-[0.74rem] font-medium tracking-[0.06em] text-terracota">A partir de R$ 2.890 a diária</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TRANSIÇÃO DIA/NOITE =================
+       A faixa é o eixo da página: daqui para baixo tudo é noite. O app.js
+       usa o topo desta seção para virar o clima da barra de navegação. -->
+  <section id="transicao" class="faixa-noite campo-estrelas relative flex h-screen items-center justify-center overflow-hidden">
+    <div class="relative z-2 flex flex-col items-center px-6 text-center">
+      <span class="h-px w-12 bg-ouro/50"></span>
+      <p class="px-6 py-8 font-display text-[clamp(1.4rem,3.5vw,2.6rem)] font-light italic leading-[1.7] text-ouro drop-shadow-[0_2px_20px_rgba(0,0,0,0.3)]">
+        Quando o vento se cala<br />o céu se acende
+      </p>
+      <span class="h-px w-12 bg-ouro/50"></span>
+    </div>
+  </section>
+
+  <!-- ================= BEM-ESTAR ================= -->
+  <section id="bemestar" class="noite relative overflow-hidden bg-noite pt-30 pb-20 text-creme">
+    <div class="pointer-events-none absolute -top-50 -right-25 h-150 w-150 bg-[radial-gradient(ellipse,rgba(212,168,83,0.06),transparent_70%)]"></div>
+
+    <div class="wrap relative">
+      <div class="rv relative mb-15 overflow-hidden rounded-2xl" x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
+        <img src="./static/images/hammam.webp" alt="Banheira de pedra do hammam, coberta de pétalas e folhas de eucalipto"
+             width="1600" height="700" loading="lazy" class="foto-tratada aspect-16/9 md:aspect-16/7" />
+        <div class="absolute inset-0 flex max-w-full flex-col justify-center bg-linear-to-r from-noite/92 via-noite/60 to-transparent p-8 md:max-w-[60%] md:p-14 lg:max-w-[50%]">
+          <span class="rotulo">Bem-estar</span>
+          <h2 class="titulo mb-4">Ritual antigo, descanso de agora</h2>
+          <p class="texto">O hammam segue o desenho dos banhos que existem por aqui há séculos: mármore morno, vapor de eucalipto e mãos que sabem onde apertar. Uma hora e meia depois você sai outra pessoa.</p>
+        </div>
+      </div>
+
+      <div class="escada grid gap-6 md:grid-cols-3" x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
+
+        <article class="cartao-noite flex flex-col p-8">
+          <span class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-ouro/15 bg-ouro/10 text-ouro">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.5 3.2 4 5.7 4 7.8A4 4 0 0 1 8 10.8C8 8.7 9.5 6.2 12 3Z"/><path stroke-linecap="round" d="M5 19.5c1.8-1 3.2-1 5 0s3.2 1 5 0"/></svg>
+          </span>
+          <h3 class="mb-3 font-display text-[1.15rem] text-creme">Ritual Hammam</h3>
+          <p class="mb-4 text-[0.8rem] leading-[1.7] text-creme/60">Vapor, sabão preto e argila ghassoul, e no fim óleo de argão morno da cabeça aos pés.</p>
+          <p class="mt-auto text-[0.68rem] font-medium uppercase tracking-[0.08em] text-ouro">90 minutos</p>
+        </article>
+
+        <article class="cartao-noite flex flex-col p-8">
+          <span class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-ouro/15 bg-ouro/10 text-ouro">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 13V5.5a1.5 1.5 0 0 1 3 0V12m0-1.5a1.5 1.5 0 0 1 3 0V12m0-1a1.5 1.5 0 0 1 3 0v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5v-3.5a1.5 1.5 0 0 1 2.5-1.1"/></svg>
+          </span>
+          <h3 class="mb-3 font-display text-[1.15rem] text-creme">Massagem de argão</h3>
+          <p class="mb-4 text-[0.8rem] leading-[1.7] text-creme/60">Óleo prensado a poucos quilômetros daqui, pedra quente e pressão firme nos pontos que o dia apertou.</p>
+          <p class="mt-auto text-[0.68rem] font-medium uppercase tracking-[0.08em] text-ouro">75 minutos</p>
+        </article>
+
+        <article class="cartao-noite flex flex-col p-8">
+          <span class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-ouro/15 bg-ouro/10 text-ouro">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5"/><path stroke-linecap="round" d="M12 3v2m0 14v2M3 12h2m14 0h2M5.6 5.6l1.4 1.4m10 10 1.4 1.4m0-12.8-1.4 1.4m-10 10-1.4 1.4"/></svg>
+          </span>
+          <h3 class="mb-3 font-display text-[1.15rem] text-creme">Ioga na duna</h3>
+          <p class="mb-4 text-[0.8rem] leading-[1.7] text-creme/60">Nascer do sol em cima da areia, respiração guiada e chá de menta para fechar a prática.</p>
+          <p class="mt-auto text-[0.68rem] font-medium uppercase tracking-[0.08em] text-ouro">60 minutos</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MESA ================= -->
+  <section id="mesa" class="noite relative overflow-hidden bg-noite pt-20 pb-25 text-creme">
+    <div class="pointer-events-none absolute left-[-5%] top-[20%] h-125 w-125 bg-[radial-gradient(ellipse,rgba(196,87,42,0.05),transparent_70%)]"></div>
+
+    <div class="wrap relative">
+      <div class="rv" x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
+        <span class="rotulo">A mesa</span>
+        <h2 class="titulo mb-12">Jantar servido debaixo das estrelas</h2>
+      </div>
+
+      <div class="escada grid min-h-105 gap-5 lg:grid-cols-[1.3fr_1fr] lg:grid-rows-2"
+           x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
+
+        <div class="relative min-h-70 overflow-hidden rounded-2xl lg:row-span-2">
+          <img src="./static/images/mesa.webp" alt="Prato do jantar servido no terraço do Noor"
+               width="1100" height="760" loading="lazy" class="foto-tratada absolute inset-0" />
+          <span class="veu-mesa absolute inset-0"></span>
+          <div class="absolute inset-x-0 bottom-0 z-2 p-8">
+            <h3 class="mb-2 font-display text-[1.4rem] text-creme">O Terraço</h3>
+            <p class="text-[0.8rem] text-creme/60">Cozinha marroquina de casa, com o que a horta e o vilarejo entregam no dia. Servido ao ar livre, sem pressa nenhuma.</p>
+          </div>
+        </div>
+
+        <article class="cartao-noite flex h-full flex-col justify-center p-8">
+          <h3 class="mb-3 font-display text-[1.2rem] text-creme">Jantar na areia</h3>
+          <p class="text-[0.8rem] leading-[1.7] text-creme/60">Mesa montada entre as dunas, lampião aceso e ninguém por perto. O cozinheiro vai até lá, serve e volta com você.</p>
+        </article>
+
+        <article class="cartao-noite flex h-full flex-col justify-center p-8">
+          <h3 class="mb-3 font-display text-[1.2rem] text-creme">Cerimônia do chá</h3>
+          <p class="text-[0.8rem] leading-[1.7] text-creme/60">Três infusões de menta ao pôr do sol, cada uma com seu gosto e seu tempo. É assim que se recebe visita por aqui.</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EXPERIÊNCIAS ================= -->
+  <section id="experiencias" class="noite relative bg-noite pt-20 pb-30 text-creme">
+    <div class="wrap relative">
+      <div class="rv" x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
+        <span class="rotulo">Experiências</span>
+        <h2 class="titulo mb-12">Escritas na areia</h2>
+      </div>
+
+      <div class="escada flex flex-col gap-6" x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
+
+        <article class="cartao-noite grid items-center gap-8 p-5 sm:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] hover:translate-x-1">
+          <div class="relative aspect-3/2 overflow-hidden rounded-[10px]">
+            <img src="./static/images/exp-duna.webp" alt="Dunas de Erg Chigaga na luz baixa do fim da tarde"
+                 width="800" height="533" loading="lazy" class="foto-tratada" />
+            <span class="pointer-events-none absolute inset-x-0 bottom-0 h-[25%] bg-linear-to-b from-transparent to-noite/40"></span>
+          </div>
+          <div>
+            <h3 class="mb-2 font-display text-[1.3rem] text-creme">Caravana no erg</h3>
+            <p class="mb-3 text-[0.82rem] leading-[1.7] text-creme/60">Travessia de camelo na hora dourada, com parada num acampamento nômade para o chá. Os guias são berberes que cresceram nessas dunas e sabem ler o vento melhor que qualquer aplicativo.</p>
+            <p class="flex items-center gap-1.5 text-[0.68rem] font-medium uppercase tracking-[0.08em] text-ouro">
+              <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" d="M12 7v5l3 2"/></svg>
+              3 horas
+            </p>
+          </div>
+        </article>
+
+        <article class="cartao-noite grid items-center gap-8 p-5 sm:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] hover:translate-x-1">
+          <div class="relative aspect-3/2 overflow-hidden rounded-[10px]">
+            <img src="./static/images/exp-estrelas.webp" alt="Lua crescente e estrelas sobre o deserto"
+                 width="800" height="533" loading="lazy" class="foto-tratada" />
+            <span class="pointer-events-none absolute inset-x-0 bottom-0 h-[25%] bg-linear-to-b from-transparent to-noite/40"></span>
+          </div>
+          <div>
+            <h3 class="mb-2 font-display text-[1.3rem] text-creme">Noite de estrelas</h3>
+            <p class="mb-3 text-[0.82rem] leading-[1.7] text-creme/60">Um dos céus mais limpos do planeta, sem cidade nenhuma por perto para atrapalhar. Telescópio montado no pátio e um astrônomo que conhece a história por trás de cada constelação.</p>
+            <p class="flex items-center gap-1.5 text-[0.68rem] font-medium uppercase tracking-[0.08em] text-ouro">
+              <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" d="M12 7v5l3 2"/></svg>
+              2 horas
+            </p>
+          </div>
+        </article>
+
+        <article class="cartao-noite grid items-center gap-8 p-5 sm:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] hover:translate-x-1">
+          <div class="relative aspect-3/2 overflow-hidden rounded-[10px]">
+            <img src="./static/images/exp-amanhecer.webp" alt="Capim seco e névoa dourada na primeira luz do dia"
+                 width="800" height="533" loading="lazy" class="foto-tratada" />
+            <span class="pointer-events-none absolute inset-x-0 bottom-0 h-[25%] bg-linear-to-b from-transparent to-noite/40"></span>
+          </div>
+          <div>
+            <h3 class="mb-2 font-display text-[1.3rem] text-creme">Caminhada da primeira luz</h3>
+            <p class="mb-3 text-[0.82rem] leading-[1.7] text-creme/60">Saída antes do sol, no frio bom, até o leito seco do rio onde o capim ainda segura o orvalho. Volta a tempo do café, com pão saído do forno de barro.</p>
+            <p class="flex items-center gap-1.5 text-[0.68rem] font-medium uppercase tracking-[0.08em] text-ouro">
+              <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" d="M12 7v5l3 2"/></svg>
+              90 minutos
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RESERVAR ================= -->
+  <section id="reservar" class="noite relative flex min-h-[80vh] items-center justify-center overflow-hidden bg-noite text-creme">
+    <img src="./static/images/reserva.webp" alt="" width="1600" height="890" loading="lazy"
+         class="absolute inset-0 h-full w-full object-cover" style="filter: saturate(0.7) contrast(1.1)" />
+    <div class="absolute inset-0 bg-noite/75"></div>
+
+    <div class="relative z-2 w-full max-w-140 px-6 py-15 text-center">
+      <span class="rotulo">Reservas</span>
+      <h2 class="mb-4 font-display text-[clamp(2rem,5vw,3.2rem)] font-light tracking-[-0.02em] text-creme">Comece a jornada</h2>
+      <p class="mb-9 text-[0.88rem] text-creme/60">Duas noites bastam para entender. Três, para não querer ir embora.</p>
+
+      <!-- novalidate: sem isso o browser engole o submit e o handler do Alpine nunca roda -->
+      <form novalidate @submit.prevent="enviar" class="mx-auto grid gap-3 text-left sm:grid-cols-2">
+        <div class="sm:col-span-2">
+          <label for="nome" class="sr-only">Nome</label>
+          <input id="nome" name="nome" type="text" x-model="form.nome" placeholder="Seu nome"
+                 class="w-full rounded-[2px] border border-ouro/25 bg-white/5 px-4 py-3.5 text-[0.85rem] text-creme placeholder:text-creme/40 transition duration-300 focus:border-ouro focus:outline-none" />
+        </div>
+        <div>
+          <label for="email" class="sr-only">E-mail</label>
+          <input id="email" name="email" type="email" x-model="form.email" placeholder="Seu e-mail"
+                 class="w-full rounded-[2px] border border-ouro/25 bg-white/5 px-4 py-3.5 text-[0.85rem] text-creme placeholder:text-creme/40 transition duration-300 focus:border-ouro focus:outline-none" />
+        </div>
+        <div>
+          <label for="chegada" class="sr-only">Chegada</label>
+          <input id="chegada" name="chegada" type="date" x-model="form.chegada"
+                 class="w-full rounded-[2px] border border-ouro/25 bg-white/5 px-4 py-3.5 text-[0.85rem] text-creme transition duration-300 focus:border-ouro focus:outline-none" />
+        </div>
+        <div class="sm:col-span-2">
+          <button type="submit" class="btn-cheio w-full" x-text="enviando ? 'Enviando…' : 'Reservar estadia'">Reservar estadia</button>
+        </div>
+        <p x-show="erro" x-cloak x-text="erro" class="text-[0.78rem] text-terracota sm:col-span-2"></p>
+        <p x-show="enviado" x-cloak class="text-[0.78rem] text-ouro sm:col-span-2">Pedido recebido. Respondemos em até um dia útil com as datas disponíveis.</p>
+      </form>
+
+      <div class="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-8">
+        <a href="tel:+212524000000" class="text-[0.78rem] tracking-[0.04em] text-creme/60 transition duration-300 hover:text-ouro">+212 524 00 00 00</a>
+        <a href="mailto:reservas@noor.ma" class="text-[0.78rem] tracking-[0.04em] text-creme/60 transition duration-300 hover:text-ouro">reservas@noor.ma</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RODAPÉ ================= -->
+  <footer class="border-t border-ouro/8 bg-noite pt-15 pb-8 text-creme">
+    <div class="wrap">
+      <div class="mb-12 grid gap-12 md:grid-cols-[1.5fr_1fr_1fr]">
+        <div>
+          <p class="mb-4 font-display text-[1.1rem] tracking-[0.15em] text-creme">NOOR</p>
+          <p class="text-[0.78rem] leading-[1.7] text-creme/60">
+            Refúgio no fim da estrada<br />
+            Piste d'Erg Chigaga, M'Hamid El Ghizlane<br />
+            Zagora 45900, Marrocos
+          </p>
+        </div>
+        <div>
+          <h4 class="mb-4 font-display text-base tracking-[0.06em] text-creme">Explore</h4>
+          <a href="#historia"     class="mb-2.5 block text-[0.78rem] text-creme/60 transition duration-300 hover:text-ouro">Nossa história</a>
+          <a href="#suites"       class="mb-2.5 block text-[0.78rem] text-creme/60 transition duration-300 hover:text-ouro">Suítes</a>
+          <a href="#bemestar"     class="mb-2.5 block text-[0.78rem] text-creme/60 transition duration-300 hover:text-ouro">Bem-estar</a>
+          <a href="#mesa"         class="mb-2.5 block text-[0.78rem] text-creme/60 transition duration-300 hover:text-ouro">Mesa</a>
+          <a href="#experiencias" class="mb-2.5 block text-[0.78rem] text-creme/60 transition duration-300 hover:text-ouro">Experiências</a>
+        </div>
+        <div>
+          <h4 class="mb-4 font-display text-base tracking-[0.06em] text-creme">Conecte-se</h4>
+          <a href="#reservar" class="mb-2.5 block text-[0.78rem] text-creme/60 transition duration-300 hover:text-ouro">Instagram</a>
+          <a href="#reservar" class="mb-2.5 block text-[0.78rem] text-creme/60 transition duration-300 hover:text-ouro">Facebook</a>
+          <a href="#reservar" class="mb-2.5 block text-[0.78rem] text-creme/60 transition duration-300 hover:text-ouro">Pinterest</a>
+          <a href="#reservar" class="mb-2.5 block text-[0.78rem] text-creme/60 transition duration-300 hover:text-ouro">TripAdvisor</a>
+        </div>
+      </div>
+      <div class="border-t border-white/6 pt-6 text-center">
+        <p class="text-[0.68rem] tracking-[0.06em] text-creme/35">© <span x-text="new Date().getFullYear()">2026</span> Noor. Projeto demonstrativo.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

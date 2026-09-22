@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BLADE &amp; CO. | Barbearia Premium</title>
+  <meta name="description" content="Barbearia premium onde a técnica tradicional encontra o corte contemporâneo. Corte exclusivo, barbear com toalha quente e cuidado de barba." />
+  <meta name="theme-color" content="#0a0a0a" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="BLADE &amp; CO. | Barbearia Premium" />
+  <meta property="og:description" content="Onde o ofício encontra a tradição. Agende sua cadeira." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <script>
+    document.documentElement.classList.add('js');
+    setTimeout(function () { if (!window.Alpine) document.documentElement.classList.remove('js'); }, 3000);
+  </script>
+
+  <link rel="stylesheet" href="./static/output.css" />
+  <!-- Fonte base fluida, igual à do site principal (html em src/styles/global.css). -->
+  <style>
+    html {
+      text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
+      font-size: clamp(12px, 4vw, 16px);
+    }
+  </style>
+  <script defer src="./app.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body x-data="blade()">
+
+  <!-- ================= HEADER ================= -->
+  <header class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
+          :class="scrolled ? 'border-b border-line bg-void/95 backdrop-blur-md py-4' : 'py-7'">
+    <div class="mx-auto flex w-full max-w-[1600px] items-center justify-between gap-8 px-6 sm:px-10 lg:px-12">
+      <a href="#topo" class="font-display text-2xl uppercase tracking-[0.18em] text-bone">
+        Blade <span class="font-serif text-lg italic tracking-normal text-gold">&amp;</span> Co.
+      </a>
+
+      <nav class="hidden items-center gap-10 lg:flex">
+        <a href="#historia" class="nav-link">Nossa história</a>
+        <a href="#servicos" class="nav-link">Serviços</a>
+        <a href="#galeria" class="nav-link">Galeria</a>
+        <a href="#barbeiros" class="nav-link">Barbeiros</a>
+        <a href="#avaliacoes" class="nav-link">Avaliações</a>
+      </nav>
+
+      <a href="#agendar" class="btn-linha hidden lg:inline-flex">Agendar agora</a>
+
+      <button @click="menu = !menu" :aria-expanded="menu" aria-label="Abrir menu"
+              class="grid h-10 w-10 cursor-pointer place-items-center border border-line text-bone lg:hidden">
+        <svg x-show="!menu" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg x-show="menu" x-cloak style="display: none" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <div x-show="menu" x-collapse x-cloak style="display: none" class="lg:hidden">
+      <div class="mx-auto w-full max-w-[1600px] space-y-1 border-t border-line px-6 pt-6 mt-6 sm:px-10 lg:px-12">
+        <a href="#historia"   @click="menu = false" class="block py-3 text-[11px] uppercase tracking-[0.2em] text-mute hover:text-gold">Nossa história</a>
+        <a href="#servicos"   @click="menu = false" class="block py-3 text-[11px] uppercase tracking-[0.2em] text-mute hover:text-gold">Serviços</a>
+        <a href="#galeria"    @click="menu = false" class="block py-3 text-[11px] uppercase tracking-[0.2em] text-mute hover:text-gold">Galeria</a>
+        <a href="#barbeiros"  @click="menu = false" class="block py-3 text-[11px] uppercase tracking-[0.2em] text-mute hover:text-gold">Barbeiros</a>
+        <a href="#avaliacoes" @click="menu = false" class="block py-3 text-[11px] uppercase tracking-[0.2em] text-mute hover:text-gold">Avaliações</a>
+        <a href="#agendar"    @click="menu = false" class="btn-gold mt-4 w-full">Agendar agora</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section id="topo" class="relative min-h-screen">
+    <div class="grid min-h-screen lg:grid-cols-2">
+
+      <div class="flex items-center px-6 pt-32 pb-16 sm:px-10 lg:pl-20 lg:pr-16 lg:pt-0 lg:pb-0">
+        <div class="max-w-xl">
+          <p class="rotulo rotulo-hero">Fundada em 2018 &middot; Cuidado premium</p>
+
+          <h1 class="titulo titulo-hero mt-8">
+            Onde o ofício<br />encontra<br /><span class="vazado">&amp; a tradição</span>
+          </h1>
+
+          <p class="mt-8 max-w-[420px] text-base leading-[1.8] text-mute">
+            Cada corte carrega uma história. Nossos mestres barbeiros unem técnica
+            consagrada pelo tempo e leitura contemporânea para esculpir o visual
+            que é só seu.
+          </p>
+
+          <div class="mt-10 flex flex-wrap items-center gap-6">
+            <a href="#agendar" class="btn-gold">
+              Reserve sua cadeira
+              <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            </a>
+            <a href="#servicos" class="btn-nu">
+              Explorar serviços
+              <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="foto min-h-[55vh] lg:min-h-screen">
+        <img src="./static/images/hero.webp" alt="Mestre barbeiro finalizando um corte" width="900" height="1250" decoding="async" fetchpriority="high" class="img-hero absolute inset-0 h-full w-full object-cover" />
+        <div class="absolute inset-0 bg-void/25"></div>
+        <div class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-void to-transparent"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MARQUEE ================= -->
+  <section class="overflow-hidden border-y border-gold/10 py-8" aria-label="O que fazemos">
+    <div class="marquee flex w-max items-center">
+      <div class="flex shrink-0 items-center gap-10 px-10">
+        <span class="faixa-item">Cuidado premium</span><span class="faixa-ponto"></span>
+        <span class="faixa-item">Barbear com toalha quente</span><span class="faixa-ponto"></span>
+        <span class="faixa-item">Modelagem de barba</span><span class="faixa-ponto"></span>
+        <span class="faixa-item">Cortes clássicos</span><span class="faixa-ponto"></span>
+        <span class="faixa-item">Design capilar</span><span class="faixa-ponto"></span>
+        <span class="faixa-item">Hora marcada</span><span class="faixa-ponto"></span>
+        <span class="faixa-item">Clube do cavalheiro</span><span class="faixa-ponto"></span>
+        <span class="faixa-item">Navalha reta</span><span class="faixa-ponto"></span>
+      </div>
+      <div class="flex shrink-0 items-center gap-10 px-10" aria-hidden="true">
+        <span class="faixa-item">Cuidado premium</span><span class="faixa-ponto"></span>
+        <span class="faixa-item">Barbear com toalha quente</span><span class="faixa-ponto"></span>
+        <span class="faixa-item">Modelagem de barba</span><span class="faixa-ponto"></span>
+        <span class="faixa-item">Cortes clássicos</span><span class="faixa-ponto"></span>
+        <span class="faixa-item">Design capilar</span><span class="faixa-ponto"></span>
+        <span class="faixa-item">Hora marcada</span><span class="faixa-ponto"></span>
+        <span class="faixa-item">Clube do cavalheiro</span><span class="faixa-ponto"></span>
+        <span class="faixa-item">Navalha reta</span><span class="faixa-ponto"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= HISTÓRIA ================= -->
+  <section id="historia" class="py-24 lg:py-40">
+    <div class="wrap grid gap-14 lg:grid-cols-2 lg:gap-24">
+
+      <div class="rv relative pb-[16%]" x-intersect.once="$el.classList.add('rv-in')">
+        <span class="pointer-events-none absolute -top-8 right-12 select-none font-display text-[10rem] leading-none text-gold/[0.06]">B&amp;C</span>
+        <div class="foto relative z-10 aspect-[0.82] w-[72%]">
+          <img src="./static/images/interior.webp" alt="Interior da barbearia" width="700" height="854" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 hover:grayscale-0" />
+        </div>
+        <div class="foto absolute bottom-0 right-0 z-20 aspect-square w-[55%] ring-[5px] ring-void">
+          <img src="./static/images/ferramentas.webp" alt="Ferramentas de barbeiro sobre a bancada" width="660" height="660" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 hover:grayscale-0" />
+        </div>
+      </div>
+
+      <div class="flex flex-col justify-center rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 120)">
+        <p class="rotulo">Nossa história</p>
+        <h2 class="titulo mt-7">Mais que uma<br />barbearia.<br />Um <em>Legado</em>.</h2>
+        <p class="mt-8 text-[0.95rem] leading-[1.9] text-mute">
+          Começamos com uma cadeira, uma navalha e a convicção de que cuidar da
+          aparência é um ritual, não uma tarefa. Sete anos depois, a régua continua
+          a mesma: tempo suficiente para cada cliente, produto que a gente usaria
+          em si mesmo e um acabamento que se percebe de longe.
+        </p>
+        <p class="mt-6 text-[0.95rem] leading-[1.9] text-mute">
+          Não trabalhamos com fila. Trabalhamos com hora marcada, café na mão e
+          conversa quando você quiser.
+        </p>
+
+        <div class="mt-10 grid grid-cols-3 gap-12 border-t border-gold/15 pt-10">
+          <div>
+            <p class="num-stat">7</p>
+            <p class="mt-1 text-[0.7rem] uppercase tracking-[0.2em] text-mute2">Anos de casa</p>
+          </div>
+          <div>
+            <p class="num-stat">12k</p>
+            <p class="mt-1 text-[0.7rem] uppercase tracking-[0.2em] text-mute2">Cortes feitos</p>
+          </div>
+          <div>
+            <p class="num-stat">4.9</p>
+            <p class="mt-1 text-[0.7rem] uppercase tracking-[0.2em] text-mute2">Nota no Google</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SERVIÇOS ================= -->
+  <section id="servicos" class="py-24 lg:pt-32 lg:pb-40">
+    <div class="wrap">
+      <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+        <div class="rv" x-intersect.once="$el.classList.add('rv-in')">
+          <p class="rotulo">O que oferecemos</p>
+          <h2 class="titulo mt-7">Nossos serviços<br /><em>Premium</em></h2>
+        </div>
+        <p class="max-w-[350px] text-[0.9rem] leading-[1.8] text-mute lg:text-right">
+          Cada serviço é executado com precisão e calma, com produto de primeira
+          e técnica que já provou que funciona.
+        </p>
+      </div>
+
+      <div class="mt-20 grid gap-px bg-gold/10 sm:grid-cols-2 lg:grid-cols-4">
+
+        <article class="group relative bg-void px-8 py-12">
+          <svg aria-hidden="true" class="absolute right-8 top-8 h-5 w-5 translate-x-2 -translate-y-2 text-gold opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6m0 0H9m9 0v9"/></svg>
+          <svg aria-hidden="true" class="h-[2.2rem] w-[2.2rem] text-gold transition duration-400 group-hover:scale-110" viewBox="0 0 24 24"><path d="M6.654 1.633a.75.75 0 0 0-1.308.735l5.794 10.304l-2.708 4.815a3.751 3.751 0 1 0-.136 3.303L12 14.202l3.704 6.588a3.75 3.75 0 1 0-.136-3.303l-2.708-4.815l5.794-10.304a.75.75 0 0 0-1.308-.735L12 11.142z" fill="currentColor"/></svg>
+          <h3 class="nome-servico mt-8">Corte exclusivo</h3>
+          <p class="mt-3 text-[0.85rem] leading-[1.7] text-mute2">Corte sob medida, com consulta antes da tesoura, toalha quente e finalização precisa.</p>
+          <div class="mt-8 flex items-center justify-between border-t border-gold/10 pt-6">
+            <span class="font-display text-[1.6rem] leading-[normal] text-gold">R$ 45</span>
+            <span class="text-[0.7rem] uppercase tracking-[0.15em] text-mute2">45 min</span>
+          </div>
+        </article>
+
+        <article class="group relative bg-void px-8 py-12">
+          <svg aria-hidden="true" class="absolute right-8 top-8 h-5 w-5 translate-x-2 -translate-y-2 text-gold opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6m0 0H9m9 0v9"/></svg>
+          <svg aria-hidden="true" class="h-[2.2rem] w-[2.2rem] text-gold transition duration-400 group-hover:scale-110" viewBox="0 0 24 24"><path d="M12.832 21.801c3.126-.626 7.168-2.875 7.168-8.69c0-5.291-3.873-8.815-6.658-10.434c-.619-.36-1.342.113-1.342.828v1.828c0 1.442-.606 4.074-2.29 5.169c-.86.559-1.79-.278-1.894-1.298l-.086-.838c-.1-.974-1.092-1.565-1.87-.971C4.461 8.46 3 10.33 3 13.11C3 20.221 8.289 22 10.933 22q.232 0 .484-.015C10.111 21.874 8 21.064 8 18.444c0-2.05 1.495-3.435 2.631-4.11c.306-.18.663.055.663.41v.59c0 .45.175 1.155.59 1.637c.47.546 1.159-.026 1.214-.744c.018-.226.246-.37.442-.256c.641.375 1.46 1.175 1.46 2.473c0 2.048-1.129 2.99-2.168 3.357" fill="currentColor"/></svg>
+          <h3 class="nome-servico mt-8">Barbear na navalha</h3>
+          <p class="mt-3 text-[0.85rem] leading-[1.7] text-mute2">Barbear tradicional na navalha, com preparo de toalha quente, espuma premium e bálsamo no fim.</p>
+          <div class="mt-8 flex items-center justify-between border-t border-gold/10 pt-6">
+            <span class="font-display text-[1.6rem] leading-[normal] text-gold">R$ 55</span>
+            <span class="text-[0.7rem] uppercase tracking-[0.15em] text-mute2">50 min</span>
+          </div>
+        </article>
+
+        <article class="group relative bg-void px-8 py-12">
+          <svg aria-hidden="true" class="absolute right-8 top-8 h-5 w-5 translate-x-2 -translate-y-2 text-gold opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6m0 0H9m9 0v9"/></svg>
+          <svg aria-hidden="true" class="h-[2.2rem] w-[2.2rem] text-gold transition duration-400 group-hover:scale-110" viewBox="0 0 24 24"><path d="m20.092 14.326l.193-1.894c.103-1.011.17-1.678.117-2.099h.02c.871 0 1.578-.746 1.578-1.666S21.293 7 20.421 7s-1.579.746-1.579 1.667c0 .416.145.797.384 1.089c-.343.223-.792.695-1.468 1.405c-.52.547-.78.82-1.07.863a.84.84 0 0 1-.473-.07c-.268-.124-.447-.462-.804-1.139L13.527 7.25c-.22-.417-.405-.766-.572-1.047c.683-.368 1.15-1.117 1.15-1.98C14.105 2.994 13.163 2 12 2s-2.105.995-2.105 2.222c0 .864.467 1.613 1.15 1.98c-.167.282-.351.631-.572 1.048L8.59 10.816c-.358.676-.537 1.014-.805 1.139a.84.84 0 0 1-.473.07c-.29-.043-.55-.317-1.07-.864c-.676-.71-1.125-1.182-1.468-1.405c.24-.292.384-.673.384-1.09C5.158 7.747 4.45 7 3.578 7C2.708 7 2 7.746 2 8.667c0 .92.707 1.666 1.579 1.666h.019c-.054.42.014 1.088.117 2.099l.193 1.894c.107 1.051.196 2.051.306 2.952h15.572c.11-.9.199-1.901.306-2.952M10.855 22h2.29c2.985 0 4.478 0 5.474-.94c.434-.412.71-1.152.908-2.116H4.473c.198.964.473 1.704.908 2.115C6.377 22 7.87 22 10.855 22" fill="currentColor"/></svg>
+          <h3 class="nome-servico mt-8">Modelagem de barba</h3>
+          <p class="mt-3 text-[0.85rem] leading-[1.7] text-mute2">Desenho, aparo e condicionamento com óleos e bálsamos escolhidos para o formato do seu rosto.</p>
+          <div class="mt-8 flex items-center justify-between border-t border-gold/10 pt-6">
+            <span class="font-display text-[1.6rem] leading-[normal] text-gold">R$ 35</span>
+            <span class="text-[0.7rem] uppercase tracking-[0.15em] text-mute2">30 min</span>
+          </div>
+        </article>
+
+        <article class="group relative bg-void px-8 py-12">
+          <svg aria-hidden="true" class="absolute right-8 top-8 h-5 w-5 translate-x-2 -translate-y-2 text-gold opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6m0 0H9m9 0v9"/></svg>
+          <svg aria-hidden="true" class="h-[2.2rem] w-[2.2rem] text-gold transition duration-400 group-hover:scale-110" viewBox="0 0 24 24"><path d="M9.153 5.408C10.42 3.136 11.053 2 12 2s1.58 1.136 2.847 3.408l.328.588c.36.646.54.969.82 1.182s.63.292 1.33.45l.636.144c2.46.557 3.689.835 3.982 1.776c.292.94-.546 1.921-2.223 3.882l-.434.507c-.476.557-.715.836-.822 1.18c-.107.345-.071.717.001 1.46l.066.677c.253 2.617.38 3.925-.386 4.506s-1.918.051-4.22-1.009l-.597-.274c-.654-.302-.981-.452-1.328-.452s-.674.15-1.328.452l-.596.274c-2.303 1.06-3.455 1.59-4.22 1.01c-.767-.582-.64-1.89-.387-4.507l.066-.676c.072-.744.108-1.116 0-1.46c-.106-.345-.345-.624-.821-1.18l-.434-.508c-1.677-1.96-2.515-2.941-2.223-3.882S3.58 8.328 6.04 7.772l.636-.144c.699-.158 1.048-.237 1.329-.45s.46-.536.82-1.182z" fill="currentColor"/></svg>
+          <h3 class="nome-servico mt-8">O completo</h3>
+          <p class="mt-3 text-[0.85rem] leading-[1.7] text-mute2">Corte, barbear na navalha, cuidado de barba, limpeza facial e massagem no couro cabeludo.</p>
+          <div class="mt-8 flex items-center justify-between border-t border-gold/10 pt-6">
+            <span class="font-display text-[1.6rem] leading-[normal] text-gold">R$ 95</span>
+            <span class="text-[0.7rem] uppercase tracking-[0.15em] text-mute2">90 min</span>
+          </div>
+        </article>
+
+        <article class="group relative bg-void px-8 py-12">
+          <svg aria-hidden="true" class="absolute right-8 top-8 h-5 w-5 translate-x-2 -translate-y-2 text-gold opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6m0 0H9m9 0v9"/></svg>
+          <svg aria-hidden="true" class="h-[2.2rem] w-[2.2rem] text-gold transition duration-400 group-hover:scale-110" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M10.847 21.934C5.867 21.362 2 17.133 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10c0 5.157-3.283 4.733-6.086 4.37c-1.618-.209-3.075-.397-3.652.518c-.395.626.032 1.406.555 1.929a1.673 1.673 0 0 1 0 2.366c-.523.523-1.235.836-1.97.751M11.085 7a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0M6.5 13a1.5 1.5 0 1 0 0-3a1.5 1.5 0 0 0 0 3m11 0a1.5 1.5 0 1 0 0-3a1.5 1.5 0 0 0 0 3m-3-4.5a1.5 1.5 0 1 0 0-3a1.5 1.5 0 0 0 0 3" fill="currentColor" fill-rule="evenodd"/></svg>
+          <h3 class="nome-servico mt-8">Design capilar</h3>
+          <p class="mt-3 text-[0.85rem] leading-[1.7] text-mute2">Degradês, padrões e desenhos feitos à mão livre na navalha, do risco simples ao gráfico.</p>
+          <div class="mt-8 flex items-center justify-between border-t border-gold/10 pt-6">
+            <span class="font-display text-[1.6rem] leading-[normal] text-gold">R$ 60</span>
+            <span class="text-[0.7rem] uppercase tracking-[0.15em] text-mute2">60 min</span>
+          </div>
+        </article>
+
+        <article class="group relative bg-void px-8 py-12">
+          <svg aria-hidden="true" class="absolute right-8 top-8 h-5 w-5 translate-x-2 -translate-y-2 text-gold opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6m0 0H9m9 0v9"/></svg>
+          <svg aria-hidden="true" class="h-[2.2rem] w-[2.2rem] text-gold transition duration-400 group-hover:scale-110" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M11.612 22C6.855 22 3 18.057 3 13.193v-.265C3 8.317 5.729 4.163 9.903 2.421a5.43 5.43 0 0 1 4.194 0C18.272 4.163 21 8.317 21 12.928v.265C21 18.057 17.145 22 12.389 22zm.454-16.039a.75.75 0 0 1-.366.996c-1.545.715-2.793 2.168-3.37 3.993a.75.75 0 1 1-1.43-.453c.692-2.186 2.206-3.993 4.17-4.901a.75.75 0 0 1 .996.365" fill="currentColor" fill-rule="evenodd"/></svg>
+          <h3 class="nome-servico mt-8">Tratamento capilar</h3>
+          <p class="mt-3 text-[0.85rem] leading-[1.7] text-mute2">Esfoliação do couro, óleos essenciais e massagem de relaxamento com pressão firme.</p>
+          <div class="mt-8 flex items-center justify-between border-t border-gold/10 pt-6">
+            <span class="font-display text-[1.6rem] leading-[normal] text-gold">R$ 70</span>
+            <span class="text-[0.7rem] uppercase tracking-[0.15em] text-mute2">45 min</span>
+          </div>
+        </article>
+
+        <article class="group relative bg-void px-8 py-12">
+          <svg aria-hidden="true" class="absolute right-8 top-8 h-5 w-5 translate-x-2 -translate-y-2 text-gold opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6m0 0H9m9 0v9"/></svg>
+          <svg aria-hidden="true" class="h-[2.2rem] w-[2.2rem] text-gold transition duration-400 group-hover:scale-110" viewBox="0 0 24 24"><path d="M3.845 3.845a2.883 2.883 0 0 0 0 4.077L5.432 9.51l.038-.04l4-4l.04-.038l-1.588-1.587a2.883 2.883 0 0 0-4.077 0m6.723 2.645l-.038.04l-4 4l-.04.038l9.588 9.588a2.884 2.884 0 0 0 4.078-4.078zM16.1 2.307a.483.483 0 0 1 .9 0l.43 1.095a.48.48 0 0 0 .272.274l1.091.432a.486.486 0 0 1 0 .903l-1.09.432a.5.5 0 0 0-.273.273L17 6.81a.483.483 0 0 1-.9 0l-.43-1.095a.5.5 0 0 0-.273-.273l-1.09-.432a.486.486 0 0 1 0-.903l1.09-.432a.5.5 0 0 0 .273-.274zm3.867 6.823a.483.483 0 0 1 .9 0l.156.399c.05.125.148.224.273.273l.398.158a.486.486 0 0 1 0 .902l-.398.158a.5.5 0 0 0-.273.273l-.156.4a.483.483 0 0 1-.9 0l-.157-.4a.5.5 0 0 0-.272-.273l-.398-.158a.486.486 0 0 1 0-.902l.398-.158a.5.5 0 0 0 .272-.273zM5.133 15.307a.483.483 0 0 1 .9 0l.157.4a.48.48 0 0 0 .272.273l.398.157a.486.486 0 0 1 0 .903l-.398.158a.48.48 0 0 0-.272.273l-.157.4a.483.483 0 0 1-.9 0l-.157-.4a.48.48 0 0 0-.272-.273l-.398-.158a.486.486 0 0 1 0-.903l.398-.157a.48.48 0 0 0 .272-.274z" fill="currentColor"/></svg>
+          <h3 class="nome-servico mt-8">Disfarce de grisalhos</h3>
+          <p class="mt-3 text-[0.85rem] leading-[1.7] text-mute2">Camuflagem natural dos fios brancos, sem o efeito chapado que a tintura comum deixa.</p>
+          <div class="mt-8 flex items-center justify-between border-t border-gold/10 pt-6">
+            <span class="font-display text-[1.6rem] leading-[normal] text-gold">R$ 50</span>
+            <span class="text-[0.7rem] uppercase tracking-[0.15em] text-mute2">40 min</span>
+          </div>
+        </article>
+
+        <article class="group relative bg-void px-8 py-12">
+          <svg aria-hidden="true" class="absolute right-8 top-8 h-5 w-5 translate-x-2 -translate-y-2 text-gold opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6m0 0H9m9 0v9"/></svg>
+          <svg aria-hidden="true" class="h-[2.2rem] w-[2.2rem] text-gold transition duration-400 group-hover:scale-110" viewBox="0 0 24 24"><g clip-rule="evenodd" fill="currentColor" fill-rule="evenodd"><path d="M10.801 2.57a.71.71 0 0 1-.555.838a8.78 8.78 0 0 0-6.838 6.838a.71.71 0 1 1-1.394-.283a10.2 10.2 0 0 1 7.949-7.949a.71.71 0 0 1 .838.556M2.57 13.199a.71.71 0 0 1 .838.555a8.78 8.78 0 0 0 6.838 6.838a.71.71 0 1 1-.283 1.394a10.2 10.2 0 0 1-7.948-7.949a.71.71 0 0 1 .555-.838M13.199 2.57a.71.71 0 0 1 .838-.556a10.2 10.2 0 0 1 7.949 7.949a.711.711 0 0 1-1.394.283a8.78 8.78 0 0 0-6.838-6.838a.71.71 0 0 1-.555-.838m8.231 10.629a.71.71 0 0 1 .556.838a10.2 10.2 0 0 1-7.949 7.949a.711.711 0 0 1-.283-1.394a8.78 8.78 0 0 0 6.838-6.838a.71.71 0 0 1 .838-.555"/><path d="M12 19.583a7.583 7.583 0 1 0 0-15.166a7.583 7.583 0 0 0 0 15.166m-3.06-5.044a.71.71 0 0 1 .995-.148c.59.437 1.3.69 2.065.69a3.45 3.45 0 0 0 2.065-.69a.71.71 0 1 1 .846 1.142a4.87 4.87 0 0 1-2.911.97a4.87 4.87 0 0 1-2.911-.97a.71.71 0 0 1-.148-.994m6.377-4.139c0 .688-.37 1.245-.829 1.245s-.83-.557-.83-1.245c0-.687.372-1.244.83-1.244s.83.557.83 1.244m-5.805 1.245c.458 0 .83-.557.83-1.245c0-.687-.372-1.244-.83-1.244s-.83.557-.83 1.244c0 .688.372 1.245.83 1.245"/></g></svg>
+          <h3 class="nome-servico mt-8">Cuidado facial</h3>
+          <p class="mt-3 text-[0.85rem] leading-[1.7] text-mute2">Limpeza, esfoliação, máscara e hidratação para a pele do rosto, com produto de primeira.</p>
+          <div class="mt-8 flex items-center justify-between border-t border-gold/10 pt-6">
+            <span class="font-display text-[1.6rem] leading-[normal] text-gold">R$ 65</span>
+            <span class="text-[0.7rem] uppercase tracking-[0.15em] text-mute2">50 min</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GALERIA ================= -->
+  <section id="galeria" class="pb-24 lg:pb-40">
+    <div class="wrap">
+      <div class="rv text-center" x-intersect.once="$el.classList.add('rv-in')">
+        <p class="rotulo rotulo-centro">Nosso trabalho</p>
+        <h2 class="titulo mt-7">O <em>Ofício</em> em detalhes</h2>
+      </div>
+
+      <div class="mt-20 grid gap-6 sm:grid-cols-3">
+        <div class="foto group aspect-[4/3]">
+          <img src="./static/images/degrade.webp" alt="Degradê clássico em execução" width="800" height="600" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[40%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" />
+          <div class="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-void/80 to-transparent to-60% p-8 opacity-0 transition duration-300 group-hover:opacity-100 max-lg:opacity-100"><span class="font-display text-lg uppercase tracking-[0.15em] text-bone">Degradê de precisão</span></div>
+        </div>
+        <div class="foto group aspect-[4/3]">
+          <img src="./static/images/barba.webp" alt="Cuidado e modelagem da barba" width="800" height="600" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[40%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" />
+          <div class="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-void/80 to-transparent to-60% p-8 opacity-0 transition duration-300 group-hover:opacity-100 max-lg:opacity-100"><span class="font-display text-lg uppercase tracking-[0.15em] text-bone">Arte da barba</span></div>
+        </div>
+        <div class="foto group aspect-[4/3]">
+          <img src="./static/images/toalha.webp" alt="Barbear com toalha quente" width="800" height="600" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[40%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" />
+          <div class="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-void/80 to-transparent to-60% p-8 opacity-0 transition duration-300 group-hover:opacity-100 max-lg:opacity-100"><span class="font-display text-lg uppercase tracking-[0.15em] text-bone">Ritual da toalha quente</span></div>
+        </div>
+      </div>
+      <div class="mt-6 grid gap-6 sm:grid-cols-2">
+        <div class="foto group aspect-[4/3]">
+          <img src="./static/images/atmosfera.webp" alt="Atmosfera da barbearia" width="1000" height="750" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[40%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" />
+          <div class="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-void/80 to-transparent to-60% p-8 opacity-0 transition duration-300 group-hover:opacity-100 max-lg:opacity-100"><span class="font-display text-lg uppercase tracking-[0.15em] text-bone">A experiência</span></div>
+        </div>
+        <div class="foto group aspect-[4/3]">
+          <img src="./static/images/estilizacao.webp" alt="Detalhes da finalização" width="1000" height="750" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[40%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" />
+          <div class="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-void/80 to-transparent to-60% p-8 opacity-0 transition duration-300 group-hover:opacity-100 max-lg:opacity-100"><span class="font-display text-lg uppercase tracking-[0.15em] text-bone">Toques finais</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= BARBEIROS ================= -->
+  <section id="barbeiros" class="bg-surface py-24 lg:pt-32 lg:pb-40">
+    <div class="wrap">
+      <div class="rv" x-intersect.once="$el.classList.add('rv-in')">
+        <p class="rotulo">A equipe</p>
+        <h2 class="titulo mt-7">Conheça nossos <em>Mestres</em><br />barbeiros</h2>
+      </div>
+
+      <div class="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <article class="rv" x-intersect.once="$el.classList.add('rv-in')">
+          <div class="foto aspect-[3/4]">
+            <img src="./static/images/barbeiro-1.webp" alt="Jonas Ribeiro, barbeiro da Blade & Co." width="640" height="800" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover transition duration-500 lg:grayscale lg:hover:grayscale-0" />
+          </div>
+          <div class="flex items-start justify-between gap-4 py-6">
+            <div>
+              <h3 class="nome-barbeiro">Jonas Ribeiro</h3>
+              <p class="mt-1.5 text-[0.7rem] uppercase tracking-[0.2em] text-gold">Mestre barbeiro &middot; Fundador</p>
+            </div>
+            <div class="flex gap-3"><a href="#" aria-label="Instagram de Jonas Ribeiro" class="text-mute2 transition duration-300 hover:text-gold"><svg aria-hidden="true" class="h-[1.1rem] w-[1.1rem]" viewBox="0 0 24 24" fill="currentColor"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5a4.5 4.5 0 1 1 0 9a4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5ZM17.5 6a1 1 0 1 1 0 2a1 1 0 0 1 0-2Z"/></svg></a></div>
+          </div>
+        </article>
+
+        <article class="rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 120)">
+          <div class="foto aspect-[3/4]">
+            <img src="./static/images/barbeiro-2.webp" alt="Marcelo Chagas, barbeiro da Blade & Co." width="640" height="800" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover transition duration-500 lg:grayscale lg:hover:grayscale-0" />
+          </div>
+          <div class="flex items-start justify-between gap-4 py-6">
+            <div>
+              <h3 class="nome-barbeiro">Marcelo Chagas</h3>
+              <p class="mt-1.5 text-[0.7rem] uppercase tracking-[0.2em] text-gold">Barbeiro sênior</p>
+            </div>
+            <div class="flex gap-3"><a href="#" aria-label="Instagram de Marcelo Chagas" class="text-mute2 transition duration-300 hover:text-gold"><svg aria-hidden="true" class="h-[1.1rem] w-[1.1rem]" viewBox="0 0 24 24" fill="currentColor"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5a4.5 4.5 0 1 1 0 9a4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5ZM17.5 6a1 1 0 1 1 0 2a1 1 0 0 1 0-2Z"/></svg></a></div>
+          </div>
+        </article>
+
+        <article class="rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 240)">
+          <div class="foto aspect-[3/4]">
+            <img src="./static/images/barbeiro-3.webp" alt="Diego Alencar, barbeiro da Blade & Co." width="640" height="800" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover transition duration-500 lg:grayscale lg:hover:grayscale-0" />
+          </div>
+          <div class="flex items-start justify-between gap-4 py-6">
+            <div>
+              <h3 class="nome-barbeiro">Diego Alencar</h3>
+              <p class="mt-1.5 text-[0.7rem] uppercase tracking-[0.2em] text-gold">Barbeiro &middot; Design capilar</p>
+            </div>
+            <div class="flex gap-3"><a href="#" aria-label="Instagram de Diego Alencar" class="text-mute2 transition duration-300 hover:text-gold"><svg aria-hidden="true" class="h-[1.1rem] w-[1.1rem]" viewBox="0 0 24 24" fill="currentColor"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5a4.5 4.5 0 1 1 0 9a4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5ZM17.5 6a1 1 0 1 1 0 2a1 1 0 0 1 0-2Z"/></svg></a></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= AVALIAÇÕES ================= -->
+  <section id="avaliacoes" class="relative overflow-hidden py-24 lg:py-40">
+    <!-- marca-d'água da referência: decorativa, fora da árvore de acessibilidade -->
+    <span aria-hidden="true"
+          class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none
+                 whitespace-nowrap font-display text-[20vw] leading-none text-gold/[0.03]">Avaliações</span>
+
+    <div class="wrap relative">
+      <div class="rv text-center" x-intersect.once="$el.classList.add('rv-in')">
+        <p class="rotulo rotulo-centro">Depoimentos</p>
+        <h2 class="titulo mt-7">O que nossos <em>Clientes</em> dizem</h2>
+      </div>
+
+      <!-- um depoimento por vez, trocado pelos dots. Sem JS o CSS não esconde
+           nada (a regra depende da classe .js), então os três ficam visíveis. -->
+      <div class="mx-auto mt-16 max-w-3xl text-center">
+        <figure class="depoimento" :class="{ 'depoimento-ativo': avaliacao === 0 }">
+          <div class="flex justify-center gap-1.5 text-gold"><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg></div>
+          <blockquote class="mt-8 font-serif text-xl italic leading-relaxed text-cream sm:text-2xl">
+            Marquei às 14h e às 14h fui atendido. Parece pouco, mas depois de anos
+            esperando em barbearia, foi o que me fez voltar.
+          </blockquote>
+          <figcaption class="mt-8">
+            <p class="font-display text-lg uppercase tracking-[0.15em] text-bone">Rafael Moura</p>
+            <p class="mt-1 text-[10px] uppercase tracking-[0.2em] text-gold">Cliente desde 2021</p>
+          </figcaption>
+        </figure>
+
+        <figure class="depoimento" :class="{ 'depoimento-ativo': avaliacao === 1 }">
+          <div class="flex justify-center gap-1.5 text-gold"><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg></div>
+          <blockquote class="mt-8 font-serif text-xl italic leading-relaxed text-cream sm:text-2xl">
+            Nunca tinha feito barbear na navalha. Saí de lá entendendo por que
+            valia o dobro do preço e por que não dá para voltar atrás.
+          </blockquote>
+          <figcaption class="mt-8">
+            <p class="font-display text-lg uppercase tracking-[0.15em] text-bone">Thiago Belmonte</p>
+            <p class="mt-1 text-[10px] uppercase tracking-[0.2em] text-gold">Cliente desde 2023</p>
+          </figcaption>
+        </figure>
+
+        <figure class="depoimento" :class="{ 'depoimento-ativo': avaliacao === 2 }">
+          <div class="flex justify-center gap-1.5 text-gold"><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg></div>
+          <blockquote class="mt-8 font-serif text-xl italic leading-relaxed text-cream sm:text-2xl">
+            Levei meu filho de sete anos e trataram ele igual trataram a mim.
+            Isso diz mais sobre a casa do que qualquer corte.
+          </blockquote>
+          <figcaption class="mt-8">
+            <p class="font-display text-lg uppercase tracking-[0.15em] text-bone">Eduardo Prado</p>
+            <p class="mt-1 text-[10px] uppercase tracking-[0.2em] text-gold">Cliente desde 2020</p>
+          </figcaption>
+        </figure>
+
+        <div class="js-only mt-12 justify-center gap-3">
+          <button type="button" @click="verDepoimento(0)" :aria-current="avaliacao === 0"
+                  aria-label="Ver o primeiro depoimento"
+                  class="dot" :class="avaliacao === 0 && 'dot-ativo'"></button>
+          <button type="button" @click="verDepoimento(1)" :aria-current="avaliacao === 1"
+                  aria-label="Ver o segundo depoimento"
+                  class="dot" :class="avaliacao === 1 && 'dot-ativo'"></button>
+          <button type="button" @click="verDepoimento(2)" :aria-current="avaliacao === 2"
+                  aria-label="Ver o terceiro depoimento"
+                  class="dot" :class="avaliacao === 2 && 'dot-ativo'"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= AGENDAMENTO ================= -->
+  <section id="agendar" class="py-24 lg:py-40">
+    <div class="wrap grid items-center gap-16 lg:grid-cols-2">
+
+      <div class="rv" x-intersect.once="$el.classList.add('rv-in')">
+        <!-- moldura dourada deslocada, como no layout original -->
+        <div class="relative">
+          <span class="pointer-events-none absolute left-5 top-5 h-full w-full border border-gold"></span>
+          <div class="foto relative aspect-[1.11]">
+            <img src="./static/images/cadeira.webp" alt="Cadeira e salão da Blade &amp; Co." width="1000" height="900"
+                 loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p class="rotulo">Reserve seu horário</p>
+        <h2 class="titulo mt-7">Agende sua <em>Visita</em></h2>
+        <!-- o painel de sucesso precisa nascer escondido mesmo sem JavaScript,
+             por isso o display inline: o x-cloak só é desligado sob a classe .js -->
+        <div x-show="form.sent" x-cloak x-transition.duration.300ms style="display: none"
+             class="mt-10 flex flex-col justify-center border border-gold/30 p-10 text-center">
+          <span class="mx-auto text-3xl text-gold">✓</span>
+          <h3 class="mt-6 font-display text-2xl uppercase tracking-[0.1em] text-bone">Pedido enviado</h3>
+          <p class="mt-4 text-sm leading-relaxed text-mute">
+            Obrigado, <span class="text-cream" x-text="form.nome.split(' ')[0]"></span>.
+            Confirmamos seu horário por WhatsApp ainda hoje.
+          </p>
+          <button @click="resetForm()" class="btn-linha mx-auto mt-8">Fazer outro pedido</button>
+        </div>
+
+        <form x-show="!form.sent" @submit.prevent="enviar()" novalidate class="mt-10 space-y-8">
+          <div class="grid gap-8 sm:grid-cols-2">
+            <div>
+              <label for="nome" class="block text-[0.65rem] uppercase tracking-[0.25em] text-mute">Nome</label>
+              <input id="nome" type="text" x-model="form.nome" placeholder="João" class="campo mt-2" :class="erros.nome && '!border-red-500/70'" />
+              <p x-show="erros.nome" x-cloak class="mt-2 text-[11px] text-red-400" x-text="erros.nome"></p>
+            </div>
+            <div>
+              <label for="sobrenome" class="block text-[0.65rem] uppercase tracking-[0.25em] text-mute">Sobrenome</label>
+              <input id="sobrenome" type="text" x-model="form.sobrenome" placeholder="Silva" class="campo mt-2" :class="erros.sobrenome && '!border-red-500/70'" />
+              <p x-show="erros.sobrenome" x-cloak class="mt-2 text-[11px] text-red-400" x-text="erros.sobrenome"></p>
+            </div>
+          </div>
+
+          <div class="grid gap-8 sm:grid-cols-2">
+            <div>
+              <label for="email" class="block text-[0.65rem] uppercase tracking-[0.25em] text-mute">E-mail</label>
+              <input id="email" type="email" x-model="form.email" placeholder="joao@email.com" class="campo mt-2" :class="erros.email && '!border-red-500/70'" />
+              <p x-show="erros.email" x-cloak class="mt-2 text-[11px] text-red-400" x-text="erros.email"></p>
+            </div>
+            <div>
+              <label for="tel" class="block text-[0.65rem] uppercase tracking-[0.25em] text-mute">Telefone</label>
+              <input id="tel" type="tel" x-model="form.tel" @input="mascara()" maxlength="15" placeholder="(11) 99999-9999" class="campo mt-2" :class="erros.tel && '!border-red-500/70'" />
+              <p x-show="erros.tel" x-cloak class="mt-2 text-[11px] text-red-400" x-text="erros.tel"></p>
+            </div>
+          </div>
+
+          <div>
+            <label for="servico" class="block text-[0.65rem] uppercase tracking-[0.25em] text-mute">Selecionar serviço</label>
+            <select id="servico" x-model="form.servico" class="campo mt-2">
+              <option class="bg-surface">Corte exclusivo &middot; R$ 45</option>
+              <option class="bg-surface">Barbear na navalha &middot; R$ 55</option>
+              <option class="bg-surface">Modelagem de barba &middot; R$ 35</option>
+              <option class="bg-surface">O completo &middot; R$ 95</option>
+              <option class="bg-surface">Design capilar &middot; R$ 60</option>
+              <option class="bg-surface">Tratamento capilar &middot; R$ 70</option>
+              <option class="bg-surface">Disfarce de grisalhos &middot; R$ 50</option>
+              <option class="bg-surface">Cuidado facial &middot; R$ 65</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="barbeiro" class="block text-[0.65rem] uppercase tracking-[0.25em] text-mute">Barbeiro preferido</label>
+            <select id="barbeiro" x-model="form.barbeiro" class="campo mt-2">
+              <option class="bg-surface">Sem preferência</option>
+              <option class="bg-surface">Jonas Ribeiro</option>
+              <option class="bg-surface">Marcelo Chagas</option>
+              <option class="bg-surface">Diego Alencar</option>
+            </select>
+          </div>
+
+          <div class="grid gap-8 sm:grid-cols-2">
+            <div>
+              <label for="data" class="block text-[0.65rem] uppercase tracking-[0.25em] text-mute">Data</label>
+              <input id="data" type="date" x-model="form.data" class="campo mt-2 [color-scheme:dark]" :class="erros.data && '!border-red-500/70'" />
+              <p x-show="erros.data" x-cloak class="mt-2 text-[11px] text-red-400" x-text="erros.data"></p>
+            </div>
+            <div>
+              <label for="hora" class="block text-[0.65rem] uppercase tracking-[0.25em] text-mute">Horário</label>
+              <input id="hora" type="time" x-model="form.hora" class="campo mt-2 [color-scheme:dark]" :class="erros.hora && '!border-red-500/70'" />
+              <p x-show="erros.hora" x-cloak class="mt-2 text-[11px] text-red-400" x-text="erros.hora"></p>
+            </div>
+          </div>
+
+          <button type="submit" :disabled="form.loading"
+                  class="btn-gold w-full cursor-pointer py-[1.2rem] text-[0.75rem] tracking-[0.25em] disabled:opacity-60">
+            <span x-text="form.loading ? 'Enviando…' : 'Confirmar agendamento'">Confirmar agendamento</span>
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          </button>
+
+          <p class="text-center text-[11px] text-mute2">
+            O pedido não confirma o horário sozinho. A gente responde no WhatsApp para fechar.
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= INSTAGRAM ================= -->
+  <section class="py-20">
+    <div class="wrap">
+      <div class="mb-12 flex flex-col items-center gap-3 text-center">
+        <div>
+          <p class="rotulo rotulo-centro">Siga-nos</p>
+          <h2 class="titulo mt-7">No <em>Instagram</em></h2>
+        </div>
+        <a href="#" class="inline-flex items-center gap-2 text-[0.8rem] tracking-[0.2em] text-gold transition duration-300 hover:text-cream">
+          <svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5a4.5 4.5 0 1 1 0 9a4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5ZM17.5 6a1 1 0 1 1 0 2a1 1 0 0 1 0-2Z"/></svg>
+          @bladeco.barbearia
+        </a>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-[3px] sm:grid-cols-3 lg:grid-cols-6">
+        <a href="#" class="foto group aspect-square"><img src="./static/images/insta-1.webp" alt="Post do Instagram" width="420" height="420" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /><span class="pointer-events-none absolute inset-0 transition duration-300 group-hover:bg-gold/20"></span></a>
+        <a href="#" class="foto group aspect-square"><img src="./static/images/insta-2.webp" alt="Post do Instagram" width="420" height="420" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /><span class="pointer-events-none absolute inset-0 transition duration-300 group-hover:bg-gold/20"></span></a>
+        <a href="#" class="foto group aspect-square"><img src="./static/images/insta-3.webp" alt="Post do Instagram" width="420" height="420" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /><span class="pointer-events-none absolute inset-0 transition duration-300 group-hover:bg-gold/20"></span></a>
+        <a href="#" class="foto group aspect-square"><img src="./static/images/insta-4.webp" alt="Post do Instagram" width="420" height="420" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /><span class="pointer-events-none absolute inset-0 transition duration-300 group-hover:bg-gold/20"></span></a>
+        <a href="#" class="foto group aspect-square"><img src="./static/images/insta-5.webp" alt="Post do Instagram" width="420" height="420" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /><span class="pointer-events-none absolute inset-0 transition duration-300 group-hover:bg-gold/20"></span></a>
+        <a href="#" class="foto group aspect-square"><img src="./static/images/insta-6.webp" alt="Post do Instagram" width="420" height="420" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /><span class="pointer-events-none absolute inset-0 transition duration-300 group-hover:bg-gold/20"></span></a>
+    </div>
+  </section>
+
+  <!-- ================= RODAPÉ ================= -->
+  <footer class="border-t border-gold/10 pt-20 pb-24 sm:pb-8">
+    <div class="wrap">
+      <div class="mb-16 grid gap-12 lg:grid-cols-[2fr_1fr_1fr_1.5fr]">
+
+        <div>
+          <p class="font-display text-2xl uppercase tracking-[0.18em] text-bone">
+            Blade <span class="font-serif text-lg italic tracking-normal text-gold">&amp;</span> Co.
+          </p>
+          <p class="mt-5 max-w-xs text-[0.85rem] leading-[1.8] text-mute2">
+            Barbearia premium na Vila Madalena. Hora marcada, produto de primeira
+            e acabamento que se percebe de longe, desde 2018.
+          </p>
+          <div class="mt-8 flex gap-3">
+        <a href="#" aria-label="Instagram" class="grid h-10 w-10 place-items-center border border-gold/20 text-mute transition duration-300 hover:border-gold hover:text-gold"><svg aria-hidden="true" class="h-[1.1rem] w-[1.1rem]" viewBox="0 0 24 24" fill="currentColor"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5a4.5 4.5 0 1 1 0 9a4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5ZM17.5 6a1 1 0 1 1 0 2a1 1 0 0 1 0-2Z"/></svg></a>
+        <a href="#" aria-label="Facebook" class="grid h-10 w-10 place-items-center border border-gold/20 text-mute transition duration-300 hover:border-gold hover:text-gold"><svg aria-hidden="true" class="h-[1.1rem] w-[1.1rem]" viewBox="0 0 24 24" fill="currentColor"><path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.33-.04-1.56-.14-2.86-.14C11.93 2 10 3.66 10 6.7v2.8H7v4h3V22h4v-8.5Z"/></svg></a>
+        <a href="#" aria-label="WhatsApp" class="grid h-10 w-10 place-items-center border border-gold/20 text-mute transition duration-300 hover:border-gold hover:text-gold"><svg aria-hidden="true" class="h-[1.1rem] w-[1.1rem]" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 0 1 6.988 2.896a9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.886-9.885 9.886M20.52 3.449A11.8 11.8 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.548 4.142 1.588 5.945L.057 24l6.305-1.654a11.9 11.9 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.82 11.82 0 0 0 20.52 3.45"/></svg></a>
+        <a href="#" aria-label="YouTube" class="grid h-10 w-10 place-items-center border border-gold/20 text-mute transition duration-300 hover:border-gold hover:text-gold"><svg aria-hidden="true" class="h-[1.1rem] w-[1.1rem]" viewBox="0 0 24 24" fill="currentColor"><path d="M21.58 6.19a2.5 2.5 0 0 0-1.77-1.77C18.25 4 12 4 12 4s-6.25 0-7.81.42a2.5 2.5 0 0 0-1.77 1.77C2 7.75 2 12 2 12s0 4.25.42 5.81a2.5 2.5 0 0 0 1.77 1.77C5.75 20 12 20 12 20s6.25 0 7.81-.42a2.5 2.5 0 0 0 1.77-1.77C22 16.25 22 12 22 12s0-4.25-.42-5.81ZM10 15.46V8.54L16 12l-6 3.46Z"/></svg></a>
+          </div>
+        </div>
+
+        <div>
+          <p class="titulo-coluna mb-6">Navegar</p>
+          <ul class="flex flex-col gap-3">
+          <li><a href="#historia" class="text-[0.85rem] text-mute2 transition duration-300 hover:text-gold">Nossa história</a></li>
+          <li><a href="#servicos" class="text-[0.85rem] text-mute2 transition duration-300 hover:text-gold">Serviços</a></li>
+          <li><a href="#galeria" class="text-[0.85rem] text-mute2 transition duration-300 hover:text-gold">Galeria</a></li>
+          <li><a href="#barbeiros" class="text-[0.85rem] text-mute2 transition duration-300 hover:text-gold">Nossos barbeiros</a></li>
+          <li><a href="#agendar" class="text-[0.85rem] text-mute2 transition duration-300 hover:text-gold">Reservar online</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="titulo-coluna mb-6">Serviços</p>
+          <ul class="flex flex-col gap-3">
+          <li><a href="#servicos" class="text-[0.85rem] text-mute2 transition duration-300 hover:text-gold">Corte exclusivo</a></li>
+          <li><a href="#servicos" class="text-[0.85rem] text-mute2 transition duration-300 hover:text-gold">Barbear na navalha</a></li>
+          <li><a href="#servicos" class="text-[0.85rem] text-mute2 transition duration-300 hover:text-gold">Modelagem de barba</a></li>
+          <li><a href="#servicos" class="text-[0.85rem] text-mute2 transition duration-300 hover:text-gold">O completo</a></li>
+          <li><a href="#servicos" class="text-[0.85rem] text-mute2 transition duration-300 hover:text-gold">Design capilar</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="titulo-coluna mb-6">Visite-nos</p>
+        <div class="mb-5 flex items-start gap-4">
+          <svg aria-hidden="true" class="mt-1 h-[1.1rem] w-[1.1rem] shrink-0 text-gold" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 1 7 7c0 5.25-7 13-7 13S5 14.25 5 9a7 7 0 0 1 7-7Zm0 4.5A2.5 2.5 0 1 0 12 11.5a2.5 2.5 0 0 0 0-5Z"/></svg>
+          <p class="text-[0.85rem] leading-[1.8] text-mute2">Rua das Oficinas, 128<br />Vila Madalena, São Paulo 05433-000</p>
+        </div>
+        <div class="mb-5 flex items-start gap-4">
+          <svg aria-hidden="true" class="mt-1 h-[1.1rem] w-[1.1rem] shrink-0 text-gold" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.24.2 2.45.57 3.57a1 1 0 0 1-.24 1.02l-2.21 2.2Z"/></svg>
+          <p class="text-[0.85rem] leading-[1.8] text-mute2">(11) 4002-8922<br />ola@bladeco.com.br</p>
+        </div>
+        <div class="mb-5 flex items-start gap-4">
+          <svg aria-hidden="true" class="mt-1 h-[1.1rem] w-[1.1rem] shrink-0 text-gold" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 1 0 20a10 10 0 0 1 0-20Zm0 2a8 8 0 1 0 0 16a8 8 0 0 0 0-16Zm1 3v5.59l3.21 3.2l-1.42 1.42L11 13V7h2Z"/></svg>
+          <p class="text-[0.85rem] leading-[1.8] text-mute2">Ter a sex: 10h às 20h<br />Sábado: 9h às 18h<br />Dom e seg: fechado</p>
+        </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-4 border-t border-gold/10 pt-8 sm:flex-row sm:items-center sm:justify-between sm:pr-24">
+        <p class="text-[0.75rem] tracking-[0.1em] text-mute2">
+          © <span x-text="new Date().getFullYear()">2026</span> Blade &amp; Co. Projeto demonstrativo.
+        </p>
+        <div class="flex gap-8">
+          <a href="#" class="text-[0.75rem] text-mute2 transition duration-300 hover:text-gold">Política de privacidade</a>
+          <a href="#" class="text-[0.75rem] text-mute2 transition duration-300 hover:text-gold">Termos de serviço</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/5511999999999" target="_blank" rel="noopener" aria-label="WhatsApp"
+     class="fixed bottom-6 right-6 z-40 grid h-14 w-14 place-items-center bg-gold text-void shadow-2xl transition duration-300 hover:bg-cream">
+    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 016.988 2.898 9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413"/></svg>
+  </a>
+
+</body>
+</html>

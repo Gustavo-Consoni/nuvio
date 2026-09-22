@@ -1,0 +1,36 @@
+---
+/**
+ * Layout das páginas demo da Casa Olívia (restaurante fictício): cardápio e
+ * página de links. Cores `olivia-*` e fonte Fraunces no global.css.
+ *
+ * Toda página daqui leva a faixa "Projeto demonstrativo": demo nunca pode
+ * parecer trabalho de cliente real.
+ */
+import Base from "./Base.astro";
+import { olivia } from "../data/demo-restaurante";
+import { site } from "../config";
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<Base title={title} description={description} marca={olivia.nome}>
+  <link slot="head" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600&display=swap" />
+
+  <div class="flex flex-col bg-olivia-papel min-h-screen font-inter text-olivia-tinta">
+    <div class="flex-1">
+      <slot />
+    </div>
+
+    <p class="px-4 py-8 border-olivia-tinta/10 border-t text-[11px] text-olivia-tinta/50 text-center">
+      Projeto demonstrativo feito pela{" "}
+      <a href={`${base}/`} target="_top" class="text-olivia-terra hover:text-olivia-tinta underline underline-offset-2">{site.name}</a>.
+      A Casa Olívia é um restaurante fictício.
+    </p>
+  </div>
+</Base>

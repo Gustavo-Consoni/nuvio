@@ -1,0 +1,172 @@
+---
+/**
+ * Visualizador de projeto: o card clicado ([data-projeto]) cresce até a tela
+ * cheia e volta pelo mesmo caminho.
+ *
+ * Durante o movimento aparece o print; o <iframe> nasce junto com o painel,
+ * invisível, carrega DURANTE a expansão e só desbota por cima depois do
+ * onload. Ele existe apenas enquanto o painel está aberto: a landing não
+ * baixa demo nenhum antes do clique.
+ *
+ * O site exibido precisa permitir iframe (sem X-Frame-Options). Se não
+ * permitir, o card ainda funciona como link para nova aba.
+ */
+---
+
+<div data-visualizador hidden class="z-[60] fixed inset-0" role="dialog" aria-modal="true">
+  <!-- o fundo desbota pelo `data-mostrando`, que cai já no começo do
+       fechamento, para escurecer e clarear junto com o painel -->
+  <div data-fundo class="absolute inset-0 bg-ink-950/85 opacity-0 data-mostrando:opacity-100 backdrop-blur-sm transition-opacity duration-[420ms]"></div>
+
+  <!-- as medidas deste painel são escritas pelo script; a transição está no CSS -->
+  <div data-painel class="absolute bg-ink-900 shadow-2xl shadow-black/60 border border-white/12 rounded-2xl overflow-hidden painel-projeto">
+    <div class="flex items-center gap-2 bg-ink-850 px-4 border-white/8 border-b h-12">
+      <span class="bg-rose-500/80 rounded-full w-3 h-3 shrink-0"></span>
+      <span class="bg-amber-400/80 rounded-full w-3 h-3 shrink-0"></span>
+      <span class="bg-emerald-500/80 rounded-full w-3 h-3 shrink-0"></span>
+      <div data-endereco class="flex-1 bg-ink-800 ml-2 px-4 py-1 rounded-md min-w-0 text-[11px] text-slate-400 truncate"></div>
+      <a data-nova-aba href="#" target="_blank" rel="noopener" class="hidden sm:block px-4 py-2 border border-white/10 hover:border-brand-400/40 rounded-lg font-semibold text-slate-300 hover:text-white text-xs transition duration-300 shrink-0">
+        Abrir em nova aba
+      </a>
+      <button type="button" data-fechar aria-label="Fechar" class="place-items-center grid hover:bg-white/10 rounded-lg w-8 h-8 text-slate-400 hover:text-white transition duration-300 cursor-pointer shrink-0">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"></path></svg>
+      </button>
+    </div>
+
+    <div data-quadro class="relative bg-ink-950 h-[calc(100%-3rem)]">
+      <!-- print: fica embaixo o tempo todo e cobre a espera do carregamento -->
+      <img data-print alt="" class="absolute inset-0 w-full h-full object-cover object-top" />
+    </div>
+  </div>
+</div>
+
+<script>
+  import { aCadaPagina } from "../../scripts/pagina";
+
+  /** Respiro entre o painel e a borda da tela, em px. */
+  const MARGEM = 24;
+
+  aCadaPagina((signal) => {
+    const raiz = document.querySelector<HTMLElement>("[data-visualizador]");
+    if (!raiz) return;
+    const fundo = raiz.querySelector<HTMLElement>("[data-fundo]")!;
+    const painel = raiz.querySelector<HTMLElement>("[data-painel]")!;
+    const quadro = raiz.querySelector<HTMLElement>("[data-quadro]")!;
+    const print = raiz.querySelector<HTMLImageElement>("[data-print]")!;
+    const endereco = raiz.querySelector<HTMLElement>("[data-endereco]")!;
+    const novaAba = raiz.querySelector<HTMLAnchorElement>("[data-nova-aba]")!;
+    const fechar = raiz.querySelector<HTMLButtonElement>("[data-fechar]")!;
+
+    let cardOrigem: HTMLElement | null = null;
+    let iframe: HTMLIFrameElement | null = null;
+    let fechando = false;
+    let timerFechar: ReturnType<typeof setTimeout> | undefined;
+
+    // A duração real vem do CSS (.painel-projeto), fonte única do tempo.
+    // Cuidado com a unidade: o minificador pode reescrever `420ms` como
+    // `.42s`, e ler só o número daria 0,42 e o painel sumiria antes de andar.
+    const duracao = () => {
+      const v = getComputedStyle(painel).getPropertyValue("--duracao").trim();
+      const n = parseFloat(v);
+      if (!n) return 420;
+      return v.endsWith("ms") ? n : n * 1000;
+    };
+
+    // `animar: false` gruda o painel no lugar sem transição (usado só na
+    // largada); `animar: true` deixa a transição do CSS levar ele até lá
+    const medir = (r: DOMRect, animar: boolean) => {
+      painel.style.transition = animar ? "" : "none";
+      painel.style.top = `${r.top}px`;
+      painel.style.left = `${r.left}px`;
+      painel.style.width = `${r.width}px`;
+      painel.style.height = `${r.height}px`;
+    };
+
+    const expandir = () => {
+      painel.style.transition = "";
+      painel.style.top = `${MARGEM}px`;
+      painel.style.left = `${MARGEM}px`;
+      painel.style.width = `${window.innerWidth - MARGEM * 2}px`;
+      painel.style.height = `${window.innerHeight - MARGEM * 2}px`;
+    };
+
+    const face = (card: HTMLElement) => card.querySelector<HTMLElement>("[data-abrir]")!;
+
+    const abrir = (card: HTMLElement) => {
+      // clique num card enquanto o anterior ainda encolhe: cancela o
+      // desmonte pendente, senão ele dispararia no meio da nova abertura
+      clearTimeout(timerFechar);
+      fechando = false;
+      iframe?.remove();
+
+      const { url = "", title = "", shot = "" } = card.dataset;
+      cardOrigem = card;
+      raiz.setAttribute("aria-label", title);
+      endereco.textContent = url;
+      novaAba.href = url;
+      print.src = shot;
+
+      // O site vivo entra POR CIMA do print e só aparece depois do onload
+      // (ver .quadro-vivo no global.css)
+      iframe = document.createElement("iframe");
+      iframe.src = url;
+      iframe.title = title;
+      iframe.className = "absolute inset-0 bg-white border-0 w-full h-full quadro-vivo";
+      iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-popups allow-forms");
+      const este = iframe;
+      este.addEventListener("load", () => este.classList.add("quadro-vivo-pronto"));
+      quadro.append(este);
+
+      document.body.style.overflow = "hidden";
+      raiz.hidden = false;
+
+      painel.classList.remove("voltando"); // a ida usa a curva expo
+      medir(face(card).getBoundingClientRect(), false); // começa exatamente sobre o card
+      painel.offsetHeight; // força o reflow antes de animar
+      fundo.toggleAttribute("data-mostrando", true);
+      expandir();
+      fechar.focus({ preventScroll: true });
+    };
+
+    const fecharPainel = () => {
+      if (raiz.hidden || fechando) return;
+      fechando = true;
+
+      iframe?.classList.remove("quadro-vivo-pronto"); // o site vivo desbota e o print reaparece
+      fundo.toggleAttribute("data-mostrando", false); // o fundo desbota junto com o trajeto
+
+      // A classe entra antes de mexer nas medidas: a curva é lida no instante
+      // em que a transição começa, então trocar depois não teria efeito.
+      painel.classList.add("voltando");
+      if (cardOrigem) medir(face(cardOrigem).getBoundingClientRect(), true);
+
+      timerFechar = setTimeout(() => {
+        fechando = false;
+        raiz.hidden = true;
+        iframe?.remove();
+        iframe = null;
+        document.body.style.overflow = "";
+        if (cardOrigem) face(cardOrigem).focus();
+      }, duracao());
+    };
+
+    document.querySelectorAll<HTMLElement>("[data-projeto]").forEach((card) => {
+      face(card).addEventListener(
+        "click",
+        (e) => {
+          e.preventDefault();
+          abrir(card);
+        },
+        { signal },
+      );
+    });
+    fundo.addEventListener("click", fecharPainel, { signal });
+    fechar.addEventListener("click", fecharPainel, { signal });
+    window.addEventListener("keydown", (e) => e.key === "Escape" && fecharPainel(), { signal });
+
+    signal.addEventListener("abort", () => {
+      clearTimeout(timerFechar);
+      document.body.style.overflow = "";
+    });
+  });
+</script>

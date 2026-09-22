@@ -1,0 +1,28 @@
+# Dependências
+node_modules/
+
+# Saída do build
+dist/
+
+# Gerado pelo Astro a cada build (tipos de `astro sync`)
+.astro/
+
+# Variáveis de ambiente
+.env
+.env.production
+.env.*.local
+
+# Ferramenta de gravação dos reels: fica só na máquina, não faz parte do site
+reels/
+
+# macOS
+.DS_Store
+
+# Editores
+.vscode/
+.idea/
+*.swp
+
+# Logs
+npm-debug.log*
+yarn-error.log*

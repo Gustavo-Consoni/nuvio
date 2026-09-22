@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mesa Farta | Receitas de verdade para a cozinha de casa</title>
+  <meta name="description" content="Receitas testadas, ingredientes da estação e técnica explicada sem enrolação. Um cardápio novo toda semana, direto no seu e-mail." />
+  <meta name="theme-color" content="#faf9f6" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Mesa Farta | Receitas de verdade para a cozinha de casa" />
+  <meta property="og:description" content="Receitas testadas, ingredientes da estação e técnica sem enrolação." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <script>
+    document.documentElement.classList.add('js');
+    setTimeout(function () { if (!window.Alpine) document.documentElement.classList.remove('js'); }, 3000);
+  </script>
+
+  <link rel="stylesheet" href="./static/output.css" />
+  <!-- Fonte base fluida, igual à do site principal (html em src/styles/global.css). -->
+  <style>
+    html {
+      text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
+      font-size: clamp(12px, 4vw, 16px);
+    }
+  </style>
+  <script defer src="./app.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body x-data="mesa()">
+
+  <!-- ================= HEADER ================= -->
+  <header class="fixed inset-x-0 top-4 z-50 px-5 sm:px-8">
+    <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 rounded-full border border-line bg-white/90 py-2.5 pl-3 pr-2.5 shadow-lg shadow-ink/5 backdrop-blur-md">
+      <a href="#topo" class="flex shrink-0 items-center gap-2.5">
+        <span class="grid h-9 w-9 place-items-center rounded-full bg-deep font-serif text-lg italic text-white">M</span>
+        <span class="text-[15px] font-extrabold tracking-tight text-deep">Mesa Farta</span>
+      </a>
+
+      <nav class="hidden items-center rounded-full bg-cloud/60 p-1 shadow-sm shadow-ink/5 lg:flex">
+        <a href="#receitas" class="link-nav">Receitas</a>
+        <a href="#chef" class="link-nav">A cozinha</a>
+        <a href="#mundo" class="link-nav">Sabores</a>
+        <a href="#clube" class="link-nav">Clube</a>
+      </nav>
+
+      <div class="flex shrink-0 items-center gap-2">
+        <button type="button" @click="alternarBusca()" :aria-expanded="busca" aria-controls="termo" aria-label="Buscar receita"
+                class="grid h-10 w-10 cursor-pointer place-items-center rounded-full text-mute transition duration-300 hover:bg-cloud hover:text-deep">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/></svg>
+        </button>
+        <a href="#clube" class="btn-noite hidden sm:inline-flex">Inscrever-se</a>
+        <button @click="menu = !menu" :aria-expanded="menu" aria-label="Abrir menu"
+                class="grid h-10 w-10 cursor-pointer place-items-center rounded-full border border-line text-deep lg:hidden">
+          <svg x-show="!menu" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg x-show="menu" x-cloak class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div x-show="menu" x-collapse x-cloak class="lg:hidden">
+      <div class="mx-auto mt-2 max-w-5xl rounded-3xl border border-line bg-white p-3 shadow-lg shadow-ink/5">
+        <a href="#receitas" @click="menu=false" class="block rounded-2xl px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-mute hover:bg-cloud hover:text-deep">Receitas</a>
+        <a href="#chef" @click="menu=false" class="block rounded-2xl px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-mute hover:bg-cloud hover:text-deep">A cozinha</a>
+        <a href="#mundo" @click="menu=false" class="block rounded-2xl px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-mute hover:bg-cloud hover:text-deep">Sabores</a>
+        <a href="#clube" @click="menu=false" class="block rounded-2xl px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-mute hover:bg-cloud hover:text-deep">Clube</a>
+        <a href="#clube" @click="menu=false" class="btn-noite mt-2 w-full">Inscrever-se</a>
+      </div>
+    </div>
+
+    <div x-show="busca" x-collapse x-cloak>
+      <div class="mx-auto mt-2 max-w-5xl rounded-3xl border border-line bg-white p-3 shadow-lg shadow-ink/5">
+        <label for="termo" class="sr-only">Buscar receita</label>
+        <input id="termo" type="search" x-model="termo" x-ref="termo" @keydown.escape="fecharBusca()"
+               placeholder="Buscar receita: massa, salada, chocolate…" class="campo" />
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section id="topo" class="px-5 pt-28 sm:px-8 lg:pt-32">
+    <div class="mx-auto grid max-w-[1440px] gap-4 lg:grid-cols-[1.55fr_1fr]">
+
+      <!-- cartão grande -->
+      <article class="relative overflow-hidden rounded-bento bg-deep">
+        <img src="./static/images/hero-capa.webp" alt="Prato de sopa rústica com pão artesanal" width="1000" height="935"
+             decoding="async" fetchpriority="high" class="absolute inset-0 h-full w-full object-cover" />
+        <!-- o título branco cai em cima da parte clara da foto: sem este degradê
+             mais forte (como o from-black/60 da referência) o contraste não fecha -->
+        <div class="absolute inset-0 bg-gradient-to-t from-deep/95 via-deep/80 via-45% to-transparent"></div>
+
+        <div class="relative flex min-h-[460px] flex-col justify-end p-7 sm:min-h-[560px] sm:p-10 lg:min-h-[620px]">
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="pilula">Escolha da casa</span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-white/70">Preparo 40 min</span>
+          </div>
+
+          <h1 class="display mt-5 text-4xl leading-none !text-white sm:text-[3.75rem] lg:text-[4.5rem]">
+            Cozinhar bem é<br /><em>mais simples do que contam</em>
+          </h1>
+
+          <div class="mt-7 border-t border-white/20 pt-6 sm:flex sm:items-end sm:justify-between sm:gap-8">
+            <p class="max-w-md text-[15px] leading-relaxed text-white/75">
+              Receitas testadas até dar certo, ingredientes que existem na feira e o
+              porquê de cada passo. Sem lista de 30 itens que você usa uma vez só.
+            </p>
+            <a href="#receitas" aria-label="Ver as receitas"
+               class="mt-6 grid h-12 w-12 shrink-0 cursor-pointer place-items-center rounded-full bg-white text-deep transition duration-300 hover:bg-rose hover:text-white sm:mt-0">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H9m8 0v8"/></svg>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- coluna de dois cartões -->
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+        <article class="relative overflow-hidden rounded-bento border border-line bg-white">
+          <img src="./static/images/ervas.webp" alt="Ervas frescas dispostas em um prato" width="600" height="556"
+               loading="lazy" decoding="async" class="h-full min-h-[220px] w-full object-cover" />
+          <div class="absolute left-6 right-6 top-6">
+            <span class="block font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-mute">Da estação</span>
+            <h2 class="mt-1.5 max-w-[15rem] font-serif text-2xl leading-tight text-ink">Ervas frescas da estação</h2>
+          </div>
+          <div class="absolute bottom-4 left-4 flex items-center gap-3 rounded-full bg-white/90 p-1.5 pr-4 backdrop-blur">
+            <img src="./static/images/chef-avatar.webp" alt="" width="120" height="120" loading="lazy" class="h-9 w-9 rounded-full object-cover" />
+            <div class="leading-tight">
+              <p class="text-xs font-bold text-deep">Chef Helena</p>
+              <p class="font-mono text-[10px] uppercase tracking-[0.1em] text-mute2">Colheita da semana</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="group relative overflow-hidden rounded-bento bg-deep">
+          <img src="./static/images/chef-card.webp" alt="Helena na cozinha do restaurante" width="600" height="560"
+               loading="lazy" decoding="async" class="h-full min-h-[220px] w-full object-cover grayscale transition duration-300 group-hover:grayscale-0" />
+          <div class="absolute inset-0 bg-gradient-to-t from-deep/85 to-transparent"></div>
+          <div class="absolute inset-x-4 bottom-4 rounded-2xl bg-white/10 p-4 backdrop-blur">
+            <p class="text-[15px] font-bold text-white">As 5 facas que bastam</p>
+            <a href="#receitas" class="mt-1.5 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-white/80 transition duration-300 hover:text-white">
+              Ler o guia
+              <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            </a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MARQUEE ================= -->
+  <section class="mt-6 overflow-hidden border-y border-line py-5">
+    <div class="marquee flex w-max items-center gap-10">
+      <div class="flex shrink-0 items-center gap-10">
+        <span class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-mute2"><span class="text-rose">✦</span> Ingredientes da estação</span>
+        <span class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-mute2"><span class="text-rose">✦</span> Técnica explicada</span>
+        <span class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-mute2"><span class="text-rose">✦</span> Feira antes do mercado</span>
+        <span class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-mute2"><span class="text-rose">✦</span> Menos louça suja</span>
+        <span class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-mute2"><span class="text-rose">✦</span> Sobra que vira almoço</span>
+      </div>
+      <div class="flex shrink-0 items-center gap-10" aria-hidden="true">
+        <span class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-mute2"><span class="text-rose">✦</span> Ingredientes da estação</span>
+        <span class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-mute2"><span class="text-rose">✦</span> Técnica explicada</span>
+        <span class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-mute2"><span class="text-rose">✦</span> Feira antes do mercado</span>
+        <span class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-mute2"><span class="text-rose">✦</span> Menos louça suja</span>
+        <span class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-mute2"><span class="text-rose">✦</span> Sobra que vira almoço</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RECEITAS ================= -->
+  <section id="receitas" class="py-20 lg:py-28">
+    <div class="wrap">
+      <div class="flex items-end justify-between gap-8">
+        <div class="rv" x-intersect.once="$el.classList.add('rv-in')">
+          <h2 class="display text-4xl italic text-ink">Direto da cozinha</h2>
+          <p class="meta mt-3">Novas receitas para testar esta semana</p>
+        </div>
+        <div class="hidden shrink-0 gap-2 sm:flex">
+          <button @click="rolar(-1)" aria-label="Anterior" :disabled="!temFolga"
+                  class="grid h-11 w-11 cursor-pointer place-items-center rounded-full border border-line bg-white text-deep transition duration-300 hover:border-mute2 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-line">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <button @click="rolar(1)" aria-label="Próximo" :disabled="!temFolga"
+                  class="grid h-11 w-11 cursor-pointer place-items-center rounded-full border border-line bg-white text-deep transition duration-300 hover:border-mute2 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-line">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div x-ref="trilho" class="mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+
+        <article x-show="combina($el)" class="group w-[74vw] shrink-0 snap-start sm:w-[46vw] lg:w-[calc((100%-3.75rem)/4)]">
+          <div class="relative overflow-hidden rounded-2xl bg-cloud">
+            <img src="./static/images/receita-1.webp" alt="Massa artesanal com molho de tomate e manjericão" width="500" height="667"
+                 loading="lazy" decoding="async" class="aspect-[3/4] w-full object-cover transition duration-300 group-hover:scale-[1.03]" />
+            <span class="pilula absolute left-3 top-3">Jantar</span>
+          </div>
+          <h3 class="mt-4 text-[17px] font-bold leading-snug text-deep">Massa fresca com tomate e manjericão</h3>
+          <p class="meta mt-1.5">45 min &middot; Intermediário</p>
+        </article>
+
+        <article x-show="combina($el)" class="group w-[74vw] shrink-0 snap-start sm:w-[46vw] lg:w-[calc((100%-3.75rem)/4)]">
+          <div class="relative overflow-hidden rounded-2xl bg-cloud">
+            <img src="./static/images/receita-2.webp" alt="Salada colorida com tomates e flores comestíveis" width="500" height="667"
+                 loading="lazy" decoding="async" class="aspect-[3/4] w-full object-cover transition duration-300 group-hover:scale-[1.03]" />
+            <span class="pilula absolute left-3 top-3">Leve</span>
+          </div>
+          <h3 class="mt-4 text-[17px] font-bold leading-snug text-deep">Salada de verão com cítricos e ervas</h3>
+          <p class="meta mt-1.5">15 min &middot; Fácil</p>
+        </article>
+
+        <article x-show="combina($el)" class="group w-[74vw] shrink-0 snap-start sm:w-[46vw] lg:w-[calc((100%-3.75rem)/4)]">
+          <div class="relative overflow-hidden rounded-2xl bg-cloud">
+            <img src="./static/images/receita-3.webp" alt="Doces variados vistos de cima" width="500" height="667"
+                 loading="lazy" decoding="async" class="aspect-[3/4] w-full object-cover transition duration-300 group-hover:scale-[1.03]" />
+            <span class="pilula absolute left-3 top-3">Doce</span>
+          </div>
+          <h3 class="mt-4 text-[17px] font-bold leading-snug text-deep">Torta de chocolate meio amargo</h3>
+          <p class="meta mt-1.5">60 min &middot; Difícil</p>
+        </article>
+
+        <article x-show="combina($el)" class="group w-[74vw] shrink-0 snap-start sm:w-[46vw] lg:w-[calc((100%-3.75rem)/4)]">
+          <div class="relative overflow-hidden rounded-2xl bg-cloud">
+            <img src="./static/images/receita-4.webp" alt="Costela assada em tábua de madeira" width="500" height="667"
+                 loading="lazy" decoding="async" class="aspect-[3/4] w-full object-cover transition duration-300 group-hover:scale-[1.03]" />
+            <span class="pilula absolute left-3 top-3">Domingo</span>
+          </div>
+          <h3 class="mt-4 text-[17px] font-bold leading-snug text-deep">Costela lenta com melado e alho</h3>
+          <p class="meta mt-1.5">3 horas &middot; Fácil</p>
+        </article>
+
+      </div>
+
+      <p x-show="vazio" x-cloak class="mt-4 text-[15px] text-mute">
+        Nenhuma receita com esse nome por aqui. Tente <button type="button" @click="termo = ''" class="cursor-pointer text-rose underline underline-offset-4">limpar a busca</button>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= A COZINHA ================= -->
+  <section id="chef" class="pb-20 lg:pb-28">
+    <div class="wrap">
+      <div class="grid overflow-hidden rounded-painel border border-line bg-white lg:grid-cols-2">
+
+        <div class="flex flex-col justify-center p-8 sm:p-12 lg:p-16">
+          <svg aria-hidden="true" class="h-11 w-11 text-rose opacity-25" viewBox="0 0 24 24"><g fill="currentColor"><path d="M7 5C4.23858 5 2 7.23858 2 10C2 12.0503 3.2341 13.8124 5 14.584V17.25H19L19 14.584C20.7659 13.8124 22 12.0503 22 10C22 7.23858 19.7614 5 17 5C16.7495 5 16.5033 5.01842 16.2626 5.05399C15.6604 3.27806 13.9794 2 12 2C10.0206 2 8.33961 3.27806 7.73736 5.05399C7.49673 5.01842 7.25052 5 7 5Z"/><path d="M18.9983 18.75H5.00169C5.01188 20.1469 5.08343 20.9119 5.58579 21.4142C6.17157 22 7.11438 22 9 22H15C16.8856 22 17.8284 22 18.4142 21.4142C18.9166 20.9119 18.9881 20.1469 18.9983 18.75Z"/></g></svg>
+          <h2 class="display mt-7 text-3xl sm:text-4xl lg:text-5xl">
+            Sem mistério.<br /><em class="text-mute2">Sou a Helena.</em>
+          </h2>
+          <p class="mt-6 text-[15px] leading-relaxed text-mute">
+            Cozinho há quinze anos, sendo os últimos seis numa cozinha de restaurante
+            e o resto na minha, que é bem menor e tem uma boca de fogão que não acende.
+            É de lá que saem quase todas as receitas daqui.
+          </p>
+          <p class="mt-4 text-[15px] leading-relaxed text-mute">
+            Meu critério é simples: se não der para repetir numa terça-feira à noite,
+            depois do trabalho, não entra no site.
+          </p>
+
+          <div class="mt-9 flex flex-wrap gap-3">
+            <a href="#receitas" class="btn-escuro !rounded-xl">Ver as receitas</a>
+            <a href="#clube" class="btn-claro !rounded-xl">Aulas ao vivo</a>
+          </div>
+
+          <div class="mt-10 grid grid-cols-3 gap-6 border-t border-line pt-8">
+            <div>
+              <p class="font-serif text-3xl text-deep">240</p>
+              <p class="meta mt-1">Receitas testadas</p>
+            </div>
+            <div>
+              <p class="font-serif text-3xl text-deep">15</p>
+              <p class="meta mt-1">Anos de cozinha</p>
+            </div>
+            <div>
+              <p class="font-serif text-3xl text-deep">86k</p>
+              <p class="meta mt-1">Inscritos</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative min-h-[340px] lg:min-h-full">
+          <img src="./static/images/chef-perfil.webp" alt="Helena na cozinha" width="700" height="745"
+               loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" />
+          <div class="absolute bottom-6 right-6 max-w-xs rounded-2xl bg-white/80 p-4 shadow-lg backdrop-blur-md">
+            <div class="flex items-center gap-3">
+              <span class="h-2 w-2 animate-pulse rounded-full bg-emerald-500"></span>
+              <span class="meta !text-deep">Abrindo massa agora</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SABORES DO MUNDO ================= -->
+  <section id="mundo" class="pb-20 lg:pb-28">
+    <div class="wrap grid items-center gap-10 lg:grid-cols-[1fr_1.5fr] lg:gap-16">
+
+      <div class="rv" x-intersect.once="$el.classList.add('rv-in')">
+        <h2 class="display text-3xl sm:text-4xl">Sabores do mundo</h2>
+        <p class="mt-4 text-[15px] leading-relaxed text-mute">
+          Toda semana a gente puxa uma linha de uma cozinha diferente e adapta para
+          o que existe no mercado aqui.
+        </p>
+
+        <ul class="mt-9">
+          <li><button @click="cozinha = 0" class="flex w-full cursor-pointer items-center justify-between gap-4 border-b border-line py-4 text-left transition duration-300" :class="cozinha === 0 ? 'text-deep' : 'text-mute2 hover:text-deep'">
+            <span class="text-sm font-bold uppercase tracking-[0.1em]">01. Italiana</span>
+            <span x-show="cozinha === 0" class="font-mono text-[10px] uppercase tracking-[0.1em]">Massas e risotos</span>
+          </button></li>
+          <li><button @click="cozinha = 1" class="flex w-full cursor-pointer items-center justify-between gap-4 border-b border-line py-4 text-left transition duration-300" :class="cozinha === 1 ? 'text-deep' : 'text-mute2 hover:text-deep'">
+            <span class="text-sm font-bold uppercase tracking-[0.1em]">02. Asiática</span>
+            <span x-show="cozinha === 1" x-cloak class="font-mono text-[10px] uppercase tracking-[0.1em]">Wok e caldos</span>
+          </button></li>
+          <li><button @click="cozinha = 2" class="flex w-full cursor-pointer items-center justify-between gap-4 border-b border-line py-4 text-left transition duration-300" :class="cozinha === 2 ? 'text-deep' : 'text-mute2 hover:text-deep'">
+            <span class="text-sm font-bold uppercase tracking-[0.1em]">03. Francesa</span>
+            <span x-show="cozinha === 2" x-cloak class="font-mono text-[10px] uppercase tracking-[0.1em]">Molhos e massas doces</span>
+          </button></li>
+          <li><button @click="cozinha = 3" class="flex w-full cursor-pointer items-center justify-between gap-4 border-b border-line py-4 text-left transition duration-300" :class="cozinha === 3 ? 'text-deep' : 'text-mute2 hover:text-deep'">
+            <span class="text-sm font-bold uppercase tracking-[0.1em]">04. Brasileira</span>
+            <span x-show="cozinha === 3" x-cloak class="font-mono text-[10px] uppercase tracking-[0.1em]">Raiz e regionais</span>
+          </button></li>
+        </ul>
+      </div>
+
+      <div class="relative overflow-hidden rounded-mapa bg-deep p-6 sm:p-10">
+        <img src="./static/images/mapa.svg" alt="Mapa-múndi com as cozinhas em destaque" width="811" height="529"
+             loading="lazy" decoding="async" class="w-full opacity-25 invert" />
+
+        <!-- pinos posicionados em porcentagem sobre o mapa -->
+        <div class="absolute left-[47%] top-[38%] -translate-x-1/2">
+          <!-- cartão do pino: a referência mostra uma miniatura acima do ponto -->
+          <div x-show="cozinha === 0" class="absolute bottom-full left-1/2 mb-3 w-[8.75rem] -translate-x-1/2 rounded-lg bg-white p-2 shadow-lg">
+            <img src="./static/images/pino-1.webp" alt="" width="160" height="160" decoding="async"
+                 class="h-16 w-full rounded-md object-cover" />
+            <p class="mt-2 text-center font-mono text-[10px] uppercase tracking-[0.1em] text-deep">Pasta fresca</p>
+          </div>
+          <span class="block h-3 w-3 rounded-full ring-4 transition duration-300"
+                :class="cozinha === 0 ? 'bg-rose ring-rose/25' : 'bg-white/50 ring-white/10'"></span>
+        </div>
+        <div class="absolute left-[72%] top-[44%] -translate-x-1/2">
+          <!-- cartão do pino: a referência mostra uma miniatura acima do ponto -->
+          <div x-show="cozinha === 1" x-cloak class="pino-extra absolute bottom-full left-1/2 mb-3 w-[8.75rem] -translate-x-1/2 rounded-lg bg-white p-2 shadow-lg">
+            <img src="./static/images/pino-2.webp" alt="" width="160" height="160" decoding="async"
+                 class="h-16 w-full rounded-md object-cover" />
+            <p class="mt-2 text-center font-mono text-[10px] uppercase tracking-[0.1em] text-deep">Dim sum</p>
+          </div>
+          <span class="block h-3 w-3 rounded-full ring-4 transition duration-300"
+                :class="cozinha === 1 ? 'bg-rose ring-rose/25' : 'bg-white/50 ring-white/10'"></span>
+        </div>
+        <div class="absolute left-[45%] top-[35%] -translate-x-1/2">
+          <!-- cartão do pino: a referência mostra uma miniatura acima do ponto -->
+          <div x-show="cozinha === 2" x-cloak class="pino-extra absolute bottom-full left-1/2 mb-3 w-[8.75rem] -translate-x-1/2 rounded-lg bg-white p-2 shadow-lg">
+            <img src="./static/images/pino-3.webp" alt="" width="160" height="160" decoding="async"
+                 class="h-16 w-full rounded-md object-cover" />
+            <p class="mt-2 text-center font-mono text-[10px] uppercase tracking-[0.1em] text-deep">Molho de manteiga</p>
+          </div>
+          <span class="block h-3 w-3 rounded-full ring-4 transition duration-300"
+                :class="cozinha === 2 ? 'bg-rose ring-rose/25' : 'bg-white/50 ring-white/10'"></span>
+        </div>
+        <div class="absolute left-[33%] top-[64%] -translate-x-1/2">
+          <!-- cartão do pino: a referência mostra uma miniatura acima do ponto -->
+          <div x-show="cozinha === 3" x-cloak class="pino-extra absolute bottom-full left-1/2 mb-3 w-[8.75rem] -translate-x-1/2 rounded-lg bg-white p-2 shadow-lg">
+            <img src="./static/images/pino-4.webp" alt="" width="160" height="160" decoding="async"
+                 class="h-16 w-full rounded-md object-cover" />
+            <p class="mt-2 text-center font-mono text-[10px] uppercase tracking-[0.1em] text-deep">Costela na brasa</p>
+          </div>
+          <span class="block h-3 w-3 rounded-full ring-4 transition duration-300"
+                :class="cozinha === 3 ? 'bg-rose ring-rose/25' : 'bg-white/50 ring-white/10'"></span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CLUBE ================= -->
+  <section id="clube" class="pb-20 lg:pb-28">
+    <div class="wrap">
+      <div class="mx-auto max-w-2xl text-center rv" x-intersect.once="$el.classList.add('rv-in')">
+        <span class="selo">Da nossa mesa</span>
+        <h2 class="display mt-4 text-3xl tracking-[-0.025em] sm:text-4xl lg:text-5xl">Entra pro clube</h2>
+        <p class="mt-5 text-[15px] leading-relaxed text-mute">
+          Mais de 80 mil pessoas cozinhando junto, trocando substituição de ingrediente
+          e reclamando quando a receita dá errado. As duas coisas ajudam.
+        </p>
+      </div>
+
+      <div class="mt-14 grid items-start gap-6 lg:grid-cols-3">
+
+        <article class="cartao group p-8 text-center transition duration-300 hover:-translate-y-1 hover:shadow-xl rv" x-intersect.once="$el.classList.add('rv-in')">
+          <span class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-cloud text-mute shadow-sm transition duration-300 group-hover:rotate-6 group-hover:scale-110 group-hover:bg-rose group-hover:text-white"><svg aria-hidden="true" class="h-7 w-7" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8V11C17 13.7614 14.7614 16 12 16C9.23858 16 7 13.7614 7 11V8Z"/><path stroke-linecap="round" d="M11 8H13"/><path stroke-linecap="round" d="M10 11L14 11"/><path stroke-linecap="round" d="M20 10V11C20 15.4183 16.4183 19 12 19C7.58172 19 4 15.4183 4 11V10"/><path stroke-linecap="round" d="M12 19V22"/></g></svg></span>
+          <h3 class="mt-6 text-lg font-bold text-deep">Podcast da cozinha</h3>
+          <p class="mt-3 text-sm leading-relaxed text-mute">
+            Conversa com cozinheiros, produtores e gente que entende de ingrediente.
+            Um episódio novo por semana.
+          </p>
+          <a href="#" class="mt-6 inline-flex items-center gap-2 border-b border-line pb-1 font-mono text-[11px] uppercase tracking-[0.14em] text-deep transition duration-300 hover:border-rose hover:text-rose">
+            Ouvir agora
+            <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          </a>
+        </article>
+
+        <article class="relative rounded-card border border-line border-t-4 border-t-rose bg-white p-8 text-center shadow-xl shadow-ink/5 rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 110)">
+          <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-deep px-4 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-white">Mais popular</span>
+          <span class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-rose-soft text-rose shadow-sm transition duration-300 group-hover:-rotate-6 group-hover:scale-110 group-hover:bg-rose group-hover:text-white"><svg aria-hidden="true" class="h-7 w-7" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12C2 8.22876 2 6.34315 3.17157 5.17157C4.34315 4 6.22876 4 10 4H14C17.7712 4 19.6569 4 20.8284 5.17157C22 6.34315 22 8.22876 22 12C22 15.7712 22 17.6569 20.8284 18.8284C19.6569 20 17.7712 20 14 20H10C6.22876 20 4.34315 20 3.17157 18.8284C2 17.6569 2 15.7712 2 12Z"/><path stroke-linecap="round" d="M6 8L8.1589 9.79908C9.99553 11.3296 10.9139 12.0949 12 12.0949C13.0861 12.0949 14.0045 11.3296 15.8411 9.79908L18 8"/></g></svg></span>
+          <h3 class="mt-6 text-lg font-bold text-deep">Cardápio da semana</h3>
+          <p class="mt-3 text-sm leading-relaxed text-mute">
+            Todo domingo: cinco receitas, a lista de compras já somada e o que fazer
+            com a sobra de cada uma.
+          </p>
+          <form @submit.prevent="inscrever()" novalidate class="mt-6 space-y-3">
+            <input type="email" x-model="email" placeholder="seu@email.com.br" class="campo text-center" :class="erro && '!border-rose'" />
+            <p x-show="erro" x-cloak class="font-mono text-[10px] uppercase tracking-[0.1em] text-rose" x-text="erro"></p>
+            <button type="submit" class="btn-escuro w-full cursor-pointer !rounded-xl">
+              <span x-text="inscrito ? 'Inscrição confirmada' : 'Inscrever-se grátis'">Inscrever-se grátis</span>
+            </button>
+          </form>
+        </article>
+
+        <article class="cartao group p-8 text-center transition duration-300 hover:-translate-y-1 hover:shadow-xl rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 220)">
+          <span class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-cloud text-mute shadow-sm transition duration-300 group-hover:rotate-6 group-hover:scale-110 group-hover:bg-rose group-hover:text-white"><svg aria-hidden="true" class="h-7 w-7" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" d="M22 22H2"/><path stroke-linecap="round" d="M20 22V11"/><path stroke-linecap="round" d="M4 22V11"/><path stroke-linejoin="round" d="M16.5278 2H7.47214C6.26932 2 5.66791 2 5.18461 2.2987C4.7013 2.5974 4.43234 3.13531 3.89443 4.21114L2.49081 7.75929C2.16652 8.57905 1.88279 9.54525 2.42867 10.2375C2.79489 10.7019 3.36257 11 3.99991 11C5.10448 11 5.99991 10.1046 5.99991 9C5.99991 10.1046 6.89534 11 7.99991 11C9.10448 11 9.99991 10.1046 9.99991 9C9.99991 10.1046 10.8953 11 11.9999 11C13.1045 11 13.9999 10.1046 13.9999 9C13.9999 10.1046 14.8953 11 15.9999 11C17.1045 11 17.9999 10.1046 17.9999 9C17.9999 10.1046 18.8953 11 19.9999 11C20.6373 11 21.205 10.7019 21.5712 10.2375C22.1171 9.54525 21.8334 8.57905 21.5091 7.75929L20.1055 4.21114C19.5676 3.13531 19.2986 2.5974 18.8153 2.2987C18.332 2 17.7306 2 16.5278 2Z"/><path stroke-linecap="round" d="M9.5 21.5V18.5C9.5 17.5654 9.5 17.0981 9.70096 16.75C9.83261 16.522 10.022 16.3326 10.25 16.201C10.5981 16 11.0654 16 12 16C12.9346 16 13.4019 16 13.75 16.201C13.978 16.3326 14.1674 16.522 14.299 16.75C14.5 17.0981 14.5 17.5654 14.5 18.5V21.5"/></g></svg></span>
+          <h3 class="mt-6 text-lg font-bold text-deep">Loja da despensa</h3>
+          <p class="mt-3 text-sm leading-relaxed text-mute">
+            Panela, faca e avental que a gente usa de verdade. Poucos itens, todos
+            testados no dia a dia.
+          </p>
+          <a href="#" class="mt-6 inline-flex items-center gap-2 border-b border-line pb-1 font-mono text-[11px] uppercase tracking-[0.14em] text-deep transition duration-300 hover:border-rose hover:text-rose">
+            Ver a loja
+            <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DEPOIMENTOS ================= -->
+  <section class="border-t border-line bg-mist/30 py-20 lg:py-24">
+    <div class="wrap">
+      <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+
+        <!-- pilha de cartões: o de cima é o mais recente, como no layout de referência -->
+        <div class="relative flex h-[30rem] items-center justify-center px-2">
+          <figure class="absolute w-full max-w-[21.25rem] rounded-card border bg-white p-8 z-10 scale-90 translate-y-8 border-line/60 shadow-lg">
+            <figcaption class="mb-6 flex items-center gap-4">
+              <img src="./static/images/avatar-1.webp" alt="" width="120" height="120" loading="lazy" decoding="async"
+                   class="h-12 w-12 rounded-full object-cover ring-2 ring-cloud" />
+              <div>
+                <p class="text-sm font-semibold text-deep">Marcelo Antunes</p>
+                <p class="meta mt-0.5">Cozinha para dois</p>
+              </div>
+            </figcaption>
+            <blockquote class="mb-6 italic leading-relaxed text-mute">
+              Eu cozinhava três coisas e repetia a vida toda. Hoje faço o cardápio da semana no domingo e sobra tempo, que era o que eu achava que faltava.
+            </blockquote>
+            <div class="flex gap-1 text-star"><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg></div>
+          </figure>
+
+          <figure class="absolute w-full max-w-[21.25rem] rounded-card border bg-white p-8 z-20 scale-95 translate-y-4 border-line/60 shadow-xl">
+            <figcaption class="mb-6 flex items-center gap-4">
+              <img src="./static/images/avatar-2.webp" alt="" width="120" height="120" loading="lazy" decoding="async"
+                   class="h-12 w-12 rounded-full object-cover ring-2 ring-cloud" />
+              <div>
+                <p class="text-sm font-semibold text-deep">Sara Nogueira</p>
+                <p class="meta mt-0.5">Assina há 2 anos</p>
+              </div>
+            </figcaption>
+            <blockquote class="mb-6 italic leading-relaxed text-mute">
+              A parte da lista de compras já somada mudou meu mês. Parei de comprar coisa repetida e de jogar verdura fora no fim da semana.
+            </blockquote>
+            <div class="flex gap-1 text-star"><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg></div>
+          </figure>
+
+          <figure class="absolute w-full max-w-[21.25rem] rounded-card border bg-white p-8 z-30 border-cloud shadow-2xl">
+            <span class="absolute -right-3 -top-3 rounded-full bg-rose px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.05em] text-white">Novo</span>
+            <figcaption class="mb-6 flex items-center gap-4">
+              <img src="./static/images/avatar-3.webp" alt="" width="120" height="120" loading="lazy" decoding="async"
+                   class="h-12 w-12 rounded-full object-cover ring-2 ring-cloud" />
+              <div>
+                <p class="text-sm font-semibold text-deep">Elena Ferraz</p>
+                <p class="meta mt-0.5">Aprendeu do zero</p>
+              </div>
+            </figcaption>
+            <blockquote class="mb-6 italic leading-relaxed text-mute">
+              É a única receita que explica o porquê de cada passo. Depois de um tempo você para de seguir e começa a entender o que está fazendo.
+            </blockquote>
+            <div class="flex gap-1 text-star"><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg></div>
+          </figure>
+        </div>
+
+        <div class="lg:pl-12 rv" x-intersect.once="$el.classList.add('rv-in')">
+          <span class="selo">Depoimentos</span>
+          <h2 class="display mt-4 text-3xl font-medium tracking-[-0.025em] sm:text-4xl lg:text-5xl">Histórias da<br />mesa de casa</h2>
+          <p class="mt-6 text-lg font-light leading-relaxed text-mute">
+            Gente que cozinhava as mesmas três receitas e hoje monta a semana inteira
+            sem pensar muito. Quase todo mundo começou pelo cardápio de domingo.
+          </p>
+
+          <div class="mt-10 flex items-center gap-10">
+            <div>
+              <p class="text-4xl font-semibold tracking-tight text-deep">4,9</p>
+              <div class="mt-1.5"><div class="flex gap-1 text-star"><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg></div></div>
+              <p class="meta mt-2">Nota média</p>
+            </div>
+            <div class="h-16 w-px bg-line"></div>
+            <div>
+              <p class="text-4xl font-semibold tracking-tight text-deep">86k</p>
+              <p class="mt-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-rose">+310 esta semana</p>
+              <p class="meta mt-2">Assinantes ativos</p>
+            </div>
+          </div>
+
+          <div class="mt-12">
+            <a href="#clube" class="btn-escuro !font-semibold">Ler as histórias</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RODAPÉ ================= -->
+  <footer class="border-t border-line bg-white">
+    <div class="wrap py-14">
+      <div class="flex flex-col gap-10 lg:flex-row lg:justify-between">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-2.5">
+            <span class="grid h-9 w-9 place-items-center rounded-full bg-deep font-serif text-lg italic text-white">M</span>
+            <span class="text-[15px] font-extrabold tracking-tight text-deep">Mesa Farta</span>
+          </div>
+          <p class="mt-5 text-sm leading-relaxed text-mute">
+            Receitas testadas para a cozinha de casa, com ingrediente que existe na
+            feira e técnica explicada sem enrolação.
+          </p>
+        </div>
+
+        <div class="grid gap-10 sm:grid-cols-3 lg:gap-16">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.1em] text-ink">Navegar</p>
+            <ul class="mt-4 space-y-2.5 text-sm text-mute">
+              <li><a href="#receitas" class="transition duration-300 hover:text-rose">Receitas</a></li>
+              <li><a href="#chef" class="transition duration-300 hover:text-rose">A cozinha</a></li>
+              <li><a href="#mundo" class="transition duration-300 hover:text-rose">Sabores</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.1em] text-ink">Clube</p>
+            <ul class="mt-4 space-y-2.5 text-sm text-mute">
+              <li><a href="#clube" class="transition duration-300 hover:text-rose">Cardápio semanal</a></li>
+              <li><a href="#" class="transition duration-300 hover:text-rose">Podcast</a></li>
+              <li><a href="#" class="transition duration-300 hover:text-rose">Loja</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.1em] text-ink">Contato</p>
+            <ul class="mt-4 space-y-2.5 break-words text-sm text-mute">
+              <li>oi@mesafarta.com.br</li>
+              <li>@mesafarta</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- marca-d'água do rodapé, como no layout de referência: decorativa,
+           por isso fica fora da árvore de acessibilidade e do fluxo de clique -->
+      <p aria-hidden="true"
+         class="pointer-events-none mt-12 select-none overflow-hidden whitespace-nowrap border-t border-line pt-8 text-center font-serif text-[12vw] leading-none text-cloud">
+        MESA FARTA
+      </p>
+
+      <div class="mt-4 flex flex-col gap-3 text-xs text-mute2 sm:flex-row sm:items-center sm:justify-between">
+        <p>© <span x-text="new Date().getFullYear()">2026</span> Mesa Farta. Projeto demonstrativo.</p>
+        <p>Feito por <a href="#" class="text-rose transition duration-300 hover:text-deep">Nexo Studio</a></p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

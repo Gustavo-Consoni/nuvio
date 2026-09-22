@@ -1,0 +1,89 @@
+---
+/**
+ * Ilustração da plaquinha de acrílico transparente (3mm), no modelo em L
+ * dobrado: chapa em pé com cantos de cima arredondados e o pé indo para
+ * trás dela. Arte impressa como nas placas reais: 5 estrelas, "AVALIE NO",
+ * logo do Google colorido e o QR code numa caixa branca com a borda nas
+ * cores do Google. Vista de três quartos com CSS 3D. Decorativa.
+ */
+interface Props {
+  /** Classes do contêiner (largura e posição). */
+  class?: string;
+  /** Nome impresso no rodapé da placa. */
+  marca?: string;
+}
+const { class: className, marca = "Seu Negócio" } = Astro.props;
+
+const ondas = "M8.5 8.5a5 5 0 0 1 0 7M12 5.5a9.5 9.5 0 0 1 0 13M15.5 2.5a14 14 0 0 1 0 19";
+
+// QR code decorativo (não abre nada): 21x21 com os três quadrados de canto
+// e o miolo gerado de forma fixa, para não mudar a cada build.
+const N = 21;
+const modulos: [number, number][] = [];
+for (let y = 0; y < N; y++) {
+  for (let x = 0; x < N; x++) {
+    const canto = [[0, 0], [14, 0], [0, 14]].find(([cx, cy]) => x >= cx && x < cx + 7 && y >= cy && y < cy + 7);
+    let cheio: boolean;
+    if (canto) {
+      const dx = x - canto[0], dy = y - canto[1];
+      cheio = dx === 0 || dy === 0 || dx === 6 || dy === 6 || (dx >= 2 && dx <= 4 && dy >= 2 && dy <= 4);
+    } else {
+      cheio = (x * 7 + y * 13 + ((x * y) % 5)) % 3 === 0;
+    }
+    if (cheio) modulos.push([x, y]);
+  }
+}
+
+/** Letras do logo com as cores do Google. */
+const logo = [
+  ["G", "#4285F4"],
+  ["o", "#EA4335"],
+  ["o", "#FBBC05"],
+  ["g", "#4285F4"],
+  ["l", "#34A853"],
+  ["e", "#EA4335"],
+];
+---
+
+<div class:list={["[perspective:1000px]", className]} aria-hidden="true">
+  <div class="[transform:rotateY(-22deg)_rotateX(6deg)] [transform-style:preserve-3d]">
+    <!-- chapa em pé -->
+    <div class="relative bg-gradient-to-br from-white/[0.18] via-white/[0.05] to-white/[0.12] shadow-[inset_-1px_0_0_rgba(255,255,255,.9),inset_0_1px_0_rgba(255,255,255,.7)] backdrop-blur-[2px] px-[9%] pt-[10%] pb-[6%] border border-white/45 border-b-0 rounded-t-[1.1rem] aspect-[3/3.9]">
+      <!-- espessura da chapa (3mm), visível na borda direita -->
+      <span class="top-3 bottom-0 -right-[4px] absolute bg-gradient-to-b from-white/90 via-white/40 to-white/70 rounded-r-sm w-[4px]"></span>
+
+      <!-- arte impressa -->
+      <div class="flex flex-col items-center h-full">
+        <p class="text-[9px] text-amber-400 leading-none tracking-[0.2em]">★★★★★</p>
+        <p class="mt-2 font-semibold text-[6px] text-slate-300 uppercase leading-none tracking-[0.15em]">Avalie no</p>
+        <p class="font-sans font-semibold text-[22px] leading-none tracking-[-0.03em]">
+          {logo.map(([letra, cor]) => <span style={`color:${cor}`}>{letra}</span>)}
+        </p>
+
+        <!-- QR code com a borda nas cores do Google -->
+        <div class="bg-[conic-gradient(from_315deg,#4285F4,#34A853_25%,#EA4335_50%,#FBBC05_75%,#4285F4)] mt-[9%] p-[2px] rounded-[10px] w-[74%]">
+          <div class="bg-white px-[9%] pt-[9%] pb-[6%] rounded-[8px]">
+            <svg class="block w-full" viewBox={`0 0 ${N} ${N}`} shape-rendering="crispEdges">
+              {modulos.map(([x, y]) => <rect x={x} y={y} width="1" height="1" fill="#111" />)}
+            </svg>
+            <p class="flex justify-center items-center gap-0.5 mt-1 font-bold text-[5px] text-slate-700 uppercase leading-none tracking-wide">
+              <svg class="w-2 h-2 shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" viewBox="0 0 24 24"><path d={ondas} /></svg>
+              Aproxime ou escaneie
+            </p>
+          </div>
+        </div>
+
+        <p class="mt-auto font-semibold text-[6px] text-slate-400 leading-none tracking-wide">{marca}</p>
+      </div>
+
+      <!-- reflexos de luz atravessando o acrílico -->
+      <span class="absolute inset-0 bg-[linear-gradient(248deg,transparent_18%,rgba(255,255,255,.22)_28%,rgba(255,255,255,.04)_36%,transparent_44%,transparent_72%,rgba(255,255,255,.1)_80%,transparent_88%)] rounded-t-[1.1rem] pointer-events-none"></span>
+    </div>
+
+    <!-- dobra e pé do L, indo para trás da chapa (aparece através do acrílico).
+         A ponta solta tem os mesmos cantos arredondados do topo da chapa. -->
+    <div class="bg-gradient-to-t from-white/45 via-white/[0.12] to-white/[0.05] shadow-[inset_0_-2px_0_rgba(255,255,255,.85)] border border-white/40 border-b-white/80 rounded-b-[1.1rem] w-full aspect-[3/1.4] [transform:rotateX(-112deg)] origin-top"></div>
+  </div>
+  <!-- sombra na mesa -->
+  <div class="bg-black/45 blur-lg mx-auto -mt-[34%] rounded-full w-[95%] h-[14%]"></div>
+</div>

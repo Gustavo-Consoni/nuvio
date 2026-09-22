@@ -1,0 +1,122 @@
+---
+import Estrelas from "../icons/Estrelas.astro";
+import { depoimentos } from "../../data/landing";
+
+const iniciais = (nome: string) =>
+  nome
+    .split(" ")
+    .map((p) => p[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+---
+
+<section class="relative py-16 lg:py-32 overflow-hidden">
+  <div class="top-0 left-1/2 absolute bg-brand-600/12 blur-[150px] rounded-full w-[820px] h-[420px] -translate-x-1/2 pointer-events-none"></div>
+
+  <div class="relative container-page">
+    <div class="mx-auto max-w-2xl text-left sm:text-center">
+      <span class="eyebrow">Depoimentos</span>
+      <h2 class="mt-4 h-section">Quem já contratou, indica</h2>
+    </div>
+
+    <div data-carrossel class="mx-auto mt-16 max-w-3xl">
+      <div class="relative bg-gradient-to-b from-white/6 to-white/2 backdrop-blur p-8 sm:p-16 border border-white/10 rounded-4xl">
+        <svg class="w-10 h-10 text-brand-500/40" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.17 6A5.17 5.17 0 002 11.17V18h6.83v-6.83H5.5A1.67 1.67 0 017.17 9.5V6zm10 0A5.17 5.17 0 0012 11.17V18h6.83v-6.83H15.5a1.67 1.67 0 011.67-1.67V6z"></path></svg>
+
+        <!-- as 5 estrelas valem para todos os depoimentos, então ficam fora dos slides -->
+        <Estrelas class="flex gap-1 mt-8 text-amber-400" />
+
+        <!-- Sem JavaScript todos aparecem em sequência; com ele, só o
+             [data-ativo] (ver .slide no global.css) -->
+        {
+          depoimentos.map((d, i) => (
+            <figure data-slide data-ativo={i === 0 ? "" : undefined} class="slide transition duration-300 ease-out">
+              <blockquote class="mt-8 font-display text-white text-xl sm:text-2xl leading-relaxed">“{d.texto}”</blockquote>
+              <figcaption class="flex items-center gap-4 mt-8">
+                <span class="place-items-center grid bg-gradient-to-br from-brand-500 to-accent-500 rounded-full w-12 h-12 font-bold text-white" aria-hidden="true">
+                  {iniciais(d.nome)}
+                </span>
+                <div>
+                  <p class="font-semibold text-white">{d.nome}</p>
+                  <p class="text-slate-400 text-sm">{d.cargo}</p>
+                </div>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+
+      <!-- com 10 dots a fileira não cabe entre as setas no celular: lá ela
+           ganha uma linha inteira embaixo, e volta para o meio a partir do sm -->
+      <div class="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 mt-8">
+        <button type="button" data-anterior aria-label="Anterior" class="place-items-center grid bg-white/5 hover:bg-white/10 border border-white/10 hover:border-brand-400/50 rounded-full w-11 h-11 text-white transition duration-300 cursor-pointer">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+        </button>
+
+        <div class="flex justify-center order-last sm:order-none w-full sm:w-auto">
+          {
+            depoimentos.map((_, i) => (
+              <button
+                type="button"
+                data-dot={i}
+                aria-label={`Depoimento ${i + 1}`}
+                aria-current={i === 0 ? "true" : "false"}
+                class="group place-items-center grid px-2 py-4 cursor-pointer">
+                <span class="bg-white/20 group-hover:bg-white/40 group-aria-[current=true]:bg-brand-400 rounded-full w-2 group-aria-[current=true]:w-8 h-2 transition-all duration-300" />
+              </button>
+            ))
+          }
+        </div>
+
+        <button type="button" data-proximo aria-label="Próximo" class="place-items-center grid bg-white/5 hover:bg-white/10 border border-white/10 hover:border-brand-400/50 rounded-full w-11 h-11 text-white transition duration-300 cursor-pointer">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { aCadaPagina } from "../../scripts/pagina";
+
+  /** Tempo de cada depoimento no autoplay, em ms. */
+  const INTERVALO = 6000;
+
+  aCadaPagina((signal) => {
+    const raiz = document.querySelector<HTMLElement>("[data-carrossel]");
+    if (!raiz) return;
+    // o número de slides vem do HTML, não de uma constante daqui
+    const slides = [...raiz.querySelectorAll<HTMLElement>("[data-slide]")];
+    const dots = [...raiz.querySelectorAll<HTMLElement>("[data-dot]")];
+    let ativo = 0;
+    let autoplay: ReturnType<typeof setInterval> | undefined;
+
+    const mostrar = (i: number) => {
+      ativo = (i + slides.length) % slides.length;
+      slides.forEach((s, n) => s.toggleAttribute("data-ativo", n === ativo));
+      dots.forEach((d, n) => d.setAttribute("aria-current", String(n === ativo)));
+
+      // entrada: parte 12px abaixo e transparente, e a transição do slide leva
+      const slide = slides[ativo];
+      slide.classList.add("opacity-0", "translate-y-3");
+      slide.offsetHeight; // força o reflow para a transição partir daqui
+      slide.classList.remove("opacity-0", "translate-y-3");
+    };
+
+    const parar = () => clearInterval(autoplay);
+    const iniciar = () => {
+      parar();
+      autoplay = setInterval(() => mostrar(ativo + 1), INTERVALO);
+    };
+
+    raiz.querySelector("[data-anterior]")?.addEventListener("click", () => mostrar(ativo - 1), { signal });
+    raiz.querySelector("[data-proximo]")?.addEventListener("click", () => mostrar(ativo + 1), { signal });
+    dots.forEach((d, i) => d.addEventListener("click", () => mostrar(i), { signal }));
+    raiz.addEventListener("mouseenter", parar, { signal });
+    raiz.addEventListener("mouseleave", iniciar, { signal });
+
+    iniciar();
+    signal.addEventListener("abort", parar);
+  });
+</script>

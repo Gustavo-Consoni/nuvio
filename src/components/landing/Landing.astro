@@ -1,0 +1,65 @@
+---
+/**
+ * A landing page inteira. Usada pela home e pelas páginas de segmento
+ * (`barbearia.astro`), então todas nunca saem de sincronia.
+ */
+import Base from "../../layouts/Base.astro";
+import Header from "./Header.astro";
+import Hero from "./Hero.astro";
+import Segmentos from "./Segmentos.astro";
+import Produtos from "./Produtos.astro";
+import Teste from "./Teste.astro";
+import TesteCartao from "./TesteCartao.astro";
+import Projetos from "./Projetos.astro";
+import Depoimentos from "./Depoimentos.astro";
+import Faq from "./Faq.astro";
+import Contato from "./Contato.astro";
+import Footer from "./Footer.astro";
+import Visualizador from "./Visualizador.astro";
+import Flutuantes from "./Flutuantes.astro";
+import Revelar from "./Revelar.astro";
+import { conteudoPadrao, mostrarDepoimentos, nav, type Conteudo } from "../../data/landing";
+
+interface Props {
+  /** Texto do topo. Páginas de segmento passam o seu (ver nichos.ts). */
+  conteudo?: Conteudo;
+  title?: string;
+  description?: string;
+  /**
+   * Versão do "Teste agora": `cartao` (só o cartão, animação em loop; ver
+   * TesteCartao.astro) ou `escolha` (o visitante escolhe a peça e clica).
+   */
+  teste?: "escolha" | "cartao";
+}
+const { conteudo = conteudoPadrao, title, description, teste = "cartao" } = Astro.props;
+
+---
+
+<Base title={title} description={description}>
+  <!-- Marca que o JS está ativo. O CSS só esconde conteúdo (menu, slides,
+       .reveal) quando esta classe existe; se os scripts não subirem em 3s
+       ela sai e a página aparece inteira, sem interação mas legível.
+       Quem marca o `data-pronto` é src/scripts/pagina.ts. -->
+  <script is:inline slot="head">
+    document.documentElement.classList.add("js");
+    setTimeout(function () {
+      if (!("pronto" in document.documentElement.dataset)) document.documentElement.classList.remove("js");
+    }, 3000);
+  </script>
+
+  <Header links={nav} />
+  <main>
+    <Hero conteudo={conteudo.hero} />
+    <Segmentos />
+    {teste === "cartao" ? <TesteCartao /> : <Teste />}
+    <Produtos />
+    <Projetos />
+    {mostrarDepoimentos && <Depoimentos />}
+    <Faq />
+    <Contato />
+  </main>
+  <Footer links={nav} />
+  <Visualizador />
+  <Flutuantes />
+  <Revelar />
+</Base>

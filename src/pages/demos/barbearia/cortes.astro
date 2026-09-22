@@ -1,0 +1,128 @@
+---
+/**
+ * Demo: o que abre quando o cliente encosta o celular no cartão da sala de
+ * espera. Catálogo de cortes com foto, preço e botão de agendar.
+ */
+import DemoBlade from "../../../layouts/DemoBlade.astro";
+import { blade, categorias, servicos, whatsapp } from "../../../data/demo-barbearia";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<DemoBlade title="Cortes e preços" description="Escolha seu corte enquanto espera: fotos, preços e agendamento pelo WhatsApp.">
+  <header class="mx-auto px-4 pt-8 max-w-3xl">
+    <div class="flex justify-between items-center">
+      <a href={`${base}/demos/barbearia/links/`} class="font-bebas text-2xl tracking-[0.2em]">
+        BLADE <em class="font-playfair text-blade-gold normal-case">&</em> CO.
+      </a>
+      <span class="text-[10px] text-blade-gold uppercase tracking-[0.3em]">Sala de espera</span>
+    </div>
+  </header>
+
+  <main class="mx-auto px-4 pb-32 max-w-3xl">
+    <section class="pt-8">
+      <p class="text-[11px] text-blade-gold uppercase tracking-[0.3em]">Enquanto você espera</p>
+      <h1 class="mt-4 font-bebas text-6xl sm:text-7xl leading-[0.9]">
+        Escolha seu <em class="font-playfair text-blade-gold normal-case">corte</em>
+      </h1>
+      <p class="mt-4 max-w-md text-white/60 text-sm leading-relaxed">
+        Toque em "Quero este" e mande para o barbeiro, ou já deixe o próximo horário marcado.
+      </p>
+    </section>
+
+    <!-- filtro: sem JS todos os serviços aparecem e os botões não fazem nada -->
+    <div data-filtros class="top-0 z-10 sticky flex gap-2 bg-blade-void/90 backdrop-blur -mx-4 mt-8 px-4 py-4 overflow-x-auto">
+      <button type="button" data-filtro="todos" aria-pressed="true" class="px-4 py-2 border border-white/15 aria-pressed:border-blade-gold aria-pressed:bg-blade-gold text-white/70 aria-pressed:text-blade-void text-xs uppercase tracking-[0.15em] whitespace-nowrap transition duration-300 cursor-pointer">
+        Todos
+      </button>
+      {
+        categorias.map((c) => (
+          <button type="button" data-filtro={c.id} aria-pressed="false" class="px-4 py-2 border border-white/15 aria-pressed:border-blade-gold aria-pressed:bg-blade-gold text-white/70 aria-pressed:text-blade-void text-xs uppercase tracking-[0.15em] whitespace-nowrap transition duration-300 cursor-pointer">
+            {c.nome}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="gap-4 grid sm:grid-cols-2 mt-4">
+      {
+        servicos.map((s, i) => (
+          <article data-servico data-categoria={s.categoria} class="bg-blade-surface border border-white/5">
+            <div class="relative bg-blade-surface2 aspect-[4/3] overflow-hidden">
+              <img
+                src={`${base}${s.foto}`}
+                alt={s.nome}
+                width="800"
+                height="600"
+                loading={i < 2 ? "eager" : "lazy"}
+                class="absolute inset-0 w-full h-full object-cover"
+              />
+              <span class="top-3 right-3 absolute bg-blade-void/80 backdrop-blur px-4 py-1 font-bebas text-blade-gold text-2xl">R$ {s.preco}</span>
+            </div>
+            <div class="p-4">
+              <div class="flex justify-between items-baseline gap-4">
+                <h2 class="font-bebas text-3xl tracking-wide">{s.nome}</h2>
+                <span class="text-[11px] text-white/40 uppercase tracking-[0.15em] shrink-0">{s.duracao}</span>
+              </div>
+              <p class="mt-2 text-white/60 text-sm leading-relaxed">{s.descricao}</p>
+              <a
+                href={whatsapp(`Olá! Quero agendar: ${s.nome} (R$ ${s.preco}).`)}
+                target="_blank"
+                rel="noopener"
+                class="inline-flex items-center gap-2 mt-4 text-blade-gold hover:text-blade-cream text-xs uppercase tracking-[0.2em] transition duration-300">
+                Quero este <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <section class="mt-16 p-8 border border-blade-gold/30 text-center">
+      <p class="font-bebas text-3xl">Gostou do atendimento?</p>
+      <p class="mt-2 text-white/60 text-sm">Sua avaliação no Google ajuda outros clientes a conhecerem a barbearia.</p>
+      <a href="#" class="inline-block mt-4 px-8 py-4 border border-blade-gold text-blade-gold hover:bg-blade-gold hover:text-blade-void text-xs uppercase tracking-[0.2em] transition duration-300">
+        Avaliar no Google ★★★★★
+      </a>
+    </section>
+
+    <p class="mt-8 text-white/40 text-xs text-center">
+      {blade.horarios.join(" · ")}
+    </p>
+  </main>
+
+  <!-- agendar sempre à mão no celular -->
+  <div class="right-0 bottom-0 left-0 z-20 fixed bg-gradient-to-t from-blade-void via-blade-void/95 to-transparent px-4 pt-8 pb-[max(1rem,env(safe-area-inset-bottom))]">
+    <a
+      href={whatsapp("Olá! Quero agendar um horário na Blade & Co.")}
+      target="_blank"
+      rel="noopener"
+      class="block bg-blade-gold hover:bg-blade-cream mx-auto py-4 max-w-3xl font-semibold text-blade-void text-xs text-center uppercase tracking-[0.25em] transition duration-300">
+      Agendar pelo WhatsApp
+    </a>
+  </div>
+</DemoBlade>
+
+<script>
+  import { aCadaPagina } from "../../../scripts/pagina";
+
+  aCadaPagina((signal) => {
+    const barra = document.querySelector<HTMLElement>("[data-filtros]");
+    if (!barra) return;
+    const botoes = barra.querySelectorAll<HTMLElement>("[data-filtro]");
+    const itens = document.querySelectorAll<HTMLElement>("[data-servico]");
+
+    botoes.forEach((botao) =>
+      botao.addEventListener(
+        "click",
+        () => {
+          const filtro = botao.dataset.filtro;
+          botoes.forEach((b) => b.setAttribute("aria-pressed", String(b === botao)));
+          // o `display` de quem fica de fora está no global.css ([data-fora])
+          itens.forEach((el) => el.toggleAttribute("data-fora", filtro !== "todos" && el.dataset.categoria !== filtro));
+        },
+        { signal },
+      ),
+    );
+  });
+</script>

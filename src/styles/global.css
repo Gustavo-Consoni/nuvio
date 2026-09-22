@@ -1,0 +1,309 @@
+/* Fontes de conteúdo para o Tailwind.
+
+   source(none) desliga a varredura automática do v4. Sem isso ela alcança
+   public/demos, que tem o próprio CSS já compilado, e traz para cá
+   utilitários usados apenas pelos demos. Com a varredura desligada, vale só
+   o @source abaixo (a pasta src inteira).
+
+   Nota: não escreva caminhos com glob dentro de comentário CSS. A sequência
+   asterisco seguida de barra encerra o comentário no meio da frase. */
+@import "tailwindcss" source(none);
+
+@source "../";
+
+/* ---------------------------------------------------------------
+   Design tokens
+   --------------------------------------------------------------- */
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink-950: #05060b;
+  --color-ink-900: #0a0c16;
+  --color-ink-850: #0f1220;
+  --color-ink-800: #151a2d;
+  --color-ink-700: #1e2440;
+  --color-ink-600: #2b3358;
+
+  --color-brand-50:  #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-200: #c7d2fe;
+  --color-brand-300: #a5b4fc;
+  --color-brand-400: #818cf8;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-brand-800: #3730a3;
+  --color-brand-900: #312e81;
+
+  --color-accent-400: #22d3ee;
+  --color-accent-500: #06b6d4;
+  --color-accent-600: #0891b2;
+  --color-accent-700: #0e7490;
+
+  --radius-4xl: 2rem;
+
+  /* Demo Blade & Co. (src/pages/demos/barbearia). Mesmos valores do demo
+     estático em public/demos/barbearia, para as páginas parecerem da mesma
+     barbearia. As fontes são carregadas pelo layout DemoBlade.astro. */
+  --color-blade-void: #0a0a0a;
+  --color-blade-surface: #141414;
+  --color-blade-surface2: #1c1c1c;
+  --color-blade-gold: #c8a97e;
+  --color-blade-cream: #e8e6e1;
+  --font-bebas: "Bebas Neue", ui-sans-serif, system-ui, sans-serif;
+  --font-playfair: "Playfair Display", ui-serif, Georgia, serif;
+  --font-inter: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Demo Casa Olívia (src/pages/demos/casa-olivia). Fontes carregadas pelo
+     layout DemoOlivia.astro. */
+  --color-olivia-papel: #f6efe4;
+  --color-olivia-cartao: #fffaf2;
+  --color-olivia-tinta: #2a211b;
+  --color-olivia-terra: #b4532f;
+  --color-olivia-oliva: #5d6a38;
+  --font-fraunces: "Fraunces", ui-serif, Georgia, serif;
+
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-shine: shine 3.5s linear infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes shine {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+/* ---------------------------------------------------------------
+   Base
+   --------------------------------------------------------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    /* clip (e não hidden): não cria scroll container, então o lg:sticky do FAQ continua funcionando */
+    overflow-x: clip;
+  }
+  body {
+    @apply bg-ink-950 text-slate-300 font-sans antialiased;
+  }
+  ::selection {
+    @apply bg-brand-500/40 text-white;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Componentes
+   --------------------------------------------------------------- */
+/* `btn` é @utility (e não .btn dentro de @layer) para poder ser
+   reaproveitada via @apply nas variações abaixo (regra do Tailwind v4). */
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-8 py-4
+         text-sm font-semibold tracking-tight transition-all duration-300
+         focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400
+         focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950;
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-8;
+  }
+
+  .btn-primary {
+    @apply btn bg-brand-600 text-white shadow-lg shadow-brand-600/25
+           hover:bg-brand-500 hover:shadow-brand-500/40 hover:-translate-y-0.5;
+  }
+  .btn-ghost {
+    @apply btn border border-white/10 bg-white/5 text-white
+           hover:border-white/25 hover:bg-white/10;
+  }
+  .btn-lg { @apply px-8 py-4 text-base; }
+
+  .card {
+    @apply rounded-3xl border border-white/8 bg-white/3 p-8
+           backdrop-blur-sm transition-all duration-300;
+  }
+  .card-hover {
+    @apply hover:border-brand-400/40 hover:bg-white/6 hover:-translate-y-1
+           hover:shadow-2xl hover:shadow-brand-900/40;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-brand-400/25
+           bg-brand-500/10 px-4 py-2 text-xs font-semibold uppercase
+           tracking-[0.18em] text-brand-300;
+  }
+
+  .h-section {
+    @apply font-display text-3xl font-extrabold tracking-tight text-white
+           sm:text-4xl lg:text-[2.75rem] lg:leading-[1.1];
+  }
+
+  .field {
+    @apply w-full rounded-2xl border border-white/10 bg-ink-900/80 px-4 py-4
+           text-sm text-white placeholder-slate-500 transition duration-300
+           focus:border-brand-400 focus:bg-ink-900 focus:outline-none
+           focus:ring-4 focus:ring-brand-500/15;
+  }
+  .field-error {
+    @apply border-rose-500/60 focus:border-rose-500 focus:ring-rose-500/15;
+  }
+
+  /* Painel do visualizador de projeto.
+     A transição PRECISA morar aqui, e não num style="" inline: o script
+     zera `el.style.transition` para posicionar o painel sobre o card sem
+     animar, e depois limpa a propriedade para deixar a animação rolar.
+     Se a declaração estivesse inline, essa limpeza apagaria a transição
+     e o painel saltaria direto para a tela cheia. */
+  .painel-projeto {
+    /* A duração mora aqui e o script lê ela deste custom property, para o
+       tempo do JavaScript e o do CSS nunca saírem de sincronia. */
+    --duracao: 420ms;
+    transition:
+      top    var(--duracao) cubic-bezier(.16, 1, .3, 1),
+      left   var(--duracao) cubic-bezier(.16, 1, .3, 1),
+      width  var(--duracao) cubic-bezier(.16, 1, .3, 1),
+      height var(--duracao) cubic-bezier(.16, 1, .3, 1);
+  }
+
+  /* Na ida a curva expo é boa: dispara e assenta. Na volta ela faz o contrário,
+     corre 65% do caminho nos primeiros 60ms e depois rasteja até o card, o que
+     parece travado. O retorno usa uma curva equilibrada. */
+  .painel-projeto.voltando {
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+  }
+
+  /* O site vivo entra POR CIMA do print e só aparece depois do onload. O
+     print continua embaixo e cobre a espera até o demo pintar; na volta o
+     iframe some primeiro e o print reaparece, que é o que o card mostra. */
+  .quadro-vivo { @apply opacity-0 transition-opacity duration-300; }
+  .quadro-vivo-pronto { @apply opacity-100; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* zera o trajeto do painel; o script lê a mesma variável e encurta os
+     próprios tempos junto */
+  .painel-projeto { --duracao: 1ms; }
+  .quadro-vivo { transition: none; }
+}
+
+@layer components {
+  .link-nav {
+    @apply relative text-sm font-medium text-slate-300 transition duration-300
+           hover:text-white after:absolute after:-bottom-1.5 after:left-0
+           after:h-px after:w-0 after:bg-brand-400 after:transition-all after:duration-300
+           hover:after:w-full;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Utilitários
+   --------------------------------------------------------------- */
+@utility text-gradient {
+  background-image: linear-gradient(100deg, #a5b4fc 0%, #818cf8 35%, #22d3ee 100%);
+  background-clip: text;
+  color: transparent;
+}
+
+@utility grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(148,163,184,.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148,163,184,.07) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Vidro no estilo "liquid glass": desfoca e satura o que está atrás, com
+   brilho na borda de cima e sombra suave. Só funciona com algo colorido
+   atrás (ver o papel de parede do celular em MockupPecas.astro). */
+@utility vidro {
+  background-image: linear-gradient(135deg, rgba(255,255,255,.24), rgba(255,255,255,.06) 60%, rgba(255,255,255,.12));
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border: 1px solid rgba(255,255,255,.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.6),
+    inset 0 -1px 0 rgba(255,255,255,.1),
+    0 10px 24px -10px rgba(0,0,0,.5);
+}
+
+@utility mask-fade-b {
+  mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+}
+
+/* Animação de entrada no scroll.
+   O estado escondido depende de `.js`: sem JavaScript o conteúdo
+   simplesmente aparece, em vez de ficar preso em opacity 0. */
+@layer components {
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    /* Este `transition` tem especificidade maior que o do .card e o substitui.
+       Por isso precisa listar também o que o hover muda: sem `translate`,
+       `border-color`, `background-color` e `box-shadow` aqui, o hover dos cards
+       que também têm .reveal saltaria sem animação.
+       Repare que o Tailwind v4 desloca pela propriedade `translate`, não por
+       `transform`, e listar só `transform` não cobre o hover:-translate-y-1. */
+    transition:
+      opacity          .7s cubic-bezier(.16,1,.3,1),
+      transform        .7s cubic-bezier(.16,1,.3,1),
+      translate        .3s cubic-bezier(.16,1,.3,1),
+      border-color     .3s cubic-bezier(.16,1,.3,1),
+      background-color .3s cubic-bezier(.16,1,.3,1),
+      box-shadow       .3s cubic-bezier(.16,1,.3,1);
+  }
+  .js .reveal-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ---------------------------------------------------------------
+   Estados controlados pelos scripts dos componentes
+   Tudo condicionado a `.js`: sem JavaScript, o conteúdo aparece inteiro.
+   O `display` é declarado aqui e NÃO no HTML: utilitária vence classe de
+   componente no v4, e um `flex`/`grid` no markup furaria o esconder.
+   --------------------------------------------------------------- */
+@layer components {
+  /* Menu mobile: anima pela altura com a linha do grid indo de 0fr a 1fr. */
+  .menu-mobile {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition: grid-template-rows 300ms cubic-bezier(.16, 1, .3, 1);
+  }
+  .js .menu-mobile:not([data-aberto]) { grid-template-rows: 0fr; }
+
+  /* Carrossel de depoimentos: só o slide ativo aparece. */
+  .js .slide:not([data-ativo]) { display: none; }
+
+  /* Catálogos das demos: item fora do filtro escolhido some. */
+  .js [data-servico][data-fora] { display: none; }
+
+  /* FAQ em <details>: anima a altura onde o navegador suporta
+     `::details-content` (nos outros abre sem animação). */
+  .faq { interpolate-size: allow-keywords; }
+  .faq::details-content {
+    block-size: 0;
+    overflow-y: clip;
+    transition:
+      block-size 300ms cubic-bezier(.16, 1, .3, 1),
+      content-visibility 300ms allow-discrete;
+  }
+  .faq[open]::details-content { block-size: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-mobile,
+  .faq::details-content { transition: none; }
+}

@@ -1,0 +1,27 @@
+---
+import { segmentos } from "../../data/landing";
+---
+
+<section class="bg-ink-900/40 py-8 border-white/8 border-y">
+  <div class="container-page">
+    <p class="font-semibold text-slate-500 text-xs text-left sm:text-center uppercase tracking-[0.2em]">
+      Feito para negócios de balcão
+    </p>
+    <div class="group relative mt-8 overflow-hidden">
+      <div class="flex gap-16 w-max animate-marquee group-hover:[animation-play-state:paused]">
+        <!-- a lista aparece duas vezes para o loop do marquee ficar contínuo -->
+        {
+          [false, true].map((copia) => (
+            <div class="flex gap-16 shrink-0" aria-hidden={copia ? "true" : undefined}>
+              {segmentos.map((nome) => (
+                <span class="font-display font-bold text-slate-600 hover:text-slate-300 text-xl tracking-tight transition duration-300">{nome}</span>
+              ))}
+            </div>
+          ))
+        }
+      </div>
+      <div class="left-0 absolute inset-y-0 bg-gradient-to-r from-ink-950 to-transparent w-24 pointer-events-none"></div>
+      <div class="right-0 absolute inset-y-0 bg-gradient-to-l from-ink-950 to-transparent w-24 pointer-events-none"></div>
+    </div>
+  </div>
+</section>

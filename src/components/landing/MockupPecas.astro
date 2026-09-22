@@ -1,0 +1,71 @@
+---
+/**
+ * Ilustração das peças: plaquinha de acrílico, cartão na frente e o
+ * celular recebendo a notificação, com o linktree aberto na tela. As três
+ * flutuam com o ciclo defasado (`animation-delay` negativo), para não
+ * subirem juntas. Decorativa.
+ */
+import Plaquinha from "./Plaquinha.astro";
+
+/** Símbolo de aproximação (três arcos). */
+const ondas = "M8.5 8.5a5 5 0 0 1 0 7M12 5.5a9.5 9.5 0 0 1 0 13M15.5 2.5a14 14 0 0 1 0 19";
+---
+
+<div class="relative mx-auto w-full max-w-md h-[460px] sm:h-[500px]" aria-hidden="true">
+  <!-- plaquinha de acrílico -->
+  <Plaquinha class="top-[8%] left-3 z-10 absolute w-[37%] rotate-6 motion-safe:animate-float [animation-delay:-2.3s]" />
+
+  <!-- cartão -->
+  <div class="bottom-4 left-0 absolute bg-gradient-to-br from-brand-600 via-brand-700 to-ink-800 shadow-2xl shadow-brand-900/50 p-4 border border-white/15 rounded-2xl w-[70%] aspect-[1.586] -rotate-6 motion-safe:animate-float [animation-delay:-4.6s]">
+    <div class="flex justify-between items-start">
+      <span class="place-items-center grid bg-white/15 rounded-xl w-9 h-9 font-display font-extrabold text-white">S</span>
+      <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><path d={ondas} /></svg>
+    </div>
+    <div class="right-5 bottom-5 left-5 absolute">
+      <p class="font-display font-extrabold text-white text-lg">Seu Negócio</p>
+      <p class="text-[10px] text-white/60 uppercase tracking-widest">Aproxime o celular</p>
+    </div>
+  </div>
+
+  <!-- ondas saindo do ponto de contato -->
+  <span class="top-[52%] left-[56%] absolute border-2 border-accent-400/50 rounded-full w-14 h-14 animate-ping"></span>
+
+  <!-- celular com o linktree aberto, em "liquid glass" -->
+  <div class="top-[6%] right-0 absolute bg-ink-900 shadow-2xl shadow-black/60 p-2 border border-white/15 rounded-[2.5rem] w-[54%] h-[88%] rotate-6 motion-safe:animate-float">
+    <div class="relative bg-ink-950 rounded-[2rem] w-full h-full overflow-hidden">
+      <!-- papel de parede: as manchas de cor são o que o vidro desfoca -->
+      <div class="absolute inset-0">
+        <span class="-top-6 -left-8 absolute bg-brand-500 opacity-80 blur-2xl rounded-full w-32 h-32"></span>
+        <span class="top-24 -right-10 absolute bg-accent-400 opacity-70 blur-2xl rounded-full w-32 h-32"></span>
+        <span class="bottom-10 -left-6 absolute bg-fuchsia-500 opacity-60 blur-2xl rounded-full w-28 h-28"></span>
+        <span class="-bottom-8 right-0 absolute bg-amber-400 opacity-50 blur-2xl rounded-full w-24 h-24"></span>
+      </div>
+
+      <div class="top-2 left-1/2 z-20 absolute bg-black rounded-full w-16 h-4 -translate-x-1/2"></div>
+
+      <!-- linktree -->
+      <div class="relative flex flex-col justify-center items-center px-4 h-full">
+        <p class="font-display font-extrabold text-white text-sm [text-shadow:0_1px_8px_rgba(0,0,0,.35)]">Seu Negócio</p>
+        <div class="space-y-2 mt-4 w-full">
+          <div class="bg-brand-500/40 py-2 rounded-full font-semibold text-[10px] text-white text-center vidro">Agendar horário</div>
+          <div class="py-2 rounded-full font-semibold text-[10px] text-white text-center vidro">Cardápio e preços</div>
+          <div class="py-2 rounded-full font-semibold text-[10px] text-white text-center vidro">Avaliar no Google</div>
+          <div class="py-2 rounded-full font-semibold text-[10px] text-white text-center vidro">Como chegar</div>
+        </div>
+      </div>
+
+      <!-- notificação -->
+      <div class="top-8 right-2 left-2 z-10 absolute p-2 rounded-2xl vidro">
+        <div class="flex items-center gap-2">
+          <span class="place-items-center grid bg-accent-500 rounded-lg w-7 h-7 text-white shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><path d={ondas} /></svg>
+          </span>
+          <div class="min-w-0">
+            <p class="font-semibold text-[10px] text-white">Seu Negócio</p>
+            <p class="text-[10px] text-white/75 truncate">Toque para abrir</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

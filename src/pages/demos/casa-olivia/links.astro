@@ -1,0 +1,64 @@
+---
+/**
+ * Demo: página de links do restaurante, no lugar de um linktree genérico.
+ */
+import DemoOlivia from "../../../layouts/DemoOlivia.astro";
+import { olivia, whatsapp } from "../../../data/demo-restaurante";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const links = [
+  { rotulo: "Reservar mesa", detalhe: "Pelo WhatsApp, sem fila na porta", href: whatsapp("Olá! Quero reservar uma mesa na Casa Olívia."), externo: true, destaque: true },
+  { rotulo: "Cardápio", detalhe: "Pratos com foto e preço", href: `${base}/demos/casa-olivia/cardapio/`, externo: false, destaque: false },
+  { rotulo: "Pedir para levar", detalhe: "Retire no balcão ou peça entrega", href: whatsapp("Olá! Quero fazer um pedido para levar."), externo: true, destaque: false },
+  { rotulo: "Avalie a gente no Google", detalhe: "Leva 30 segundos", href: "#", externo: true, destaque: false },
+  { rotulo: "Instagram", detalhe: "O prato do dia sai lá primeiro", href: "#", externo: true, destaque: false },
+  { rotulo: "Como chegar", detalhe: olivia.endereco, href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(olivia.endereco)}`, externo: true, destaque: false },
+];
+---
+
+<DemoOlivia title="Links" description="Reserve, veja o cardápio, peça para levar e encontre a Casa Olívia.">
+  <main class="flex flex-col items-center mx-auto px-4 pt-16 pb-8 max-w-md">
+    <img
+      src={`${base}${olivia.capa}`}
+      alt="Prato da Casa Olívia"
+      width="112"
+      height="112"
+      class="shadow-xl rounded-full ring-2 ring-olivia-terra/60 ring-offset-4 ring-offset-olivia-papel w-28 h-28 object-cover"
+    />
+    <h1 class="mt-8 font-fraunces font-bold text-4xl">
+      Casa <em class="font-medium text-olivia-terra">Olívia</em>
+    </h1>
+    <p class="mt-1 text-olivia-tinta/70 text-sm">{olivia.bio}</p>
+
+    <ul class="space-y-4 mt-8 w-full">
+      {
+        links.map((l) => (
+          <li>
+            <a
+              href={l.href}
+              target={l.externo ? "_blank" : undefined}
+              rel={l.externo ? "noopener" : undefined}
+              class:list={[
+                "group flex justify-between items-center gap-4 px-8 py-4 rounded-full transition duration-300",
+                l.destaque
+                  ? "bg-olivia-terra text-olivia-cartao hover:bg-olivia-tinta"
+                  : "bg-olivia-cartao shadow-sm hover:shadow-md hover:text-olivia-terra",
+              ]}>
+              <span class="min-w-0">
+                <span class="block font-semibold text-sm">{l.rotulo}</span>
+                <span class:list={["block text-xs truncate", l.destaque ? "text-olivia-cartao/75" : "text-olivia-tinta/55"]}>{l.detalhe}</span>
+              </span>
+              <span aria-hidden="true" class="transition-transform group-hover:translate-x-1 duration-300 shrink-0">→</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="mt-8 text-center">
+      <p class="text-[10px] text-olivia-oliva uppercase tracking-[0.3em]">Horários</p>
+      {olivia.horarios.map((h) => <p class="mt-2 text-olivia-tinta/70 text-sm">{h}</p>)}
+    </div>
+  </main>
+</DemoOlivia>
