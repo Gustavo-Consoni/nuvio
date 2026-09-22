@@ -248,7 +248,8 @@ removida (`estar\n<span>` vira "estarvendendo"). Use `{" "}` no fim da linha.
 plaquinha: `reel.html?v=cardapio|google|links` (abra no navegador para ver em
 loop), `node telas.mjs` recaptura as demos com o dev server no ar e
 `node gravar.mjs` gera os MP4 em `reels/saida/` (Chrome + ffmpeg). Pasta fora
-do `src`, com `package.json` próprio: o Astro não a enxerga.
+do `src`, com `package.json` próprio: o Astro não a enxerga. Não é versionada
+(entra no `.gitignore`): é ferramenta de gravação, não faz parte do site.
 
 `.astro/` é gerado pelo Astro a cada build e está no `.gitignore` — não editar
 nem versionar.
