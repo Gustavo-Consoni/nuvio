@@ -1,8 +1,8 @@
-# Publica a PRÉVIA no GitHub Pages a cada push na main.
-# Usa `build:preview`: o site sai com `base` de subpasta e marcado como
-# noindex (ver src/config.ts). O build de entrega, no domínio do cliente,
-# é `npm run build` e não passa por aqui.
-name: Deploy da prévia no GitHub Pages
+# Publica o site no GitHub Pages a cada push na main.
+# Usa `build` (entrega), não `build:preview`: o domínio é próprio
+# (nuviostudio.com.br), então o site é servido na raiz, sem `base` de
+# subpasta, com sitemap e liberado para indexação.
+name: Deploy no GitHub Pages
 
 on:
   push:
@@ -33,7 +33,7 @@ jobs:
       # `ci` respeita o package-lock.json; o build roda `astro check` antes,
       # então erro de tipo barra o deploy.
       - run: npm ci
-      - run: npm run build:preview
+      - run: npm run build
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
