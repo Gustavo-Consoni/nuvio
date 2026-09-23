@@ -132,7 +132,9 @@ src/
 └── styles/global.css         # Tailwind, tokens (@theme) e componentes
 public/
 ├── demos/                    # 5 sites demo prontos (HTML + CSS compilado)
-└── images/projetos/          # prints dos cards de exemplos
+├── images/logo.webp          # logo do header e rodapé (108px, gerado de nuvio.png)
+├── images/projetos/          # prints dos cards de exemplos
+└── favicon.ico, icon-192.png, apple-touch-icon.png  # gerados de nuvio.png
 ```
 
 ## Landing page (Nuvio Studio)
@@ -239,9 +241,6 @@ nem versionar.
 - **`public/og-image.png` não existe.** O `Base.astro` já aponta para ele, mas
   o arquivo precisa ser criado (1200×630) ou os compartilhamentos saem sem
   imagem. É a pendência de maior impacto.
-- **Sem `apple-touch-icon.png`** (180×180) em `public/`. A tag só deve ser
-  adicionada ao `Base.astro` depois que o arquivo existir — apontar para um
-  arquivo ausente é pior que não ter a tag.
 - **Formulário de contato só simula o envio** (bloqueante). O `submit` em
   `Contato.astro` precisa apontar para Formspree, Web3Forms ou um webhook; o
   `fetch` comentado mostra onde.

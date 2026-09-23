@@ -1,15 +1,14 @@
 ---
 interface Props {
-  /** Letra do selo. */
-  inicial?: string;
   /** Nome ao lado do selo. */
   nome?: string;
   href?: string;
 }
-const { inicial = "N", nome = "Nuvio", href = "#hero" } = Astro.props;
+const { nome = "Nuvio", href = "#hero" } = Astro.props;
 ---
 
 <a href={href} class="flex items-center gap-2">
-  <span class="place-items-center grid bg-gradient-to-br from-brand-500 to-accent-500 rounded-xl w-9 h-9 font-display font-extrabold text-white text-lg">{inicial}</span>
+  <!-- alt vazio: o nome ao lado já dá o texto do link -->
+  <img src="/images/logo.webp" alt="" width="36" height="36" class="rounded-xl w-9 h-9" />
   <span class="font-display font-extrabold text-white text-lg tracking-tight">{nome}</span>
 </a>
