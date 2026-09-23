@@ -145,10 +145,13 @@ src/
 └── styles/demos/             # Tailwind das demos (ver **Demos**)
 public/
 ├── demos/<nome>/static/images/  # fotos dos sites demo
-├── images/logo.webp          # logo do header e rodapé (108px, gerado de nuvio.png)
+├── images/logo.webp          # logo do header e rodapé (108px, gerado do logo original)
 ├── images/projetos/          # prints dos cards de exemplos
-└── favicon.ico, icon-192.png, apple-touch-icon.png  # gerados de nuvio.png
+└── favicon.ico, icon-192.png, apple-touch-icon.png  # gerados do logo original
 ```
+
+O logo original (`nuvio.png`) não fica no repositório. Para gerar os ícones de
+novo, recupere do histórico: `git show e67f7db:nuvio.png > nuvio.png`.
 
 ## Landing page (Nuvio Studio)
 
