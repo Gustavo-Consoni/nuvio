@@ -130,10 +130,11 @@ src/
 ├── layouts/DemoOlivia.astro  # cardápio e links da Casa Olívia (casa-olivia.css)
 ├── components/ClasseJs.astro # script inline da classe .js no <html>
 ├── components/landing/       # uma seção por arquivo + Landing.astro que monta
-├── components/icons/         # SVGs reaproveitados (check, seta, WhatsApp)
+├── components/icons/         # SVGs reaproveitados (check, seta, WhatsApp, redes)
 ├── scripts/pagina.ts         # aCadaPagina(): ciclo de vida com o ClientRouter
 ├── scripts/demos.ts          # menu, entrada ao rolar, contagem... dos sites demo
 ├── pages/index.astro         # landing completa
+├── pages/linktree.astro      # linktree da Nuvio (link da bio), em liquid glass
 ├── pages/demos/barbearia/    # site demo (index), cortes e links (noindex)
 ├── pages/demos/casa-olivia/  # cardápio e página de links do restaurante (noindex)
 ├── pages/demos/{eventos,refugio,restaurante,treino}/  # sites demo (noindex)
@@ -215,6 +216,13 @@ HTML: utilitária vence `@layer components` no v4.
 **Exemplos** (`projetos` em `landing.ts`): 5 sites, 2 cardápios digitais
 (cortes da Blade & Co., pratos da Casa Olívia) e 2 linktrees, em ordem
 misturada de propósito. Prints de 800×600 em `public/images/projetos/`.
+
+**Linktree da Nuvio** (`/linktree`, `pages/linktree.astro`): usa o `Base` e a
+utilitária `vidro-liquido` do `global.css` (vidro do iOS 26: pouco desfoque,
+muita saturação, borda acesa e reflexo que segue o dedo). O vidro só aparece
+com cor atrás, por isso há manchas paradas do topo ao rodapé (azul e roxo
+alternados, separados por uma faixa escura); sem elas os botões ficam cinza. Os links de rede saem de `site.socials` (os com
+`href: "#"` ficam de fora).
 
 **FAQ é `<details name="faq">`**: acordeão exclusivo nativo, sem JS.
 

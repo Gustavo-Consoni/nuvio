@@ -54,6 +54,15 @@
   --animate-float: float 7s ease-in-out infinite;
   --animate-marquee: marquee 32s linear infinite;
   --animate-shine: shine 3.5s linear infinite;
+  /* Entrada na página de links: esmaece e sobe. Duas regras por causa do
+     vidro (`vidro-liquido`):
+     - sem `scale`: com ele o Chrome desenha o elemento reduzido numa
+       camada à parte e estica a imagem, e o texto fica borrado até a
+       animação acabar;
+     - no próprio elemento de vidro, nunca num pai: pai com opacidade
+       abaixo de 1 vira raiz do backdrop e o vidro dentro dele só enxerga
+       o pai (sem cor) até a animação acabar. */
+  --animate-entra: entra 700ms cubic-bezier(.16, 1, .3, 1) backwards;
 }
 
 @keyframes float {
@@ -67,6 +76,9 @@
 @keyframes shine {
   0%   { background-position: 200% center; }
   100% { background-position: -200% center; }
+}
+@keyframes entra {
+  from { opacity: 0; transform: translateY(16px); }
 }
 
 /* ---------------------------------------------------------------
@@ -219,6 +231,68 @@
     inset 0 1px 0 rgba(255,255,255,.6),
     inset 0 -1px 0 rgba(255,255,255,.1),
     0 10px 24px -10px rgba(0,0,0,.5);
+}
+
+/* Liquid glass do iOS 26, mais fiel que o `vidro` (é o da página de links,
+   pages/linktree.astro). Pouco desfoque e muita saturação: o que está atrás
+   continua reconhecível, só mais vivo. A borda acende em cima à esquerda e
+   embaixo à direita (::before, um degradê recortado em anel pela máscara) e
+   um reflexo segue o dedo ou o mouse (::after, posição em --mx/--my, que o
+   script da página liga). Tinta opcional em --vidro-tinta.
+   O `display` fica com quem usa; aqui só entra `position` para os pseudos. */
+@utility vidro-liquido {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--vidro-tinta, rgba(255,255,255,.05));
+  background-image: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.02) 50%, rgba(255,255,255,.06));
+  backdrop-filter: blur(10px) saturate(200%) brightness(1.06);
+  -webkit-backdrop-filter: blur(10px) saturate(200%) brightness(1.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.4),
+    inset 0 -1px 0 rgba(255,255,255,.06),
+    inset 0 0 20px rgba(255,255,255,.05),
+    0 16px 32px -16px rgba(0,0,0,.7);
+  transition:
+    scale 300ms cubic-bezier(.34, 1.56, .64, 1),
+    background-color 300ms ease,
+    box-shadow 300ms ease;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg,
+      rgba(255,255,255,.8), rgba(255,255,255,.1) 30%,
+      rgba(255,255,255,0) 50%,
+      rgba(255,255,255,.1) 70%, rgba(255,255,255,.5));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(180px circle at var(--mx, 50%) var(--my, 0%), rgba(255,255,255,.22), transparent 70%);
+    opacity: 0;
+    transition: opacity 300ms ease;
+    pointer-events: none;
+  }
+
+  /* No toque o vidro afunda um pouco e volta com mola, como no iOS. */
+  &:active { scale: .97; }
+  &:active::after,
+  &:focus-visible::after { opacity: 1; }
+
+  @media (hover: hover) {
+    &:hover::after { opacity: 1; }
+  }
 }
 
 @utility mask-fade-b {
