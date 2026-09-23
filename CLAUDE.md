@@ -2,8 +2,8 @@
 
 Site da Nuvio Studio, no ar em `nuviostudio.com.br`. Foi criado a partir do
 template Astro próprio, mas não é o template: valores fixos da Nuvio são
-esperados aqui. Generalize só onde há reuso real (ex.: `Landing.astro`, que
-serve a home e as páginas de segmento).
+esperados aqui. Generalize só onde há reuso real (ex.: `scripts/demos.ts`,
+que os cinco sites demo compartilham).
 
 ## Stack
 
@@ -120,8 +120,7 @@ subpasta: um `base` como `/nuvio` prefixa o CSS e ele dá 404 no domínio.
 ```
 src/
 ├── config.ts                 # dados do site (nome, domínio, noindex) + semIndice()
-├── data/landing.ts           # preços, produtos, textos (conteudoPadrao)
-├── data/nichos.ts            # texto do topo por segmento (barbearia...)
+├── data/landing.ts           # preços, produtos e textos da landing
 ├── data/demo-barbearia.ts    # serviços e dados da Blade & Co. (fictícia)
 ├── data/demo-restaurante.ts  # pratos e dados da Casa Olívia (fictícia)
 ├── layouts/Documento.astro   # <html>, <head>, SEO, Open Graph, ícones, fontes
@@ -135,7 +134,6 @@ src/
 ├── scripts/pagina.ts         # aCadaPagina(): ciclo de vida com o ClientRouter
 ├── scripts/demos.ts          # menu, entrada ao rolar, contagem... dos sites demo
 ├── pages/index.astro         # landing completa
-├── pages/barbearia.astro     # landing com os textos do segmento barbearia
 ├── pages/demos/barbearia/    # site demo (index), cortes e links (noindex)
 ├── pages/demos/casa-olivia/  # cardápio e página de links do restaurante (noindex)
 ├── pages/demos/{eventos,refugio,restaurante,treino}/  # sites demo (noindex)
@@ -177,10 +175,6 @@ dali.
 
 **As peças gravam o link final direto** (sem redirecionamento). Não prometer
 no site troca de destino à distância.
-
-**Segmentos:** `Landing.astro` recebe `conteudo` (texto do topo). Para
-um segmento novo, copie o bloco da barbearia em `nichos.ts` e crie a página
-igual a `barbearia.astro`.
 
 **"Teste agora"** (`TesteCartao.astro`): animação em loop
 só com o cartão (encosta, notificação, dedo toca, cardápio abre e rola). Não

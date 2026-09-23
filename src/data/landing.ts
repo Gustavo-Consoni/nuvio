@@ -46,32 +46,17 @@ export const precos = {
 export const reais = (valor: number) => valor.toLocaleString("pt-BR");
 
 /* ------------------------------------------------------------------
-   Conteúdo que muda por segmento (ver nichos.ts)
+   Conteúdo
 ------------------------------------------------------------------ */
 
-export interface ConteudoHero {
-  selo: string;
+/** Topo da página (Hero.astro). */
+export const hero = {
+  selo: "Presença digital para empresas",
   /** O título é montado como `antes` + `destaque` (em gradiente) + `depois`. */
-  titulo: { antes: string; destaque: string; depois: string };
-  texto: string;
-}
-
-export interface Conteudo {
-  hero: ConteudoHero;
-}
-
-export const conteudoPadrao: Conteudo = {
-  hero: {
-    selo: "Presença digital para empresas",
-    titulo: { antes: "O cliente", destaque: "te acha, escolhe e avalia", depois: " sem você parar o atendimento." },
-    texto:
-      "Seu negócio aparece no Google para quem procura por perto, mostra serviços e preços antes da pergunta no direct e ganha avaliação com um toque no balcão. Tudo com a cara da sua marca.",
-  },
+  titulo: { antes: "O cliente", destaque: "te acha, escolhe e avalia", depois: " sem você parar o atendimento." },
+  texto:
+    "Seu negócio aparece no Google para quem procura por perto, mostra serviços e preços antes da pergunta no direct e ganha avaliação com um toque no balcão. Tudo com a cara da sua marca.",
 };
-
-/* ------------------------------------------------------------------
-   Conteúdo fixo
------------------------------------------------------------------- */
 
 /** Faixa rolante logo abaixo do topo. */
 export const segmentos = [

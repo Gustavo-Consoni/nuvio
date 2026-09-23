@@ -1,7 +1,6 @@
 ---
 /**
- * A landing page inteira. Usada pela home e pelas páginas de segmento
- * (`barbearia.astro`), então todas nunca saem de sincronia.
+ * A landing page inteira (a home, src/pages/index.astro).
  */
 import Base from "../../layouts/Base.astro";
 import ClasseJs from "../ClasseJs.astro";
@@ -17,24 +16,16 @@ import Footer from "./Footer.astro";
 import Visualizador from "./Visualizador.astro";
 import Flutuantes from "./Flutuantes.astro";
 import Revelar from "./Revelar.astro";
-import { conteudoPadrao, nav, type Conteudo } from "../../data/landing";
-
-interface Props {
-  /** Texto do topo. Páginas de segmento passam o seu (ver nichos.ts). */
-  conteudo?: Conteudo;
-  title?: string;
-  description?: string;
-}
-const { conteudo = conteudoPadrao, title, description } = Astro.props;
+import { nav } from "../../data/landing";
 
 ---
 
-<Base title={title} description={description}>
+<Base>
   <ClasseJs slot="head" />
 
   <Header links={nav} />
   <main>
-    <Hero conteudo={conteudo.hero} />
+    <Hero />
     <Segmentos />
     <TesteCartao />
     <Produtos />
