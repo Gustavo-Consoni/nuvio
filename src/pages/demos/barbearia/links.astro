@@ -12,7 +12,7 @@ const links = [
   { rotulo: "Avalie a gente no Google", detalhe: "Leva 30 segundos", href: "#", externo: true, destaque: false },
   { rotulo: "Instagram", detalhe: "Cortes da semana", href: "#", externo: true, destaque: false },
   { rotulo: "Como chegar", detalhe: blade.endereco, href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(blade.endereco)}`, externo: true, destaque: false },
-  { rotulo: "Conheça a barbearia", detalhe: "Nossa história e os barbeiros", href: "/demos/barbearia/index.html", externo: false, destaque: false },
+  { rotulo: "Conheça a barbearia", detalhe: "Nossa história e os barbeiros", href: "/demos/barbearia/", externo: false, destaque: false },
 ];
 ---
 
@@ -23,10 +23,10 @@ const links = [
       alt="Interior da Blade & Co."
       width="112"
       height="112"
-      class="shadow-2xl rounded-full ring-2 ring-blade-gold/60 ring-offset-4 ring-offset-blade-void w-28 h-28 object-cover"
+      class="shadow-2xl rounded-full ring-2 ring-gold/60 ring-offset-4 ring-offset-void w-28 h-28 object-cover"
     />
-    <h1 class="mt-8 font-bebas text-5xl tracking-[0.15em]">
-      BLADE <em class="font-playfair text-blade-gold normal-case">&</em> CO.
+    <h1 class="mt-8 font-display text-5xl tracking-[0.15em]">
+      BLADE <em class="font-serif text-gold normal-case">&</em> CO.
     </h1>
     <p class="mt-1 text-white/60 text-sm">{blade.bio}</p>
 
@@ -41,12 +41,12 @@ const links = [
               class:list={[
                 "group flex justify-between items-center gap-4 px-4 py-4 border transition duration-300",
                 l.destaque
-                  ? "bg-blade-gold border-blade-gold text-blade-void hover:bg-blade-cream hover:border-blade-cream"
-                  : "bg-blade-surface border-white/8 hover:border-blade-gold/60",
+                  ? "bg-gold border-gold text-void hover:bg-cream hover:border-cream"
+                  : "bg-surface border-white/8 hover:border-gold/60",
               ]}>
               <span class="min-w-0">
                 <span class="block font-semibold text-sm">{l.rotulo}</span>
-                <span class:list={["block text-xs truncate", l.destaque ? "text-blade-void/70" : "text-white/45"]}>{l.detalhe}</span>
+                <span class:list={["block text-xs truncate", l.destaque ? "text-void/70" : "text-white/45"]}>{l.detalhe}</span>
               </span>
               <span aria-hidden="true" class="transition-transform group-hover:translate-x-1 duration-300 shrink-0">→</span>
             </a>
@@ -56,7 +56,7 @@ const links = [
     </ul>
 
     <div class="mt-8 text-center">
-      <p class="text-[10px] text-blade-gold uppercase tracking-[0.3em]">Horários</p>
+      <p class="text-[10px] text-gold uppercase tracking-[0.3em]">Horários</p>
       {blade.horarios.map((h) => <p class="mt-2 text-white/60 text-sm">{h}</p>)}
     </div>
   </main>

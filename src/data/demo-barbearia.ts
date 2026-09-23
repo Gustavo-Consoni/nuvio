@@ -1,10 +1,14 @@
 /**
  * Demo Blade & Co. (barbearia fictícia). Mesmos serviços, preços, endereço e
- * horários do site demo estático em public/demos/barbearia, para as três
+ * horários do site demo (pages/demos/barbearia/index.astro), para as três
  * páginas contarem a mesma história numa visita de venda.
  */
 
-/** Fotos do demo estático, reaproveitadas. */
+/** Folha do Google Fonts da Blade & Co. (site demo, cortes e links). */
+export const fontesBlade =
+  "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@1,400;1,500&family=Inter:wght@400;500;600&display=swap";
+
+/** Fotos do site demo, reaproveitadas. */
 const foto = (arquivo: string) => `/demos/barbearia/static/images/${arquivo}`;
 
 export const blade = {

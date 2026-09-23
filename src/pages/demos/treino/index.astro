@@ -1,48 +1,26 @@
-<!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SpacePro | Plataforma de treino para resultados consistentes</title>
-  <meta name="description" content="Treinos profissionais prontos para seguir na academia, com periodização, progressão de carga e renovação a cada 45 dias." />
-  <meta name="theme-color" content="#101010" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="SpacePro | Plataforma de treino" />
-  <meta property="og:description" content="Treinos profissionais prontos para seguir na academia, renovados a cada 45 dias." />
+---
+/**
+ * Site demo da SpacePro, app de treino fictício. Tema próprio em
+ * src/styles/demos/treino.css (ver src/layouts/DemoSite.astro).
+ */
+import DemoSite from "../../../layouts/DemoSite.astro";
+import "../../../styles/demos/treino.css";
+---
 
-  <link rel="icon" href="./static/images/logo.png" type="image/png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
-  <script>
-    document.documentElement.classList.add('js');
-    setTimeout(function () { if (!window.Alpine) document.documentElement.classList.remove('js'); }, 3000);
-  </script>
-
-  <link rel="stylesheet" href="./static/output.css" />
-  <!-- Fonte base fluida, igual à do site principal (html em src/styles/global.css). -->
-  <style>
-    html {
-      text-size-adjust: 100%;
-      -webkit-text-size-adjust: 100%;
-      font-size: clamp(12px, 4vw, 16px);
-    }
-  </style>
-  <script defer src="./app.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-</head>
-
-<body x-data="space()">
+<DemoSite
+  title="Plataforma de treino para resultados consistentes"
+  marca="SpacePro"
+  description="Treinos profissionais prontos para seguir na academia, com periodização, progressão de carga e renovação a cada 45 dias."
+  fontes="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600&family=Poppins:wght@400;500;600;700&display=swap"
+  corTema="#101010"
+  icone="/demos/treino/static/images/logo.png">
 
   <!-- ================= HEADER ================= -->
-  <header class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
-          :class="scrolled ? 'bg-breu/95 backdrop-blur-md py-3' : 'py-5'">
+  <header data-header
+          class="fixed inset-x-0 top-0 z-50 py-5 transition-all duration-300 data-rolou:bg-breu/95 data-rolou:py-3 data-rolou:backdrop-blur-md">
     <div class="wrap flex items-center justify-between gap-6">
       <a href="#topo" class="flex shrink-0 items-center gap-3">
-        <img src="./static/images/logo.png" alt="" width="48" height="48" class="h-9 w-9 object-contain" />
+        <img src="/demos/treino/static/images/logo.png" alt="" width="48" height="48" class="h-9 w-9 object-contain" />
         <span class="font-display text-2xl font-medium uppercase tracking-[0.14em] text-white">SpacePro</span>
       </a>
 
@@ -55,23 +33,25 @@
 
       <div class="flex shrink-0 items-center gap-3">
         <a href="#planos" class="btn-azul hidden sm:inline-flex">Área de Alunos</a>
-        <button @click="menu = !menu" :aria-expanded="menu" aria-label="Abrir menu"
-                class="grid h-10 w-10 cursor-pointer place-items-center rounded-xl border border-linha text-white lg:hidden">
-          <svg x-show="!menu" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
-          <svg x-show="menu" x-cloak class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+        <button type="button" data-menu-botao aria-controls="menu-mobile" aria-expanded="false" aria-label="Abrir menu"
+                class="group grid h-10 w-10 cursor-pointer place-items-center rounded-xl border border-linha text-white lg:hidden">
+          <svg class="h-4 w-4 group-aria-expanded:hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg class="hidden h-4 w-4 group-aria-expanded:block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
       </div>
     </div>
 
-    <div x-show="menu" x-collapse x-cloak class="lg:hidden">
+    <div id="menu-mobile" class="recolhe lg:hidden">
+      <div>
       <div class="wrap mt-4">
         <div class="cartao space-y-1 p-3">
-          <a href="#aplicativo"     @click="menu = false" class="block rounded-xl px-4 py-3 text-sm text-mudo hover:bg-white/5 hover:text-white">Aplicativo</a>
-          <a href="#transformacoes" @click="menu = false" class="block rounded-xl px-4 py-3 text-sm text-mudo hover:bg-white/5 hover:text-white">Transformações</a>
-          <a href="#planos"         @click="menu = false" class="block rounded-xl px-4 py-3 text-sm text-mudo hover:bg-white/5 hover:text-white">Planos</a>
-          <a href="#duvidas"        @click="menu = false" class="block rounded-xl px-4 py-3 text-sm text-mudo hover:bg-white/5 hover:text-white">Dúvidas</a>
-          <a href="#planos"         @click="menu = false" class="btn-azul mt-2 w-full">Área de Alunos</a>
+          <a href="#aplicativo" class="block rounded-xl px-4 py-3 text-sm text-mudo hover:bg-white/5 hover:text-white">Aplicativo</a>
+          <a href="#transformacoes" class="block rounded-xl px-4 py-3 text-sm text-mudo hover:bg-white/5 hover:text-white">Transformações</a>
+          <a href="#planos" class="block rounded-xl px-4 py-3 text-sm text-mudo hover:bg-white/5 hover:text-white">Planos</a>
+          <a href="#duvidas" class="block rounded-xl px-4 py-3 text-sm text-mudo hover:bg-white/5 hover:text-white">Dúvidas</a>
+          <a href="#planos" class="btn-azul mt-2 w-full">Área de Alunos</a>
         </div>
+      </div>
       </div>
     </div>
   </header>
@@ -80,7 +60,7 @@
   <section id="topo" class="relative min-h-screen overflow-hidden">
     <!-- No site original aqui roda um vídeo de fundo. Num demo que abre dentro
          de um modal, 4,5 MB de vídeo custa caro, então usamos um quadro dele. -->
-    <img src="./static/images/hero.webp" alt="" width="1600" height="900"
+    <img src="/demos/treino/static/images/hero.webp" alt="" width="1600" height="900"
          decoding="async" fetchpriority="high" class="absolute inset-0 h-full w-full object-cover" />
     <div class="absolute inset-0 bg-breu/70"></div>
     <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-breu to-transparent"></div>
@@ -107,7 +87,7 @@
   <!-- ================= PILARES ================= -->
   <section class="relative z-10 -mt-24 pb-20">
     <div class="wrap grid gap-6 md:grid-cols-3">
-      <article class="cartao p-7 rv" x-intersect.once="$el.classList.add('rv-in')">
+      <article class="cartao p-7 rv" data-revelar>
         <span class="grid h-12 w-12 place-items-center rounded-xl bg-azul/15 text-azul-cl">
           <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4L2 9l10 5 10-5-10-5zM5 11v5c0 1.5 3 3 7 3s7-1.5 7-3v-5"/></svg>
         </span>
@@ -119,7 +99,7 @@
         </p>
       </article>
 
-      <article class="cartao p-7 rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 110)">
+      <article class="cartao p-7 rv" data-revelar data-atraso="110">
         <span class="grid h-12 w-12 place-items-center rounded-xl bg-azul/15 text-azul-cl">
           <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 19l3-3m0 0a9 9 0 0111-11 9 9 0 01-11 11zm0 0l-3 3m10-13a2 2 0 100 4 2 2 0 000-4z"/></svg>
         </span>
@@ -131,7 +111,7 @@
         </p>
       </article>
 
-      <article class="cartao p-7 rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 220)">
+      <article class="cartao p-7 rv" data-revelar data-atraso="220">
         <span class="grid h-12 w-12 place-items-center rounded-xl bg-azul/15 text-azul-cl">
           <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg>
         </span>
@@ -149,17 +129,17 @@
   <section id="aplicativo" class="overflow-hidden py-20 lg:py-28">
     <div class="wrap grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
 
-      <div class="rv" x-intersect.once="$el.classList.add('rv-in')">
+      <div class="rv" data-revelar>
         <div class="relative mx-auto w-full max-w-[300px]">
           <div class="pointer-events-none absolute -inset-10 rounded-full bg-azul/20 blur-3xl"></div>
           <div class="relative overflow-hidden rounded-[2.2rem] border-[6px] border-linha bg-carvao">
-            <img src="./static/images/app.webp" alt="Tela do aplicativo SpacePro com a frequência de treinos"
+            <img src="/demos/treino/static/images/app.webp" alt="Tela do aplicativo SpacePro com a frequência de treinos"
                  width="560" height="1115" loading="lazy" decoding="async" class="block w-full" />
           </div>
         </div>
       </div>
 
-      <div class="rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 120)">
+      <div class="rv" data-revelar data-atraso="120">
         <p class="rotulo">Aplicativo exclusivo</p>
         <h2 class="titulo mt-6">Seu treino na palma<br />de suas mãos</h2>
 
@@ -181,7 +161,7 @@
   <section class="py-20 lg:py-28">
     <div class="wrap grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
 
-      <div class="rv" x-intersect.once="$el.classList.add('rv-in')">
+      <div class="rv" data-revelar>
         <p class="rotulo">Comunidade SpacePro</p>
         <p class="mt-6 font-display text-7xl font-medium leading-none text-white sm:text-8xl">300<span class="text-amarelo">+</span></p>
         <h2 class="mt-3 font-display text-3xl font-medium uppercase text-white">Alunos satisfeitos</h2>
@@ -201,9 +181,9 @@
         <a href="#planos" class="btn-azul mt-8">Comece agora</a>
       </div>
 
-      <div class="text-center rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 120)">
+      <div class="text-center rv" data-revelar data-atraso="120">
         <div class="overflow-hidden rounded-2xl">
-          <img src="./static/images/dupla.webp" alt="Dois alunos treinando com halteres na academia"
+          <img src="/demos/treino/static/images/dupla.webp" alt="Dois alunos treinando com halteres na academia"
                width="900" height="694" loading="lazy" decoding="async" class="block w-full object-cover" />
         </div>
         <h2 class="titulo mt-8">Construa seu físico<br />guiado pelos melhores</h2>
@@ -217,7 +197,7 @@
 
   <!-- ================= TRANSFORMAÇÕES ================= -->
   <section id="transformacoes" class="py-20 lg:py-28">
-    <div class="wrap text-center rv" x-intersect.once="$el.classList.add('rv-in')">
+    <div class="wrap text-center rv" data-revelar>
       <p class="rotulo rotulo-centro">Resultados</p>
       <h2 class="titulo mt-6">Transformações para você se inspirar</h2>
       <p class="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-mudo">
@@ -229,36 +209,36 @@
     <div class="mt-14 overflow-hidden">
       <div class="marquee flex w-max gap-4">
         <div class="flex shrink-0 gap-4">
-          <img src="./static/images/t1.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t2.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t3.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t4.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t5.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t6.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t7.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t8.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t9.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t10.webp" alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t11.webp" alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t12.webp" alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t13.webp" alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t14.webp" alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t1.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t2.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t3.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t4.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t5.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t6.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t7.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t8.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t9.webp"  alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t10.webp" alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t11.webp" alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t12.webp" alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t13.webp" alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t14.webp" alt="Antes e depois de um aluno"  width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
         </div>
         <div class="flex shrink-0 gap-4" aria-hidden="true">
-          <img src="./static/images/t1.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t2.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t3.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t4.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t5.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t6.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t7.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t8.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t9.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t10.webp" alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t11.webp" alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t12.webp" alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t13.webp" alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
-          <img src="./static/images/t14.webp" alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t1.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t2.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t3.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t4.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t5.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t6.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t7.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t8.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t9.webp"  alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t10.webp" alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t11.webp" alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t12.webp" alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t13.webp" alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
+          <img src="/demos/treino/static/images/t14.webp" alt="" width="400" height="300" loading="lazy" decoding="async" class="h-48 w-auto rounded-xl object-cover sm:h-60" />
         </div>
       </div>
     </div>
@@ -267,7 +247,7 @@
   <!-- ================= PLANOS ================= -->
   <section id="planos" class="py-20 lg:py-28">
     <div class="wrap">
-      <div class="text-center rv" x-intersect.once="$el.classList.add('rv-in')">
+      <div class="text-center rv" data-revelar>
         <p class="rotulo rotulo-centro">Planos</p>
         <h2 class="titulo mt-6">Seu primeiro passo para evolução</h2>
         <p class="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-mudo">
@@ -279,24 +259,22 @@
       <!-- alternador de ciclo -->
       <div class="mt-10 flex justify-center">
         <div class="inline-flex rounded-full border border-amarelo/40 bg-amarelo/10 p-1">
-          <button type="button" @click="ciclo = 'mensal'"
-                  :class="ciclo === 'mensal' ? 'bg-amarelo text-breu' : 'text-mudo hover:text-white'"
-                  class="cursor-pointer rounded-full px-6 py-2 text-sm font-semibold transition duration-300">Mensal</button>
-          <button type="button" @click="ciclo = 'trimestral'"
-                  :class="ciclo === 'trimestral' ? 'bg-amarelo text-breu' : 'text-mudo hover:text-white'"
-                  class="cursor-pointer rounded-full px-6 py-2 text-sm font-semibold transition duration-300">Trimestral</button>
+          <button type="button" data-ciclo="mensal" aria-pressed="true"
+                  class="cursor-pointer rounded-full text-mudo hover:text-white aria-pressed:bg-amarelo aria-pressed:text-breu px-6 py-2 text-sm font-semibold transition duration-300">Mensal</button>
+          <button type="button" data-ciclo="trimestral" aria-pressed="false"
+                  class="cursor-pointer rounded-full text-mudo hover:text-white aria-pressed:bg-amarelo aria-pressed:text-breu px-6 py-2 text-sm font-semibold transition duration-300">Trimestral</button>
         </div>
       </div>
       <p class="mt-3 text-center text-xs text-mudo2">
-        <span x-show="ciclo === 'trimestral'" x-cloak>20% de desconto no pagamento trimestral</span>
+        <span data-desconto hidden>20% de desconto no pagamento trimestral</span>
       </p>
 
       <div class="mt-12 grid items-start gap-6 lg:grid-cols-3">
 
-        <article class="cartao p-7 rv" x-intersect.once="$el.classList.add('rv-in')">
+        <article class="cartao p-7 rv" data-revelar>
           <p class="text-xs font-semibold uppercase tracking-[0.18em] text-mudo2">Masculino</p>
           <p class="mt-5 font-display text-5xl font-medium text-white">
-            <span x-text="preco(49.90, 39.90)">R$ 49,90</span>
+            <span data-mensal="R$ 49,90" data-trimestral="R$ 39,90">R$ 49,90</span>{" "}
             <span class="font-sans text-base font-normal text-mudo2">/ mês</span>
           </p>
           <p class="mt-4 text-sm leading-relaxed text-mudo">Projetado para impulsionar a força e vitalidade dos homens.</p>
@@ -312,11 +290,11 @@
           </ul>
         </article>
 
-        <article class="relative rounded-2xl border-2 border-azul bg-carvao p-7 shadow-2xl shadow-azul/15 rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 110)">
+        <article class="relative rounded-2xl border-2 border-azul bg-carvao p-7 shadow-2xl shadow-azul/15 rv" data-revelar data-atraso="110">
           <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-azul px-4 py-1 text-[11px] font-semibold text-white">Econômico</span>
           <p class="text-xs font-semibold uppercase tracking-[0.18em] text-mudo2">Casal</p>
           <p class="mt-5 font-display text-5xl font-medium text-white">
-            <span x-text="preco(79.90, 63.90)">R$ 79,90</span>
+            <span data-mensal="R$ 79,90" data-trimestral="R$ 63,90">R$ 79,90</span>{" "}
             <span class="font-sans text-base font-normal text-mudo2">/ mês</span>
           </p>
           <p class="mt-4 text-sm leading-relaxed text-mudo">Ideal para treinar junto com sua companhia de academia.</p>
@@ -333,10 +311,10 @@
           </ul>
         </article>
 
-        <article class="cartao p-7 rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 220)">
+        <article class="cartao p-7 rv" data-revelar data-atraso="220">
           <p class="text-xs font-semibold uppercase tracking-[0.18em] text-mudo2">Feminino</p>
           <p class="mt-5 font-display text-5xl font-medium text-white">
-            <span x-text="preco(49.90, 39.90)">R$ 49,90</span>
+            <span data-mensal="R$ 49,90" data-trimestral="R$ 39,90">R$ 49,90</span>{" "}
             <span class="font-sans text-base font-normal text-mudo2">/ mês</span>
           </p>
           <p class="mt-4 text-sm leading-relaxed text-mudo">Desenvolvido especialmente para a fisiologia feminina.</p>
@@ -358,12 +336,12 @@
   <!-- ================= MENTALIDADE ================= -->
   <section class="py-20 lg:py-28">
     <div class="wrap grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
-      <div class="overflow-hidden rounded-2xl rv" x-intersect.once="$el.classList.add('rv-in')">
-        <img src="./static/images/mentalidade.webp" alt="Dois alunos posando após o treino"
+      <div class="overflow-hidden rounded-2xl rv" data-revelar>
+        <img src="/demos/treino/static/images/mentalidade.webp" alt="Dois alunos posando após o treino"
              width="900" height="694" loading="lazy" decoding="async" class="block w-full object-cover" />
       </div>
 
-      <div class="rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 120)">
+      <div class="rv" data-revelar data-atraso="120">
         <p class="rotulo">Mentalidade</p>
         <h2 class="titulo mt-6">Transforme seu corpo no reflexo do esforço</h2>
         <p class="mt-6 max-w-md text-sm leading-relaxed text-mudo">
@@ -378,7 +356,7 @@
   <!-- ================= DÚVIDAS ================= -->
   <section id="duvidas" class="py-20 lg:py-28">
     <div class="wrap">
-      <div class="text-center rv" x-intersect.once="$el.classList.add('rv-in')">
+      <div class="text-center rv" data-revelar>
         <p class="rotulo rotulo-centro">FAQ</p>
         <h2 class="titulo mt-6">Ainda restou alguma dúvida?</h2>
         <p class="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-mudo">
@@ -387,89 +365,66 @@
         </p>
       </div>
 
+      <!-- Acordeão sem JavaScript: <details> com o mesmo `name` abre um de
+           cada vez. A animação de altura está em .faq no CSS da demo. -->
       <div class="mx-auto mt-12 max-w-3xl divide-y divide-linha border-y border-linha">
 
-        <div>
-          <h3>
-            <button type="button" @click="alterna(0)" :aria-expanded="aberta === 0"
-                    class="flex w-full cursor-pointer items-center gap-4 py-6 text-left text-[15px] text-white">
-              <span class="grid h-6 w-6 shrink-0 place-items-center text-xl text-azul-cl transition duration-300" :class="aberta === 0 && 'rotate-45'">+</span>
-              Os treinos são individualizados ou personalizados?
-            </button>
-          </h3>
-          <div x-show="aberta === 0" x-collapse x-cloak>
-            <p class="pb-6 pl-10 text-sm leading-relaxed text-mudo">
-              Os treinos são montados por nível e objetivo, não sob medida para uma
-              pessoa. Você escolhe a trilha que combina com o seu momento e segue a
-              periodização pronta, com progressão de carga já prevista.
-            </p>
-          </div>
-        </div>
+        <details name="faq" class="faq group">
+          <summary class="flex w-full cursor-pointer list-none items-center gap-4 py-6 text-left text-[15px] text-white [&::-webkit-details-marker]:hidden">
+            <span class="grid h-6 w-6 shrink-0 place-items-center text-xl text-azul-cl transition duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+            <h3>Os treinos são individualizados ou personalizados?</h3>
+          </summary>
+          <p class="pb-6 pl-10 text-sm leading-relaxed text-mudo">
+            Os treinos são montados por nível e objetivo, não sob medida para uma
+            pessoa. Você escolhe a trilha que combina com o seu momento e segue a
+            periodização pronta, com progressão de carga já prevista.
+          </p>
+        </details>
 
-        <div>
-          <h3>
-            <button type="button" @click="alterna(1)" :aria-expanded="aberta === 1"
-                    class="flex w-full cursor-pointer items-center gap-4 py-6 text-left text-[15px] text-white">
-              <span class="grid h-6 w-6 shrink-0 place-items-center text-xl text-azul-cl transition duration-300" :class="aberta === 1 && 'rotate-45'">+</span>
-              Em quanto tempo posso esperar resultados?
-            </button>
-          </h3>
-          <div x-show="aberta === 1" x-collapse x-cloak>
-            <p class="pb-6 pl-10 text-sm leading-relaxed text-mudo">
-              Depende de constância, alimentação e ponto de partida. Quem treina na
-              frequência indicada costuma notar diferença de condicionamento nas
-              primeiras semanas e mudança visível a partir do segundo ciclo.
-            </p>
-          </div>
-        </div>
+        <details name="faq" class="faq group">
+          <summary class="flex w-full cursor-pointer list-none items-center gap-4 py-6 text-left text-[15px] text-white [&::-webkit-details-marker]:hidden">
+            <span class="grid h-6 w-6 shrink-0 place-items-center text-xl text-azul-cl transition duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+            <h3>Em quanto tempo posso esperar resultados?</h3>
+          </summary>
+          <p class="pb-6 pl-10 text-sm leading-relaxed text-mudo">
+            Depende de constância, alimentação e ponto de partida. Quem treina na
+            frequência indicada costuma notar diferença de condicionamento nas
+            primeiras semanas e mudança visível a partir do segundo ciclo.
+          </p>
+        </details>
 
-        <div>
-          <h3>
-            <button type="button" @click="alterna(2)" :aria-expanded="aberta === 2"
-                    class="flex w-full cursor-pointer items-center gap-4 py-6 text-left text-[15px] text-white">
-              <span class="grid h-6 w-6 shrink-0 place-items-center text-xl text-azul-cl transition duration-300" :class="aberta === 2 && 'rotate-45'">+</span>
-              Os treinos são atualizados com frequência?
-            </button>
-          </h3>
-          <div x-show="aberta === 2" x-collapse x-cloak>
-            <p class="pb-6 pl-10 text-sm leading-relaxed text-mudo">
-              Sim. A cada 45 dias entra uma programação nova, para o corpo não
-              acomodar e o estímulo continuar surtindo efeito.
-            </p>
-          </div>
-        </div>
+        <details name="faq" class="faq group">
+          <summary class="flex w-full cursor-pointer list-none items-center gap-4 py-6 text-left text-[15px] text-white [&::-webkit-details-marker]:hidden">
+            <span class="grid h-6 w-6 shrink-0 place-items-center text-xl text-azul-cl transition duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+            <h3>Os treinos são atualizados com frequência?</h3>
+          </summary>
+          <p class="pb-6 pl-10 text-sm leading-relaxed text-mudo">
+            Sim. A cada 45 dias entra uma programação nova, para o corpo não
+            acomodar e o estímulo continuar surtindo efeito.
+          </p>
+        </details>
 
-        <div>
-          <h3>
-            <button type="button" @click="alterna(3)" :aria-expanded="aberta === 3"
-                    class="flex w-full cursor-pointer items-center gap-4 py-6 text-left text-[15px] text-white">
-              <span class="grid h-6 w-6 shrink-0 place-items-center text-xl text-azul-cl transition duration-300" :class="aberta === 3 && 'rotate-45'">+</span>
-              Posso compartilhar a minha conta com alguém?
-            </button>
-          </h3>
-          <div x-show="aberta === 3" x-collapse x-cloak>
-            <p class="pb-6 pl-10 text-sm leading-relaxed text-mudo">
-              A conta é individual. Para treinar acompanhado existe o plano Casal,
-              que dá acesso às trilhas masculina e feminina em duas contas.
-            </p>
-          </div>
-        </div>
+        <details name="faq" class="faq group">
+          <summary class="flex w-full cursor-pointer list-none items-center gap-4 py-6 text-left text-[15px] text-white [&::-webkit-details-marker]:hidden">
+            <span class="grid h-6 w-6 shrink-0 place-items-center text-xl text-azul-cl transition duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+            <h3>Posso compartilhar a minha conta com alguém?</h3>
+          </summary>
+          <p class="pb-6 pl-10 text-sm leading-relaxed text-mudo">
+            A conta é individual. Para treinar acompanhado existe o plano Casal,
+            que dá acesso às trilhas masculina e feminina em duas contas.
+          </p>
+        </details>
 
-        <div>
-          <h3>
-            <button type="button" @click="alterna(4)" :aria-expanded="aberta === 4"
-                    class="flex w-full cursor-pointer items-center gap-4 py-6 text-left text-[15px] text-white">
-              <span class="grid h-6 w-6 shrink-0 place-items-center text-xl text-azul-cl transition duration-300" :class="aberta === 4 && 'rotate-45'">+</span>
-              Posso cancelar meu plano a qualquer momento?
-            </button>
-          </h3>
-          <div x-show="aberta === 4" x-collapse x-cloak>
-            <p class="pb-6 pl-10 text-sm leading-relaxed text-mudo">
-              Pode, sem fidelidade e sem multa. O acesso segue até o fim do período
-              já pago e depois a renovação simplesmente não acontece.
-            </p>
-          </div>
-        </div>
+        <details name="faq" class="faq group">
+          <summary class="flex w-full cursor-pointer list-none items-center gap-4 py-6 text-left text-[15px] text-white [&::-webkit-details-marker]:hidden">
+            <span class="grid h-6 w-6 shrink-0 place-items-center text-xl text-azul-cl transition duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+            <h3>Posso cancelar meu plano a qualquer momento?</h3>
+          </summary>
+          <p class="pb-6 pl-10 text-sm leading-relaxed text-mudo">
+            Pode, sem fidelidade e sem multa. O acesso segue até o fim do período
+            já pago e depois a renovação simplesmente não acontece.
+          </p>
+        </details>
       </div>
     </div>
   </section>
@@ -480,7 +435,7 @@
       <div class="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <div class="flex items-center gap-3">
-            <img src="./static/images/logo.png" alt="" width="48" height="48" class="h-9 w-9 object-contain" />
+            <img src="/demos/treino/static/images/logo.png" alt="" width="48" height="48" class="h-9 w-9 object-contain" />
             <span class="font-display text-2xl font-medium uppercase tracking-[0.14em] text-white">SpacePro</span>
           </div>
           <p class="mt-5 max-w-xs text-sm leading-relaxed text-mudo">
@@ -524,7 +479,7 @@
       </div>
 
       <div class="mt-12 flex flex-col gap-3 border-t border-linha pt-7 text-xs text-mudo2 sm:flex-row sm:items-center sm:justify-between">
-        <p>© <span x-text="new Date().getFullYear()">2026</span> SpacePro. Todos os direitos reservados.</p>
+        <p>© {new Date().getFullYear()} SpacePro. Todos os direitos reservados.</p>
         <div class="flex gap-6">
           <a href="#" class="transition duration-300 hover:text-white">Política de Privacidade</a>
           <a href="#" class="transition duration-300 hover:text-white">Termos de Uso</a>
@@ -533,5 +488,36 @@
     </div>
   </footer>
 
-</body>
-</html>
+</DemoSite>
+
+<script>
+  import { aCadaPagina } from "../../../scripts/pagina";
+  import { menu, revelar, rolagem } from "../../../scripts/demos";
+
+  aCadaPagina((signal) => {
+    rolagem(document.querySelectorAll("[data-header]"), signal);
+    menu(signal, 1024);
+    revelar(signal);
+    ciclo(signal);
+  });
+
+  /** Mensal ou trimestral: os dois preços de cada plano estão no HTML
+   *  (`data-mensal`, `data-trimestral`); o botão só escolhe qual mostrar. */
+  function ciclo(signal: AbortSignal) {
+    const botoes = document.querySelectorAll<HTMLElement>("[data-ciclo]");
+    const precos = document.querySelectorAll<HTMLElement>("[data-mensal]");
+    const desconto = document.querySelector<HTMLElement>("[data-desconto]");
+    botoes.forEach((b) =>
+      b.addEventListener(
+        "click",
+        () => {
+          const trimestral = b.dataset.ciclo === "trimestral";
+          botoes.forEach((o) => o.setAttribute("aria-pressed", String(o === b)));
+          precos.forEach((p) => (p.textContent = trimestral ? p.dataset.trimestral! : p.dataset.mensal!));
+          if (desconto) desconto.hidden = !trimestral;
+        },
+        { signal },
+      ),
+    );
+  }
+</script>

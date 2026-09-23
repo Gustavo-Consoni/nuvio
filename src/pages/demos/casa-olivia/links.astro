@@ -23,12 +23,12 @@ const links = [
       alt="Prato da Casa Olívia"
       width="112"
       height="112"
-      class="shadow-xl rounded-full ring-2 ring-olivia-terra/60 ring-offset-4 ring-offset-olivia-papel w-28 h-28 object-cover"
+      class="shadow-xl rounded-full ring-2 ring-terra/60 ring-offset-4 ring-offset-papel w-28 h-28 object-cover"
     />
-    <h1 class="mt-8 font-fraunces font-bold text-4xl">
-      Casa <em class="font-medium text-olivia-terra">Olívia</em>
+    <h1 class="mt-8 font-serif font-bold text-4xl">
+      Casa <em class="font-medium text-terra">Olívia</em>
     </h1>
-    <p class="mt-1 text-olivia-tinta/70 text-sm">{olivia.bio}</p>
+    <p class="mt-1 text-tinta/70 text-sm">{olivia.bio}</p>
 
     <ul class="space-y-4 mt-8 w-full">
       {
@@ -41,12 +41,12 @@ const links = [
               class:list={[
                 "group flex justify-between items-center gap-4 px-8 py-4 rounded-full transition duration-300",
                 l.destaque
-                  ? "bg-olivia-terra text-olivia-cartao hover:bg-olivia-tinta"
-                  : "bg-olivia-cartao shadow-sm hover:shadow-md hover:text-olivia-terra",
+                  ? "bg-terra text-cartao hover:bg-tinta"
+                  : "bg-cartao shadow-sm hover:shadow-md hover:text-terra",
               ]}>
               <span class="min-w-0">
                 <span class="block font-semibold text-sm">{l.rotulo}</span>
-                <span class:list={["block text-xs truncate", l.destaque ? "text-olivia-cartao/75" : "text-olivia-tinta/55"]}>{l.detalhe}</span>
+                <span class:list={["block text-xs truncate", l.destaque ? "text-cartao/75" : "text-tinta/55"]}>{l.detalhe}</span>
               </span>
               <span aria-hidden="true" class="transition-transform group-hover:translate-x-1 duration-300 shrink-0">→</span>
             </a>
@@ -56,8 +56,8 @@ const links = [
     </ul>
 
     <div class="mt-8 text-center">
-      <p class="text-[10px] text-olivia-oliva uppercase tracking-[0.3em]">Horários</p>
-      {olivia.horarios.map((h) => <p class="mt-2 text-olivia-tinta/70 text-sm">{h}</p>)}
+      <p class="text-[10px] text-oliva uppercase tracking-[0.3em]">Horários</p>
+      {olivia.horarios.map((h) => <p class="mt-2 text-tinta/70 text-sm">{h}</p>)}
     </div>
   </main>
 </DemoOlivia>

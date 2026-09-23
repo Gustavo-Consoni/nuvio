@@ -1,0 +1,102 @@
+/* Tema da SpacePro (src/pages/demos/treino/index.astro). Tailwind
+   próprio, separado do global.css do site: ver src/layouts/DemoSite.astro. */
+@import "tailwindcss" source(none);
+@import "./comum.css";
+
+@source "../../pages/demos/treino/index.astro";
+
+/* ---------------------------------------------------------------
+   SpacePro: tokens (tema escuro)
+   Teko condensada nos títulos, Poppins no corpo, como no site.
+   --------------------------------------------------------------- */
+@theme {
+  --font-display: "Teko", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:    "Poppins", ui-sans-serif, system-ui, sans-serif;
+
+  --color-breu:    #101010;   /* fundo da página */
+  --color-carvao:  #161616;   /* cartões */
+  --color-linha:   #262626;
+  --color-mudo:    #cad5e2;   /* slate-300, o texto de apoio do site */
+  --color-mudo2:   #8a94a3;
+  --color-azul:    #155dfc;   /* blue-600, o botão principal */
+  --color-azul-cl: #51a2ff;   /* blue-400, os rótulos de seção */
+  --color-amarelo: #ffdf20;   /* yellow-300, o acento dos títulos e checks */
+}
+
+@layer base {
+  html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+  body { @apply bg-breu text-mudo font-sans antialiased; }
+  ::selection { @apply bg-azul/40 text-white; }
+}
+
+/* btn como @utility para poder ser reaproveitado via @apply (Tailwind v4) */
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-7 py-3.5
+         text-sm font-semibold transition duration-300;
+}
+
+@layer components {
+  .wrap { @apply mx-auto w-full max-w-[1320px] px-5 sm:px-8; }
+
+  /* título condensado: Teko em caixa alta natural, bem apertado */
+  .titulo {
+    @apply font-display text-4xl font-medium uppercase leading-[0.95] tracking-[0.01em]
+           text-white sm:text-5xl lg:text-6xl;
+  }
+  .titulo em { @apply not-italic text-amarelo; }
+
+  /* rótulo azul com risco à esquerda, como nas seções do site */
+  .rotulo {
+    @apply flex items-center gap-3 text-[11px] font-semibold uppercase
+           tracking-[0.18em] text-azul-cl;
+  }
+  .rotulo::before { content: ""; @apply block h-4 w-0.5 bg-azul; }
+
+  /* variação centralizada: risco dos dois lados */
+  .rotulo-centro { @apply justify-center; }
+  .rotulo-centro::before,
+  .rotulo-centro::after { content: ""; @apply block h-px w-9 bg-azul; }
+
+  .btn-azul {
+    @apply btn bg-azul text-white shadow-lg shadow-azul/25 hover:bg-azul/85;
+  }
+
+  .cartao {
+    @apply rounded-2xl border border-linha bg-carvao;
+  }
+
+  /* item de lista com o check amarelo do site */
+  .check {
+    @apply flex items-center gap-3 text-sm text-mudo;
+  }
+  .check::before {
+    content: "✓";
+    @apply grid h-5 w-5 shrink-0 place-items-center rounded-full bg-amarelo
+           text-[11px] font-bold text-breu;
+  }
+
+  /* FAQ em <details>: anima a altura onde o navegador suporta
+     `::details-content` (nos outros abre sem animação). */
+  .faq { interpolate-size: allow-keywords; }
+  .faq::details-content {
+    block-size: 0;
+    overflow-y: clip;
+    transition:
+      block-size 300ms cubic-bezier(.16, 1, .3, 1),
+      content-visibility 300ms allow-discrete;
+  }
+  .faq[open]::details-content { block-size: auto; }
+
+  .js .rv { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+  .js .rv-in { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .rv { opacity: 1; transform: none; transition: none; }
+  .marquee { animation: none; }
+  .faq::details-content { transition: none; }
+}
+
+/* esteira das transformações */
+@keyframes desliza { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@utility marquee { animation: desliza 60s linear infinite; }

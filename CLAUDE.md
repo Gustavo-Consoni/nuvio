@@ -50,9 +50,11 @@ npx astro dev stop
 
 ## Convenções
 
-**Layouts.** Toda página deve usar `src/layouts/Base.astro`, que contém o
-`<html>`, `<head>`, meta tags e Open Graph. Ele também faz o
+**Layouts.** Toda página do site deve usar `src/layouts/Base.astro`: o
+`Documento.astro` (`<html>`, `<head>`, meta tags, ícones e Open Graph) mais o
 `import "../styles/global.css"` — páginas não devem importar o CSS de novo.
+A exceção são as páginas de demo (ver **Demos**), que usam o
+`DemoSite.astro`: o mesmo `Documento.astro`, sem o `global.css`.
 
 ```astro
 ---
@@ -64,7 +66,9 @@ import Base from "../layouts/Base.astro";
 ```
 
 Props, todas opcionais: `title` (vira `Título | Marca`; omita na home),
-`description`, `ogImage`, `noindex`, `lang`. Os defaults vêm de `src/config.ts`.
+`description`, `ogImage`, `noindex`, `lang`, `marca`, `fontes` (Google Fonts),
+`corTema`, `icone` (favicon próprio, no lugar dos do site) e `class` (do
+`<body>`). Os defaults vêm de `src/config.ts`.
 Há um `<slot name="head" />` para tags extras por página (ex.: JSON-LD).
 
 **Páginas que não devem ser indexadas** entram em `site.noindexPaths` no
@@ -72,7 +76,7 @@ Há um `<slot name="head" />` para tags extras por página (ex.: JSON-LD).
 a meta tag e o sitemap exclui a rota. Usar só a prop deixaria a página com
 `noindex` mas ainda listada no sitemap — sinais contraditórios para o Google.
 
-**Transições entre páginas.** O `Base.astro` inclui `<ClientRouter />`
+**Transições entre páginas.** O `Documento.astro` inclui `<ClientRouter />`
 (`astro:transitions`), então a navegação troca o conteúdo sem recarregar, com
 fade. Em navegador sem suporte, cai no recarregamento normal.
 
@@ -85,9 +89,12 @@ Na v7 o componente chama-se `ClientRouter`. `ViewTransitions` foi removido —
 tutoriais antigos que o usam não funcionam.
 
 **Tailwind v4.** Configurado pelo plugin Vite em `astro.config.ts`. Não existe
-`tailwind.config.js` nem PostCSS — isso é intencional. Todo o Tailwind entra
+`tailwind.config.js` nem PostCSS — isso é intencional. O Tailwind do site entra
 por `@import "tailwindcss"` em `src/styles/global.css`; customização de tema se
-faz com `@theme` nesse mesmo arquivo.
+faz com `@theme` nesse mesmo arquivo. As demos têm o seu em
+`src/styles/demos/`, com tema próprio. **Cada classe e token mora só no CSS
+de quem usa**: nada de demo no `global.css` (a exceção são as 2 cores
+`blade-*` do cartão no `TesteCartao.astro`, que é da landing).
 
 **TypeScript.** `tsconfig.json` estende `astro/tsconfigs/strict`. O
 `astro build` **não** verifica tipos por si (o esbuild apenas remove as
@@ -117,21 +124,27 @@ src/
 ├── data/nichos.ts            # texto do topo por segmento (barbearia...)
 ├── data/demo-barbearia.ts    # serviços e dados da Blade & Co. (fictícia)
 ├── data/demo-restaurante.ts  # pratos e dados da Casa Olívia (fictícia)
-├── layouts/Base.astro        # <html>, <head>, SEO, Open Graph, fontes
-├── layouts/DemoBlade.astro   # visual das páginas demo da barbearia
-├── layouts/DemoOlivia.astro  # visual das páginas demo do restaurante
+├── layouts/Documento.astro   # <html>, <head>, SEO, Open Graph, ícones, fontes
+├── layouts/Base.astro        # Documento + global.css (toda página do site)
+├── layouts/DemoSite.astro    # Documento sem global.css (todas as páginas de demo)
+├── layouts/DemoBlade.astro   # cortes e links da Blade & Co. (blade.css)
+├── layouts/DemoOlivia.astro  # cardápio e links da Casa Olívia (casa-olivia.css)
+├── components/ClasseJs.astro # script inline da classe .js no <html>
 ├── components/landing/       # uma seção por arquivo + Landing.astro que monta
 ├── components/icons/         # SVGs reaproveitados (check, seta, WhatsApp)
 ├── scripts/pagina.ts         # aCadaPagina(): ciclo de vida com o ClientRouter
+├── scripts/demos.ts          # menu, entrada ao rolar, contagem... dos sites demo
 ├── pages/index.astro         # landing completa
 ├── pages/barbearia.astro     # landing com os textos do segmento barbearia
-├── pages/demos/barbearia/    # catálogo de cortes e página de links (noindex)
+├── pages/demos/barbearia/    # site demo (index), cortes e links (noindex)
 ├── pages/demos/casa-olivia/  # cardápio e página de links do restaurante (noindex)
+├── pages/demos/{eventos,refugio,restaurante,treino}/  # sites demo (noindex)
 ├── pages/404.astro           # página de erro
 ├── pages/robots.txt.ts       # robots.txt gerado no build
-└── styles/global.css         # Tailwind, tokens (@theme) e componentes
+├── styles/global.css         # Tailwind, tokens (@theme) e componentes
+└── styles/demos/             # Tailwind das demos (ver **Demos**)
 public/
-├── demos/                    # 5 sites demo prontos (HTML + CSS compilado)
+├── demos/<nome>/static/images/  # fotos dos sites demo
 ├── images/logo.webp          # logo do header e rodapé (108px, gerado de nuvio.png)
 ├── images/projetos/          # prints dos cards de exemplos
 └── favicon.ico, icon-192.png, apple-touch-icon.png  # gerados de nuvio.png
@@ -174,7 +187,7 @@ com `prefers-reduced-motion` mostra o cardápio aberto parado. Estado em
 iframe desenhado em 390px e encolhido para a tela do celular.
 
 **`noindexPaths` aceita prefixo** (`/demos/*`); use sempre `semIndice()` do
-`config.ts`, que é o que o Base e o sitemap consultam.
+`config.ts`, que é o que o Documento e o sitemap consultam.
 
 Migrada do site em HTML puro de `../vender-sites/website-seller`. O Alpine.js
 foi removido: a interação é feita com `<script>` do Astro dentro de cada
@@ -190,7 +203,8 @@ roda no `astro:page-load` e entrega um `AbortSignal` abortado antes da próxima
 troca de página. Passe `{ signal }` a todo `addEventListener` em `window` e
 limpe timers no `abort`, senão eles acumulam a cada navegação.
 
-**A classe `.js` no `<html>`.** Um script inline (em `Landing.astro`) põe a
+**A classe `.js` no `<html>`.** Um script inline (`ClasseJs.astro`, usado
+no `Landing.astro` e no `DemoSite.astro`) põe a
 classe e a remove se `data-pronto` não aparecer em 3s. O CSS só esconde algo
 (menu mobile, `.reveal`, itens fora do filtro das demos) sob `.js`. Sem
 isso, uma falha de JS deixaria conteúdo invisível.
@@ -207,12 +221,29 @@ misturada de propósito. Prints de 800×600 em `public/images/projetos/`.
 
 **FAQ é `<details name="faq">`**: acordeão exclusivo nativo, sem JS.
 
-**Demos** (`public/demos/`) são sites independentes com o próprio CSS já
-compilado e Alpine via CDN; o Astro só os copia. O fonte (`input.css`) e o
-build deles continuam no projeto original. Cada `index.html` tem um `<style>`
-com a mesma fonte base fluida do site; demo nova ou recopiada precisa recebê-lo
-também. O `@source "../"` no `global.css`
-existe para o Tailwind não varrer esses HTMLs.
+**Demos.** Os 5 sites demo (barbearia, eventos, refugio, restaurante, treino)
+são páginas Astro em `src/pages/demos/<nome>/index.astro`, sem Alpine. Todas
+as páginas de demo usam o `DemoSite.astro` e não o `Base`: com o `global.css`
+junto, os temas brigariam pelas mesmas variáveis (`--font-sans`, cores) e
+pelo `<body>`. Pelo mesmo motivo o `global.css` exclui `pages/demos` e os
+layouts `DemoBlade`/`DemoOlivia` do `@source`. CSS em `src/styles/demos/`:
+
+- `<nome>.css`: um por site demo, com tema e componentes próprios.
+- `blade-tema.css`: fontes, cores e base da Blade & Co. Parcial (sem
+  `@import "tailwindcss"`), importado pelo `barbearia.css` e pelo `blade.css`
+  (cortes e links), para as três páginas terem a mesma identidade.
+- `casa-olivia.css`: cardápio e links da Casa Olívia.
+- `comum.css`: só `@utility` e tema (`recolhe`, painel que abre pela altura;
+  `filtravel`, item de catálogo que some com `data-fora`; `animate-surge`).
+  O Tailwind só gera o que a página usa, então importar não custa nada.
+
+As fotos ficam em `public/demos/<nome>/static/images/` (caminho absoluto).
+
+Os scripts seguem as regras do site (`aCadaPagina`, estado em atributo) e
+reaproveitam `src/scripts/demos.ts`: `menu()` e `alternar()` (botão com
+`aria-controls` que liga `data-aberto` no painel), `rolagem()` (`data-rolou`),
+`revelar()` (`.rv-in` em `[data-revelar]`, com `data-atraso` e `data-margem`),
+`contar()` (`[data-contar]`) e `paralaxe()`. Os formulários só simulam o envio.
 
 **Regras de texto herdadas:** nunca usar travessão (—) nem meia-risca (–);
 em intervalos, "Dias 2 a 4". Todo `<button>` precisa de `cursor-pointer` e
@@ -224,7 +255,8 @@ em intervalos, "Dias 2 a 4". Todo `<button>` precisa de `cursor-pointer` e
 Tamanhos (`w-`, `h-`) e posições (`top-`, `inset-`) não entram na regra.
 
 **Armadilha do compilador:** quebra de linha entre texto e tag inline é
-removida (`estar\n<span>` vira "estarvendendo"). Use `{" "}` no fim da linha.
+removida (`estar\n<span>` vira "estarvendendo"), e também entre duas tags
+inline (`</span>\n<span>` cola as duas). Use `{" "}` no fim da linha.
 
 **Reels (`reels/`).** Vídeos 9:16 para Instagram mostrando o cartão e a
 plaquinha: `reel.html?v=cardapio|google|links` (abra no navegador para ver em
@@ -238,7 +270,7 @@ nem versionar.
 
 ## Pendências conhecidas
 
-- **`public/og-image.png` não existe.** O `Base.astro` já aponta para ele, mas
+- **`public/og-image.png` não existe.** O `Documento.astro` já aponta para ele, mas
   o arquivo precisa ser criado (1200×630) ou os compartilhamentos saem sem
   imagem. É a pendência de maior impacto.
 - **Formulário de contato só simula o envio** (bloqueante). O `submit` em

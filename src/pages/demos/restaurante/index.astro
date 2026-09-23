@@ -1,40 +1,18 @@
-<!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mesa Farta | Receitas de verdade para a cozinha de casa</title>
-  <meta name="description" content="Receitas testadas, ingredientes da estação e técnica explicada sem enrolação. Um cardápio novo toda semana, direto no seu e-mail." />
-  <meta name="theme-color" content="#faf9f6" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Mesa Farta | Receitas de verdade para a cozinha de casa" />
-  <meta property="og:description" content="Receitas testadas, ingredientes da estação e técnica sem enrolação." />
+---
+/**
+ * Site demo da Mesa Farta, blog de receitas fictício. Tema próprio em
+ * src/styles/demos/restaurante.css (ver src/layouts/DemoSite.astro).
+ */
+import DemoSite from "../../../layouts/DemoSite.astro";
+import "../../../styles/demos/restaurante.css";
+---
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-
-  <script>
-    document.documentElement.classList.add('js');
-    setTimeout(function () { if (!window.Alpine) document.documentElement.classList.remove('js'); }, 3000);
-  </script>
-
-  <link rel="stylesheet" href="./static/output.css" />
-  <!-- Fonte base fluida, igual à do site principal (html em src/styles/global.css). -->
-  <style>
-    html {
-      text-size-adjust: 100%;
-      -webkit-text-size-adjust: 100%;
-      font-size: clamp(12px, 4vw, 16px);
-    }
-  </style>
-  <script defer src="./app.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-</head>
-
-<body x-data="mesa()">
+<DemoSite
+  title="Receitas de verdade para a cozinha de casa"
+  marca="Mesa Farta"
+  description="Receitas testadas, ingredientes da estação e técnica explicada sem enrolação. Um cardápio novo toda semana, direto no seu e-mail."
+  fontes="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Geist+Mono:wght@400;500;600&display=swap"
+  corTema="#faf9f6">
 
   <!-- ================= HEADER ================= -->
   <header class="fixed inset-x-0 top-4 z-50 px-5 sm:px-8">
@@ -52,34 +30,38 @@
       </nav>
 
       <div class="flex shrink-0 items-center gap-2">
-        <button type="button" @click="alternarBusca()" :aria-expanded="busca" aria-controls="termo" aria-label="Buscar receita"
+        <button type="button" data-busca-botao aria-expanded="false" aria-controls="busca" aria-label="Buscar receita"
                 class="grid h-10 w-10 cursor-pointer place-items-center rounded-full text-mute transition duration-300 hover:bg-cloud hover:text-deep">
           <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/></svg>
         </button>
         <a href="#clube" class="btn-noite hidden sm:inline-flex">Inscrever-se</a>
-        <button @click="menu = !menu" :aria-expanded="menu" aria-label="Abrir menu"
-                class="grid h-10 w-10 cursor-pointer place-items-center rounded-full border border-line text-deep lg:hidden">
-          <svg x-show="!menu" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
-          <svg x-show="menu" x-cloak class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+        <button type="button" data-menu-botao aria-controls="menu-mobile" aria-expanded="false" aria-label="Abrir menu"
+                class="group grid h-10 w-10 cursor-pointer place-items-center rounded-full border border-line text-deep lg:hidden">
+          <svg class="h-4 w-4 group-aria-expanded:hidden" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg class="hidden h-4 w-4 group-aria-expanded:block" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
       </div>
     </div>
 
-    <div x-show="menu" x-collapse x-cloak class="lg:hidden">
+    <div id="menu-mobile" class="recolhe lg:hidden">
+      <div>
       <div class="mx-auto mt-2 max-w-5xl rounded-3xl border border-line bg-white p-3 shadow-lg shadow-ink/5">
-        <a href="#receitas" @click="menu=false" class="block rounded-2xl px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-mute hover:bg-cloud hover:text-deep">Receitas</a>
-        <a href="#chef" @click="menu=false" class="block rounded-2xl px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-mute hover:bg-cloud hover:text-deep">A cozinha</a>
-        <a href="#mundo" @click="menu=false" class="block rounded-2xl px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-mute hover:bg-cloud hover:text-deep">Sabores</a>
-        <a href="#clube" @click="menu=false" class="block rounded-2xl px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-mute hover:bg-cloud hover:text-deep">Clube</a>
-        <a href="#clube" @click="menu=false" class="btn-noite mt-2 w-full">Inscrever-se</a>
+        <a href="#receitas" class="block rounded-2xl px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-mute hover:bg-cloud hover:text-deep">Receitas</a>
+        <a href="#chef" class="block rounded-2xl px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-mute hover:bg-cloud hover:text-deep">A cozinha</a>
+        <a href="#mundo" class="block rounded-2xl px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-mute hover:bg-cloud hover:text-deep">Sabores</a>
+        <a href="#clube" class="block rounded-2xl px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-mute hover:bg-cloud hover:text-deep">Clube</a>
+        <a href="#clube" class="btn-noite mt-2 w-full">Inscrever-se</a>
+      </div>
       </div>
     </div>
 
-    <div x-show="busca" x-collapse x-cloak>
+    <div id="busca" class="recolhe">
+      <div>
       <div class="mx-auto mt-2 max-w-5xl rounded-3xl border border-line bg-white p-3 shadow-lg shadow-ink/5">
         <label for="termo" class="sr-only">Buscar receita</label>
-        <input id="termo" type="search" x-model="termo" x-ref="termo" @keydown.escape="fecharBusca()"
+        <input id="termo" type="search"
                placeholder="Buscar receita: massa, salada, chocolate…" class="campo" />
+      </div>
       </div>
     </div>
   </header>
@@ -90,7 +72,7 @@
 
       <!-- cartão grande -->
       <article class="relative overflow-hidden rounded-bento bg-deep">
-        <img src="./static/images/hero-capa.webp" alt="Prato de sopa rústica com pão artesanal" width="1000" height="935"
+        <img src="/demos/restaurante/static/images/hero-capa.webp" alt="Prato de sopa rústica com pão artesanal" width="1000" height="935"
              decoding="async" fetchpriority="high" class="absolute inset-0 h-full w-full object-cover" />
         <!-- o título branco cai em cima da parte clara da foto: sem este degradê
              mais forte (como o from-black/60 da referência) o contraste não fecha -->
@@ -122,14 +104,14 @@
       <!-- coluna de dois cartões -->
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
         <article class="relative overflow-hidden rounded-bento border border-line bg-white">
-          <img src="./static/images/ervas.webp" alt="Ervas frescas dispostas em um prato" width="600" height="556"
+          <img src="/demos/restaurante/static/images/ervas.webp" alt="Ervas frescas dispostas em um prato" width="600" height="556"
                loading="lazy" decoding="async" class="h-full min-h-[220px] w-full object-cover" />
           <div class="absolute left-6 right-6 top-6">
             <span class="block font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-mute">Da estação</span>
             <h2 class="mt-1.5 max-w-[15rem] font-serif text-2xl leading-tight text-ink">Ervas frescas da estação</h2>
           </div>
           <div class="absolute bottom-4 left-4 flex items-center gap-3 rounded-full bg-white/90 p-1.5 pr-4 backdrop-blur">
-            <img src="./static/images/chef-avatar.webp" alt="" width="120" height="120" loading="lazy" class="h-9 w-9 rounded-full object-cover" />
+            <img src="/demos/restaurante/static/images/chef-avatar.webp" alt="" width="120" height="120" loading="lazy" class="h-9 w-9 rounded-full object-cover" />
             <div class="leading-tight">
               <p class="text-xs font-bold text-deep">Chef Helena</p>
               <p class="font-mono text-[10px] uppercase tracking-[0.1em] text-mute2">Colheita da semana</p>
@@ -138,7 +120,7 @@
         </article>
 
         <article class="group relative overflow-hidden rounded-bento bg-deep">
-          <img src="./static/images/chef-card.webp" alt="Helena na cozinha do restaurante" width="600" height="560"
+          <img src="/demos/restaurante/static/images/chef-card.webp" alt="Helena na cozinha do restaurante" width="600" height="560"
                loading="lazy" decoding="async" class="h-full min-h-[220px] w-full object-cover grayscale transition duration-300 group-hover:grayscale-0" />
           <div class="absolute inset-0 bg-gradient-to-t from-deep/85 to-transparent"></div>
           <div class="absolute inset-x-4 bottom-4 rounded-2xl bg-white/10 p-4 backdrop-blur">
@@ -177,27 +159,27 @@
   <section id="receitas" class="py-20 lg:py-28">
     <div class="wrap">
       <div class="flex items-end justify-between gap-8">
-        <div class="rv" x-intersect.once="$el.classList.add('rv-in')">
+        <div class="rv" data-revelar>
           <h2 class="display text-4xl italic text-ink">Direto da cozinha</h2>
           <p class="meta mt-3">Novas receitas para testar esta semana</p>
         </div>
         <div class="hidden shrink-0 gap-2 sm:flex">
-          <button @click="rolar(-1)" aria-label="Anterior" :disabled="!temFolga"
+          <button type="button" data-rolar="-1" aria-label="Anterior" disabled
                   class="grid h-11 w-11 cursor-pointer place-items-center rounded-full border border-line bg-white text-deep transition duration-300 hover:border-mute2 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-line">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
           </button>
-          <button @click="rolar(1)" aria-label="Próximo" :disabled="!temFolga"
+          <button type="button" data-rolar="1" aria-label="Próximo" disabled
                   class="grid h-11 w-11 cursor-pointer place-items-center rounded-full border border-line bg-white text-deep transition duration-300 hover:border-mute2 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-line">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
           </button>
         </div>
       </div>
 
-      <div x-ref="trilho" class="mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div data-trilho class="mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
 
-        <article x-show="combina($el)" class="group w-[74vw] shrink-0 snap-start sm:w-[46vw] lg:w-[calc((100%-3.75rem)/4)]">
+        <article class="group w-[74vw] shrink-0 snap-start sm:w-[46vw] lg:w-[calc((100%-3.75rem)/4)]">
           <div class="relative overflow-hidden rounded-2xl bg-cloud">
-            <img src="./static/images/receita-1.webp" alt="Massa artesanal com molho de tomate e manjericão" width="500" height="667"
+            <img src="/demos/restaurante/static/images/receita-1.webp" alt="Massa artesanal com molho de tomate e manjericão" width="500" height="667"
                  loading="lazy" decoding="async" class="aspect-[3/4] w-full object-cover transition duration-300 group-hover:scale-[1.03]" />
             <span class="pilula absolute left-3 top-3">Jantar</span>
           </div>
@@ -205,9 +187,9 @@
           <p class="meta mt-1.5">45 min &middot; Intermediário</p>
         </article>
 
-        <article x-show="combina($el)" class="group w-[74vw] shrink-0 snap-start sm:w-[46vw] lg:w-[calc((100%-3.75rem)/4)]">
+        <article class="group w-[74vw] shrink-0 snap-start sm:w-[46vw] lg:w-[calc((100%-3.75rem)/4)]">
           <div class="relative overflow-hidden rounded-2xl bg-cloud">
-            <img src="./static/images/receita-2.webp" alt="Salada colorida com tomates e flores comestíveis" width="500" height="667"
+            <img src="/demos/restaurante/static/images/receita-2.webp" alt="Salada colorida com tomates e flores comestíveis" width="500" height="667"
                  loading="lazy" decoding="async" class="aspect-[3/4] w-full object-cover transition duration-300 group-hover:scale-[1.03]" />
             <span class="pilula absolute left-3 top-3">Leve</span>
           </div>
@@ -215,9 +197,9 @@
           <p class="meta mt-1.5">15 min &middot; Fácil</p>
         </article>
 
-        <article x-show="combina($el)" class="group w-[74vw] shrink-0 snap-start sm:w-[46vw] lg:w-[calc((100%-3.75rem)/4)]">
+        <article class="group w-[74vw] shrink-0 snap-start sm:w-[46vw] lg:w-[calc((100%-3.75rem)/4)]">
           <div class="relative overflow-hidden rounded-2xl bg-cloud">
-            <img src="./static/images/receita-3.webp" alt="Doces variados vistos de cima" width="500" height="667"
+            <img src="/demos/restaurante/static/images/receita-3.webp" alt="Doces variados vistos de cima" width="500" height="667"
                  loading="lazy" decoding="async" class="aspect-[3/4] w-full object-cover transition duration-300 group-hover:scale-[1.03]" />
             <span class="pilula absolute left-3 top-3">Doce</span>
           </div>
@@ -225,9 +207,9 @@
           <p class="meta mt-1.5">60 min &middot; Difícil</p>
         </article>
 
-        <article x-show="combina($el)" class="group w-[74vw] shrink-0 snap-start sm:w-[46vw] lg:w-[calc((100%-3.75rem)/4)]">
+        <article class="group w-[74vw] shrink-0 snap-start sm:w-[46vw] lg:w-[calc((100%-3.75rem)/4)]">
           <div class="relative overflow-hidden rounded-2xl bg-cloud">
-            <img src="./static/images/receita-4.webp" alt="Costela assada em tábua de madeira" width="500" height="667"
+            <img src="/demos/restaurante/static/images/receita-4.webp" alt="Costela assada em tábua de madeira" width="500" height="667"
                  loading="lazy" decoding="async" class="aspect-[3/4] w-full object-cover transition duration-300 group-hover:scale-[1.03]" />
             <span class="pilula absolute left-3 top-3">Domingo</span>
           </div>
@@ -237,8 +219,8 @@
 
       </div>
 
-      <p x-show="vazio" x-cloak class="mt-4 text-[15px] text-mute">
-        Nenhuma receita com esse nome por aqui. Tente <button type="button" @click="termo = ''" class="cursor-pointer text-rose underline underline-offset-4">limpar a busca</button>.
+      <p data-vazio hidden class="mt-4 text-[15px] text-mute">
+        Nenhuma receita com esse nome por aqui. Tente <button type="button" data-limpar-busca class="cursor-pointer text-rose underline underline-offset-4">limpar a busca</button>.
       </p>
     </div>
   </section>
@@ -285,7 +267,7 @@
         </div>
 
         <div class="relative min-h-[340px] lg:min-h-full">
-          <img src="./static/images/chef-perfil.webp" alt="Helena na cozinha" width="700" height="745"
+          <img src="/demos/restaurante/static/images/chef-perfil.webp" alt="Helena na cozinha" width="700" height="745"
                loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" />
           <div class="absolute bottom-6 right-6 max-w-xs rounded-2xl bg-white/80 p-4 shadow-lg backdrop-blur-md">
             <div class="flex items-center gap-3">
@@ -302,7 +284,7 @@
   <section id="mundo" class="pb-20 lg:pb-28">
     <div class="wrap grid items-center gap-10 lg:grid-cols-[1fr_1.5fr] lg:gap-16">
 
-      <div class="rv" x-intersect.once="$el.classList.add('rv-in')">
+      <div class="rv" data-revelar>
         <h2 class="display text-3xl sm:text-4xl">Sabores do mundo</h2>
         <p class="mt-4 text-[15px] leading-relaxed text-mute">
           Toda semana a gente puxa uma linha de uma cozinha diferente e adapta para
@@ -310,69 +292,65 @@
         </p>
 
         <ul class="mt-9">
-          <li><button @click="cozinha = 0" class="flex w-full cursor-pointer items-center justify-between gap-4 border-b border-line py-4 text-left transition duration-300" :class="cozinha === 0 ? 'text-deep' : 'text-mute2 hover:text-deep'">
+          <li><button type="button" data-cozinha="0" aria-pressed="true" class="flex w-full cursor-pointer items-center justify-between gap-4 border-b border-line py-4 text-left text-mute2 transition duration-300 hover:text-deep aria-pressed:text-deep">
             <span class="text-sm font-bold uppercase tracking-[0.1em]">01. Italiana</span>
-            <span x-show="cozinha === 0" class="font-mono text-[10px] uppercase tracking-[0.1em]">Massas e risotos</span>
+            <span class="rotulo-cozinha font-mono text-[10px] uppercase tracking-[0.1em]">Massas e risotos</span>
           </button></li>
-          <li><button @click="cozinha = 1" class="flex w-full cursor-pointer items-center justify-between gap-4 border-b border-line py-4 text-left transition duration-300" :class="cozinha === 1 ? 'text-deep' : 'text-mute2 hover:text-deep'">
+          <li><button type="button" data-cozinha="1" aria-pressed="false" class="flex w-full cursor-pointer items-center justify-between gap-4 border-b border-line py-4 text-left text-mute2 transition duration-300 hover:text-deep aria-pressed:text-deep">
             <span class="text-sm font-bold uppercase tracking-[0.1em]">02. Asiática</span>
-            <span x-show="cozinha === 1" x-cloak class="font-mono text-[10px] uppercase tracking-[0.1em]">Wok e caldos</span>
+            <span class="rotulo-cozinha font-mono text-[10px] uppercase tracking-[0.1em]">Wok e caldos</span>
           </button></li>
-          <li><button @click="cozinha = 2" class="flex w-full cursor-pointer items-center justify-between gap-4 border-b border-line py-4 text-left transition duration-300" :class="cozinha === 2 ? 'text-deep' : 'text-mute2 hover:text-deep'">
+          <li><button type="button" data-cozinha="2" aria-pressed="false" class="flex w-full cursor-pointer items-center justify-between gap-4 border-b border-line py-4 text-left text-mute2 transition duration-300 hover:text-deep aria-pressed:text-deep">
             <span class="text-sm font-bold uppercase tracking-[0.1em]">03. Francesa</span>
-            <span x-show="cozinha === 2" x-cloak class="font-mono text-[10px] uppercase tracking-[0.1em]">Molhos e massas doces</span>
+            <span class="rotulo-cozinha font-mono text-[10px] uppercase tracking-[0.1em]">Molhos e massas doces</span>
           </button></li>
-          <li><button @click="cozinha = 3" class="flex w-full cursor-pointer items-center justify-between gap-4 border-b border-line py-4 text-left transition duration-300" :class="cozinha === 3 ? 'text-deep' : 'text-mute2 hover:text-deep'">
+          <li><button type="button" data-cozinha="3" aria-pressed="false" class="flex w-full cursor-pointer items-center justify-between gap-4 border-b border-line py-4 text-left text-mute2 transition duration-300 hover:text-deep aria-pressed:text-deep">
             <span class="text-sm font-bold uppercase tracking-[0.1em]">04. Brasileira</span>
-            <span x-show="cozinha === 3" x-cloak class="font-mono text-[10px] uppercase tracking-[0.1em]">Raiz e regionais</span>
+            <span class="rotulo-cozinha font-mono text-[10px] uppercase tracking-[0.1em]">Raiz e regionais</span>
           </button></li>
         </ul>
       </div>
 
       <div class="relative overflow-hidden rounded-mapa bg-deep p-6 sm:p-10">
-        <img src="./static/images/mapa.svg" alt="Mapa-múndi com as cozinhas em destaque" width="811" height="529"
+        <img src="/demos/restaurante/static/images/mapa.svg" alt="Mapa-múndi com as cozinhas em destaque" width="811" height="529"
              loading="lazy" decoding="async" class="w-full opacity-25 invert" />
 
         <!-- pinos posicionados em porcentagem sobre o mapa -->
-        <div class="absolute left-[47%] top-[38%] -translate-x-1/2">
+        <div data-pino="0" data-ativo class="group absolute left-[47%] top-[38%] -translate-x-1/2">
           <!-- cartão do pino: a referência mostra uma miniatura acima do ponto -->
-          <div x-show="cozinha === 0" class="absolute bottom-full left-1/2 mb-3 w-[8.75rem] -translate-x-1/2 rounded-lg bg-white p-2 shadow-lg">
-            <img src="./static/images/pino-1.webp" alt="" width="160" height="160" decoding="async"
+          <div class="pino-cartao absolute bottom-full left-1/2 mb-3 w-[8.75rem] -translate-x-1/2 rounded-lg bg-white p-2 shadow-lg">
+            <img src="/demos/restaurante/static/images/pino-1.webp" alt="" width="160" height="160" decoding="async"
                  class="h-16 w-full rounded-md object-cover" />
             <p class="mt-2 text-center font-mono text-[10px] uppercase tracking-[0.1em] text-deep">Pasta fresca</p>
           </div>
-          <span class="block h-3 w-3 rounded-full ring-4 transition duration-300"
-                :class="cozinha === 0 ? 'bg-rose ring-rose/25' : 'bg-white/50 ring-white/10'"></span>
+          <span class="block h-3 w-3 rounded-full bg-white/50 ring-4 ring-white/10 transition duration-300 group-data-ativo:bg-rose group-data-ativo:ring-rose/25"></span>
         </div>
-        <div class="absolute left-[72%] top-[44%] -translate-x-1/2">
+        <div data-pino="1" class="group absolute left-[72%] top-[44%] -translate-x-1/2">
           <!-- cartão do pino: a referência mostra uma miniatura acima do ponto -->
-          <div x-show="cozinha === 1" x-cloak class="pino-extra absolute bottom-full left-1/2 mb-3 w-[8.75rem] -translate-x-1/2 rounded-lg bg-white p-2 shadow-lg">
-            <img src="./static/images/pino-2.webp" alt="" width="160" height="160" decoding="async"
+          <div class="pino-cartao pino-extra absolute bottom-full left-1/2 mb-3 w-[8.75rem] -translate-x-1/2 rounded-lg bg-white p-2 shadow-lg">
+            <img src="/demos/restaurante/static/images/pino-2.webp" alt="" width="160" height="160" decoding="async"
                  class="h-16 w-full rounded-md object-cover" />
             <p class="mt-2 text-center font-mono text-[10px] uppercase tracking-[0.1em] text-deep">Dim sum</p>
           </div>
-          <span class="block h-3 w-3 rounded-full ring-4 transition duration-300"
-                :class="cozinha === 1 ? 'bg-rose ring-rose/25' : 'bg-white/50 ring-white/10'"></span>
+          <span class="block h-3 w-3 rounded-full bg-white/50 ring-4 ring-white/10 transition duration-300 group-data-ativo:bg-rose group-data-ativo:ring-rose/25"></span>
         </div>
-        <div class="absolute left-[45%] top-[35%] -translate-x-1/2">
+        <div data-pino="2" class="group absolute left-[45%] top-[35%] -translate-x-1/2">
           <!-- cartão do pino: a referência mostra uma miniatura acima do ponto -->
-          <div x-show="cozinha === 2" x-cloak class="pino-extra absolute bottom-full left-1/2 mb-3 w-[8.75rem] -translate-x-1/2 rounded-lg bg-white p-2 shadow-lg">
-            <img src="./static/images/pino-3.webp" alt="" width="160" height="160" decoding="async"
+          <div class="pino-cartao pino-extra absolute bottom-full left-1/2 mb-3 w-[8.75rem] -translate-x-1/2 rounded-lg bg-white p-2 shadow-lg">
+            <img src="/demos/restaurante/static/images/pino-3.webp" alt="" width="160" height="160" decoding="async"
                  class="h-16 w-full rounded-md object-cover" />
             <p class="mt-2 text-center font-mono text-[10px] uppercase tracking-[0.1em] text-deep">Molho de manteiga</p>
           </div>
-          <span class="block h-3 w-3 rounded-full ring-4 transition duration-300"
-                :class="cozinha === 2 ? 'bg-rose ring-rose/25' : 'bg-white/50 ring-white/10'"></span>
+          <span class="block h-3 w-3 rounded-full bg-white/50 ring-4 ring-white/10 transition duration-300 group-data-ativo:bg-rose group-data-ativo:ring-rose/25"></span>
         </div>
-        <div class="absolute left-[33%] top-[64%] -translate-x-1/2">
+        <div data-pino="3" class="group absolute left-[33%] top-[64%] -translate-x-1/2">
           <!-- cartão do pino: a referência mostra uma miniatura acima do ponto -->
-          <div x-show="cozinha === 3" x-cloak class="pino-extra absolute bottom-full left-1/2 mb-3 w-[8.75rem] -translate-x-1/2 rounded-lg bg-white p-2 shadow-lg">
-            <img src="./static/images/pino-4.webp" alt="" width="160" height="160" decoding="async"
+          <div class="pino-cartao pino-extra absolute bottom-full left-1/2 mb-3 w-[8.75rem] -translate-x-1/2 rounded-lg bg-white p-2 shadow-lg">
+            <img src="/demos/restaurante/static/images/pino-4.webp" alt="" width="160" height="160" decoding="async"
                  class="h-16 w-full rounded-md object-cover" />
             <p class="mt-2 text-center font-mono text-[10px] uppercase tracking-[0.1em] text-deep">Costela na brasa</p>
           </div>
-          <span class="block h-3 w-3 rounded-full ring-4 transition duration-300"
-                :class="cozinha === 3 ? 'bg-rose ring-rose/25' : 'bg-white/50 ring-white/10'"></span>
+          <span class="block h-3 w-3 rounded-full bg-white/50 ring-4 ring-white/10 transition duration-300 group-data-ativo:bg-rose group-data-ativo:ring-rose/25"></span>
         </div>
 
       </div>
@@ -382,7 +360,7 @@
   <!-- ================= CLUBE ================= -->
   <section id="clube" class="pb-20 lg:pb-28">
     <div class="wrap">
-      <div class="mx-auto max-w-2xl text-center rv" x-intersect.once="$el.classList.add('rv-in')">
+      <div class="mx-auto max-w-2xl text-center rv" data-revelar>
         <span class="selo">Da nossa mesa</span>
         <h2 class="display mt-4 text-3xl tracking-[-0.025em] sm:text-4xl lg:text-5xl">Entra pro clube</h2>
         <p class="mt-5 text-[15px] leading-relaxed text-mute">
@@ -393,7 +371,7 @@
 
       <div class="mt-14 grid items-start gap-6 lg:grid-cols-3">
 
-        <article class="cartao group p-8 text-center transition duration-300 hover:-translate-y-1 hover:shadow-xl rv" x-intersect.once="$el.classList.add('rv-in')">
+        <article class="cartao group p-8 text-center transition duration-300 hover:-translate-y-1 hover:shadow-xl rv" data-revelar>
           <span class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-cloud text-mute shadow-sm transition duration-300 group-hover:rotate-6 group-hover:scale-110 group-hover:bg-rose group-hover:text-white"><svg aria-hidden="true" class="h-7 w-7" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8V11C17 13.7614 14.7614 16 12 16C9.23858 16 7 13.7614 7 11V8Z"/><path stroke-linecap="round" d="M11 8H13"/><path stroke-linecap="round" d="M10 11L14 11"/><path stroke-linecap="round" d="M20 10V11C20 15.4183 16.4183 19 12 19C7.58172 19 4 15.4183 4 11V10"/><path stroke-linecap="round" d="M12 19V22"/></g></svg></span>
           <h3 class="mt-6 text-lg font-bold text-deep">Podcast da cozinha</h3>
           <p class="mt-3 text-sm leading-relaxed text-mute">
@@ -406,7 +384,7 @@
           </a>
         </article>
 
-        <article class="relative rounded-card border border-line border-t-4 border-t-rose bg-white p-8 text-center shadow-xl shadow-ink/5 rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 110)">
+        <article class="relative rounded-card border border-line border-t-4 border-t-rose bg-white p-8 text-center shadow-xl shadow-ink/5 rv" data-revelar data-atraso="110">
           <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-deep px-4 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-white">Mais popular</span>
           <span class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-rose-soft text-rose shadow-sm transition duration-300 group-hover:-rotate-6 group-hover:scale-110 group-hover:bg-rose group-hover:text-white"><svg aria-hidden="true" class="h-7 w-7" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12C2 8.22876 2 6.34315 3.17157 5.17157C4.34315 4 6.22876 4 10 4H14C17.7712 4 19.6569 4 20.8284 5.17157C22 6.34315 22 8.22876 22 12C22 15.7712 22 17.6569 20.8284 18.8284C19.6569 20 17.7712 20 14 20H10C6.22876 20 4.34315 20 3.17157 18.8284C2 17.6569 2 15.7712 2 12Z"/><path stroke-linecap="round" d="M6 8L8.1589 9.79908C9.99553 11.3296 10.9139 12.0949 12 12.0949C13.0861 12.0949 14.0045 11.3296 15.8411 9.79908L18 8"/></g></svg></span>
           <h3 class="mt-6 text-lg font-bold text-deep">Cardápio da semana</h3>
@@ -414,16 +392,17 @@
             Todo domingo: cinco receitas, a lista de compras já somada e o que fazer
             com a sobra de cada uma.
           </p>
-          <form @submit.prevent="inscrever()" novalidate class="mt-6 space-y-3">
-            <input type="email" x-model="email" placeholder="seu@email.com.br" class="campo text-center" :class="erro && '!border-rose'" />
-            <p x-show="erro" x-cloak class="font-mono text-[10px] uppercase tracking-[0.1em] text-rose" x-text="erro"></p>
+          <form data-clube novalidate class="mt-6 space-y-3">
+            <label for="email-clube" class="sr-only">Seu e-mail</label>
+            <input id="email-clube" type="email" name="email" placeholder="seu@email.com.br" class="campo text-center aria-invalid:border-rose" />
+            <p data-erro hidden class="font-mono text-[10px] uppercase tracking-[0.1em] text-rose"></p>
             <button type="submit" class="btn-escuro w-full cursor-pointer !rounded-xl">
-              <span x-text="inscrito ? 'Inscrição confirmada' : 'Inscrever-se grátis'">Inscrever-se grátis</span>
+              <span data-rotulo-envio>Inscrever-se grátis</span>
             </button>
           </form>
         </article>
 
-        <article class="cartao group p-8 text-center transition duration-300 hover:-translate-y-1 hover:shadow-xl rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 220)">
+        <article class="cartao group p-8 text-center transition duration-300 hover:-translate-y-1 hover:shadow-xl rv" data-revelar data-atraso="220">
           <span class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-cloud text-mute shadow-sm transition duration-300 group-hover:rotate-6 group-hover:scale-110 group-hover:bg-rose group-hover:text-white"><svg aria-hidden="true" class="h-7 w-7" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" d="M22 22H2"/><path stroke-linecap="round" d="M20 22V11"/><path stroke-linecap="round" d="M4 22V11"/><path stroke-linejoin="round" d="M16.5278 2H7.47214C6.26932 2 5.66791 2 5.18461 2.2987C4.7013 2.5974 4.43234 3.13531 3.89443 4.21114L2.49081 7.75929C2.16652 8.57905 1.88279 9.54525 2.42867 10.2375C2.79489 10.7019 3.36257 11 3.99991 11C5.10448 11 5.99991 10.1046 5.99991 9C5.99991 10.1046 6.89534 11 7.99991 11C9.10448 11 9.99991 10.1046 9.99991 9C9.99991 10.1046 10.8953 11 11.9999 11C13.1045 11 13.9999 10.1046 13.9999 9C13.9999 10.1046 14.8953 11 15.9999 11C17.1045 11 17.9999 10.1046 17.9999 9C17.9999 10.1046 18.8953 11 19.9999 11C20.6373 11 21.205 10.7019 21.5712 10.2375C22.1171 9.54525 21.8334 8.57905 21.5091 7.75929L20.1055 4.21114C19.5676 3.13531 19.2986 2.5974 18.8153 2.2987C18.332 2 17.7306 2 16.5278 2Z"/><path stroke-linecap="round" d="M9.5 21.5V18.5C9.5 17.5654 9.5 17.0981 9.70096 16.75C9.83261 16.522 10.022 16.3326 10.25 16.201C10.5981 16 11.0654 16 12 16C12.9346 16 13.4019 16 13.75 16.201C13.978 16.3326 14.1674 16.522 14.299 16.75C14.5 17.0981 14.5 17.5654 14.5 18.5V21.5"/></g></svg></span>
           <h3 class="mt-6 text-lg font-bold text-deep">Loja da despensa</h3>
           <p class="mt-3 text-sm leading-relaxed text-mute">
@@ -448,7 +427,7 @@
         <div class="relative flex h-[30rem] items-center justify-center px-2">
           <figure class="absolute w-full max-w-[21.25rem] rounded-card border bg-white p-8 z-10 scale-90 translate-y-8 border-line/60 shadow-lg">
             <figcaption class="mb-6 flex items-center gap-4">
-              <img src="./static/images/avatar-1.webp" alt="" width="120" height="120" loading="lazy" decoding="async"
+              <img src="/demos/restaurante/static/images/avatar-1.webp" alt="" width="120" height="120" loading="lazy" decoding="async"
                    class="h-12 w-12 rounded-full object-cover ring-2 ring-cloud" />
               <div>
                 <p class="text-sm font-semibold text-deep">Marcelo Antunes</p>
@@ -463,7 +442,7 @@
 
           <figure class="absolute w-full max-w-[21.25rem] rounded-card border bg-white p-8 z-20 scale-95 translate-y-4 border-line/60 shadow-xl">
             <figcaption class="mb-6 flex items-center gap-4">
-              <img src="./static/images/avatar-2.webp" alt="" width="120" height="120" loading="lazy" decoding="async"
+              <img src="/demos/restaurante/static/images/avatar-2.webp" alt="" width="120" height="120" loading="lazy" decoding="async"
                    class="h-12 w-12 rounded-full object-cover ring-2 ring-cloud" />
               <div>
                 <p class="text-sm font-semibold text-deep">Sara Nogueira</p>
@@ -479,7 +458,7 @@
           <figure class="absolute w-full max-w-[21.25rem] rounded-card border bg-white p-8 z-30 border-cloud shadow-2xl">
             <span class="absolute -right-3 -top-3 rounded-full bg-rose px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.05em] text-white">Novo</span>
             <figcaption class="mb-6 flex items-center gap-4">
-              <img src="./static/images/avatar-3.webp" alt="" width="120" height="120" loading="lazy" decoding="async"
+              <img src="/demos/restaurante/static/images/avatar-3.webp" alt="" width="120" height="120" loading="lazy" decoding="async"
                    class="h-12 w-12 rounded-full object-cover ring-2 ring-cloud" />
               <div>
                 <p class="text-sm font-semibold text-deep">Elena Ferraz</p>
@@ -493,7 +472,7 @@
           </figure>
         </div>
 
-        <div class="lg:pl-12 rv" x-intersect.once="$el.classList.add('rv-in')">
+        <div class="lg:pl-12 rv" data-revelar>
           <span class="selo">Depoimentos</span>
           <h2 class="display mt-4 text-3xl font-medium tracking-[-0.025em] sm:text-4xl lg:text-5xl">Histórias da<br />mesa de casa</h2>
           <p class="mt-6 text-lg font-light leading-relaxed text-mute">
@@ -573,11 +552,119 @@
       </p>
 
       <div class="mt-4 flex flex-col gap-3 text-xs text-mute2 sm:flex-row sm:items-center sm:justify-between">
-        <p>© <span x-text="new Date().getFullYear()">2026</span> Mesa Farta. Projeto demonstrativo.</p>
+        <p>© {new Date().getFullYear()} Mesa Farta. Projeto demonstrativo.</p>
         <p>Feito por <a href="#" class="text-rose transition duration-300 hover:text-deep">Nexo Studio</a></p>
       </div>
     </div>
   </footer>
 
-</body>
-</html>
+</DemoSite>
+
+<script>
+  import { aCadaPagina } from "../../../scripts/pagina";
+  import { alternar, emailValido, menu, revelar } from "../../../scripts/demos";
+
+  aCadaPagina((signal) => {
+    menu(signal, 1024);
+    revelar(signal);
+    receitas(signal);
+    cozinhas(signal);
+    clube(signal);
+  });
+
+  /** Carrossel de receitas e a busca do topo, que filtra os cards dele. */
+  function receitas(signal: AbortSignal) {
+    const trilho = document.querySelector<HTMLElement>("[data-trilho]");
+    const botaoBusca = document.querySelector<HTMLElement>("[data-busca-botao]");
+    const termo = document.querySelector<HTMLInputElement>("#termo");
+    const vazio = document.querySelector<HTMLElement>("[data-vazio]");
+    if (!trilho || !botaoBusca || !termo || !vazio) return;
+    const cards = [...trilho.querySelectorAll<HTMLElement>("article")];
+    const setas = document.querySelectorAll<HTMLButtonElement>("[data-rolar]");
+
+    // Em telas largas os 4 cards cabem inteiros: aí não há o que rolar e as
+    // setas ficam desabilitadas em vez de mortas.
+    const medir = () => {
+      const folga = trilho.scrollWidth > trilho.clientWidth + 4;
+      setas.forEach((b) => (b.disabled = !folga));
+    };
+
+    // Lê o texto do próprio card em vez de repetir o título aqui: o conteúdo
+    // continua morando só no HTML.
+    const filtrar = () => {
+      const t = termo.value.trim().toLowerCase();
+      cards.forEach((c) => (c.hidden = !!t && !c.textContent!.toLowerCase().includes(t)));
+      vazio.hidden = cards.some((c) => !c.hidden);
+      medir();
+    };
+    const limpar = () => {
+      termo.value = "";
+      filtrar();
+    };
+
+    const abrirBusca = alternar(botaoBusca, signal, {
+      aoMudar: (aberta) => (aberta ? termo.focus() : limpar()),
+    });
+    termo.addEventListener("input", filtrar, { signal });
+    termo.addEventListener("keydown", (e) => e.key === "Escape" && abrirBusca(false), { signal });
+    vazio.querySelector("[data-limpar-busca]")?.addEventListener("click", limpar, { signal });
+
+    setas.forEach((b) =>
+      b.addEventListener(
+        "click",
+        () => {
+          const card = cards.find((c) => !c.hidden);
+          const passo = card ? card.getBoundingClientRect().width + 20 : trilho.clientWidth * 0.8;
+          trilho.scrollBy({ left: Number(b.dataset.rolar) * passo, behavior: "smooth" });
+        },
+        { signal },
+      ),
+    );
+
+    medir();
+    window.addEventListener("resize", medir, { signal });
+    // as imagens podem mudar a largura dos cards ao carregar
+    window.addEventListener("load", medir, { signal });
+  }
+
+  /** "Sabores do mundo": um botão por cozinha acende o pino dela no mapa. */
+  function cozinhas(signal: AbortSignal) {
+    const botoes = document.querySelectorAll<HTMLElement>("[data-cozinha]");
+    const pinos = document.querySelectorAll<HTMLElement>("[data-pino]");
+    botoes.forEach((b) =>
+      b.addEventListener(
+        "click",
+        () => {
+          const i = b.dataset.cozinha;
+          botoes.forEach((o) => o.setAttribute("aria-pressed", String(o === b)));
+          pinos.forEach((p) => p.toggleAttribute("data-ativo", p.dataset.pino === i));
+        },
+        { signal },
+      ),
+    );
+  }
+
+  function clube(signal: AbortSignal) {
+    const form = document.querySelector<HTMLFormElement>("[data-clube]");
+    if (!form) return;
+    const email = form.elements.namedItem("email") as HTMLInputElement;
+    const erro = form.querySelector<HTMLElement>("[data-erro]")!;
+    const rotulo = form.querySelector<HTMLElement>("[data-rotulo-envio]")!;
+
+    form.addEventListener(
+      "submit",
+      (e) => {
+        e.preventDefault();
+        const ok = emailValido(email.value);
+        erro.textContent = ok ? "" : "Confira o e-mail";
+        erro.hidden = ok;
+        if (ok) email.removeAttribute("aria-invalid");
+        else email.setAttribute("aria-invalid", "true");
+        // Demo: a inscrição é simulada. Num site real, ligue o formulário no
+        // Formspree, Web3Forms ou no seu provedor de newsletter.
+        if (ok) rotulo.textContent = "Inscrição confirmada";
+      },
+      { signal },
+    );
+  }
+</script>

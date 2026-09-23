@@ -1,0 +1,35 @@
+/* Peças comuns aos CSS de demo. Tudo aqui é @utility ou tema, que o
+   Tailwind só gera quando a página daquele CSS usa: importar este arquivo
+   não põe nada a mais onde a peça não aparece. */
+
+@theme {
+  /* Mensagem que aparece ao perder o `hidden` (ex.: pedido enviado). Use
+     com `motion-reduce:animate-none`. */
+  --animate-surge: surge-demo 300ms ease both;
+
+  @keyframes surge-demo {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+/* Painel que abre e fecha pela altura (menu mobile, busca). A linha do grid
+   vai de 1fr a 0fr; o filho direto é quem corta o conteúdo, então o padding
+   e a borda ficam num elemento dentro dele. Sem JavaScript o painel fica
+   aberto. Quem liga o `data-aberto` é o alternar() de src/scripts/demos.ts. */
+@utility recolhe {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 300ms cubic-bezier(.16, 1, .3, 1);
+
+  & > * { min-height: 0; overflow: hidden; }
+  .js &:not([data-aberto]) { grid-template-rows: 0fr; }
+
+  @media (prefers-reduced-motion: reduce) { transition: none; }
+}
+
+/* Item de catálogo com filtro por categoria (cortes, cardápio): some quando
+   o script liga `data-fora`. Sem JavaScript, tudo aparece. */
+@utility filtravel {
+  .js &[data-fora] { display: none; }
+}

@@ -1,0 +1,9 @@
+/* Catálogo de cortes e página de links da Blade & Co. (DemoBlade.astro).
+   Mesmo tema do site demo (blade-tema.css), sem os componentes dele. */
+@import "tailwindcss" source(none);
+@import "./blade-tema.css";
+@import "./comum.css";
+
+@source "../../layouts/DemoBlade.astro";
+@source "../../pages/demos/barbearia/cortes.astro";
+@source "../../pages/demos/barbearia/links.astro";

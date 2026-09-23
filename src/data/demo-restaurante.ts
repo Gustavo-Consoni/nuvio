@@ -1,9 +1,9 @@
 /**
  * Demo Casa Olívia (restaurante fictício): cardápio digital e página de links.
- * As fotos são as do demo estático em public/demos/restaurante, reaproveitadas.
+ * As fotos são as do site demo da Mesa Farta (public/demos/restaurante), reaproveitadas.
  */
 
-/** Fotos do demo estático, reaproveitadas. */
+/** Fotos do site demo, reaproveitadas. */
 const foto = (arquivo: string) => `/demos/restaurante/static/images/${arquivo}`;
 
 export const olivia = {

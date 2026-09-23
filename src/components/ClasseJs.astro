@@ -1,0 +1,11 @@
+<!-- Marca que o JS está ativo. O CSS só esconde conteúdo (menu, .reveal)
+     quando esta classe existe; se os scripts não subirem em 3s ela sai e a
+     página aparece inteira, sem interação mas legível.
+     Quem marca o `data-pronto` é src/scripts/pagina.ts. Use no <head>:
+     <ClasseJs slot="head" /> -->
+<script is:inline>
+  document.documentElement.classList.add("js");
+  setTimeout(function () {
+    if (!("pronto" in document.documentElement.dataset)) document.documentElement.classList.remove("js");
+  }, 3000);
+</script>

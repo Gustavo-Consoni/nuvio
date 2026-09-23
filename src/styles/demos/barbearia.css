@@ -1,0 +1,175 @@
+/* Site demo da Blade & Co. (src/pages/demos/barbearia/index.astro). Tailwind
+   próprio, separado do global.css do site: ver src/layouts/DemoSite.astro.
+   O tema fica em blade-tema.css, junto com as páginas de cortes e links. */
+@import "tailwindcss" source(none);
+@import "./blade-tema.css";
+@import "./comum.css";
+
+@source "../../pages/demos/barbearia/index.astro";
+
+/* `btn` como @utility (e não .btn dentro de @layer) para poder ser
+   reaproveitada via @apply nas variações (regra do Tailwind v4). */
+@utility btn {
+  @apply inline-flex items-center justify-center gap-3 px-8 py-4 text-[11px]
+         font-semibold uppercase tracking-[0.22em] transition duration-300;
+}
+
+@layer components {
+  .wrap { @apply mx-auto w-full max-w-[1600px] px-6 sm:px-10 lg:px-20; }
+
+  /* título: Bebas em caixa alta, com uma palavra em Playfair itálico dourado */
+  .titulo {
+    @apply font-display uppercase text-bone;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    line-height: 1.05;
+    letter-spacing: 0.05em;
+  }
+  /* o h1 do hero tem escala própria, maior que a das seções */
+  .titulo-hero {
+    font-size: clamp(3.5rem, 7vw, 7rem);
+    line-height: 0.95;
+    letter-spacing: 0.04em;
+  }
+  .titulo em {
+    @apply font-serif text-gold italic tracking-normal;
+    font-style: italic;
+    text-transform: none;
+  }
+
+  /* terceira linha do h1: letra vazada, como o .title-stroke da referência.
+     O fallback importa: se o browser não tiver text-stroke, o texto some
+     (color: transparent), então só zeramos a cor quando o suporte existe. */
+  .vazado { color: inherit; }
+  @supports (-webkit-text-stroke: 1px currentColor) {
+    .vazado {
+      -webkit-text-stroke: 1.5px var(--color-bone);
+      color: transparent;
+    }
+  }
+
+  /* rótulo com risco dourado à esquerda */
+  .rotulo {
+    @apply flex items-center gap-4 font-medium uppercase text-gold;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+  }
+  /* o rótulo do hero é um ponto maior que o das seções */
+  .rotulo-hero { font-size: 0.7rem; }
+  .rotulo::before {
+    content: "";
+    @apply block h-px w-[30px] bg-gold;
+  }
+
+  /* variação das seções centralizadas (galeria, avaliações, instagram):
+     risco dos dois lados, como na referência */
+  .rotulo-centro { @apply justify-center; }
+  .rotulo-centro::after {
+    content: "";
+    @apply block h-px w-[30px] bg-gold;
+  }
+
+  /* Bebas com tracking largo: sem isso o título perde o ar do original */
+  .nome-servico  { @apply font-display uppercase text-bone; font-size: 1.4rem; letter-spacing: 0.1em; line-height: normal; }
+  .nome-barbeiro { @apply font-display uppercase text-bone; font-size: 1.3rem; letter-spacing: 0.1em; line-height: normal; }
+  .num-stat      { @apply font-display text-gold; font-size: 2.8rem; letter-spacing: 0.03em; line-height: normal; }
+  .titulo-coluna { @apply font-display uppercase text-bone; font-size: 1rem; letter-spacing: 0.15em; line-height: normal; }
+
+  .btn-gold  { @apply btn bg-gold text-void hover:bg-cream; }
+  .btn-linha { @apply btn border border-gold/40 text-gold hover:border-gold hover:bg-gold/10; }
+  .btn-nu    { @apply btn px-0 text-bone hover:text-gold; }
+
+  .campo {
+    @apply w-full border-b border-line bg-transparent py-3 text-sm text-bone
+           placeholder-mute2 transition duration-300 focus:border-gold focus:outline-none;
+  }
+
+  .nav-link {
+    @apply text-[11px] font-medium uppercase tracking-[0.2em] text-mute
+           transition duration-300 hover:text-gold;
+  }
+
+  /* Depoimentos: um por vez, trocado pelos dots (o script liga `data-ativo`).
+     O `display: none` mora sob a classe .js, então sem JavaScript os três
+     aparecem empilhados em vez de sobrar um só, e os dots (.js-only) somem
+     por não terem mais função. */
+  .js .depoimento { display: none; }
+  .js .depoimento[data-ativo] { display: block; animation: surge .6s ease; }
+  .depoimento + .depoimento { @apply mt-14; }
+  .js .depoimento + .depoimento { margin-top: 0; }
+
+  /* O `display` mora aqui, e não como utilitária `flex` no HTML: utilitária
+     está numa layer de prioridade maior e venceria o `display: none`, deixando
+     os dots na tela mesmo sem JavaScript, onde eles não fazem nada. */
+  .js-only { display: none; }
+  .js .js-only { display: flex; }
+
+  .dot {
+    @apply h-2 w-2 cursor-pointer rounded-full border border-gold bg-transparent
+           transition duration-300;
+  }
+  .dot[aria-current="true"] { @apply scale-125 bg-gold; }
+
+  /* espaço reservado para foto: some quando você põe um <img> por cima */
+  .foto {
+    @apply relative overflow-hidden bg-surface;
+    background-image:
+      radial-gradient(circle at 30% 25%, rgba(200,169,126,.10), transparent 55%),
+      linear-gradient(140deg, #1c1c1c 0%, #0f0f0f 60%, #161616 100%);
+  }
+  .foto::after {
+    content: "";
+    @apply pointer-events-none absolute inset-0;
+    background-image:
+      repeating-linear-gradient(45deg, rgba(255,255,255,.014) 0 2px, transparent 2px 6px);
+  }
+}
+
+@keyframes surge {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* faixa rolante entre o hero e a história */
+@keyframes desliza { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@utility marquee { animation: desliza 40s linear infinite; }
+
+@layer components {
+  .faixa-item { @apply font-display uppercase tracking-[0.2em] text-mute2 whitespace-nowrap; font-size: 1.3rem; line-height: normal; }
+  .faixa-ponto { @apply h-1 w-1 shrink-0 rounded-full bg-gold; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee { animation: none; }
+}
+
+@layer components {
+  .js .rv { opacity: 0; transform: translateY(24px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+  .js .rv-in { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .rv { opacity: 1; transform: none; transition: none; }
+}
+
+/* A referência derruba a escala do título em dois degraus. Sem isso o
+   clamp de 4vw deixa o h2 grande demais no celular. */
+@media (max-width: 968px) {
+  .titulo { font-size: clamp(2rem, 6vw, 3rem); }
+}
+@media (max-width: 640px) {
+  .titulo { font-size: 1.8rem; }
+  .titulo-hero { font-size: clamp(2.2rem, 10vw, 2.8rem); }
+}
+
+/* Foto do hero: fade com escala, como o heroImgReveal da referência.
+   O fill `both` importa: se a animação não rodar, a imagem fica visível
+   em vez de presa no opacity 0 do primeiro quadro. */
+@keyframes revela-hero {
+  from { opacity: 0; scale: 1.2; }
+  to   { opacity: 1; scale: 1.05; }
+}
+@layer components {
+  .img-hero { animation: revela-hero 1.8s cubic-bezier(.16, 1, .3, 1) .5s both; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .img-hero { animation: none; }
+}

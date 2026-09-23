@@ -1,0 +1,110 @@
+/* Tema da Mesa Farta (src/pages/demos/restaurante/index.astro). Tailwind
+   próprio, separado do global.css do site: ver src/layouts/DemoSite.astro. */
+@import "tailwindcss" source(none);
+@import "./comum.css";
+
+@source "../../pages/demos/restaurante/index.astro";
+
+/* ---------------------------------------------------------------
+   Mesa Farta: tokens (tema claro)
+   --------------------------------------------------------------- */
+@theme {
+  --font-sans:  "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+  --font-mono:  "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --color-paper:  #faf9f6;
+  --color-ink:    #1e293b;
+  --color-deep:   #0f172a;
+  --color-rose:   #e11d48;
+  --color-rose-soft: #fff1f3;
+  --color-mute:   #64748b;
+  --color-mute2:  #94a3b8;
+  --color-line:   #e2e8f0;   /* slate-200, igual ao da referência */
+  --color-cloud:  #f1f5f9;
+  --color-mist:   #f8fafc;   /* fundo dos depoimentos */
+  --color-night:  #020617;   /* só o botão do topo, mais escuro que o --deep */
+  --color-star:   #facc15;   /* estrela dos depoimentos: yellow-400, não amber */
+
+  /* Raios do layout de referência. Cada um vira uma utilitária no Tailwind v4
+     (`rounded-card`, `rounded-bento`...). Nunca escrever `rounded-[--radius-x]`:
+     o v4 compila isso como `border-radius: --radius-x`, que o browser descarta
+     e o canto fica reto. A forma com parênteses também vale: `rounded-(--radius-x)`. */
+  --radius-card:   1.5rem;   /* cartões do clube e depoimentos */
+  --radius-bento:  2rem;     /* os três cartões do hero */
+  --radius-mapa:   2.5rem;   /* painel escuro do mapa */
+  --radius-painel: 3rem;     /* painel grande da chef */
+}
+
+@layer base {
+  html { scroll-behavior: smooth; scroll-padding-top: 7rem; }
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    /* papel quadriculado discreto, como no layout de referência */
+    background-image:
+      linear-gradient(to right, rgba(0,0,0,.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0,0,0,.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  ::selection { @apply bg-rose/15 text-deep; }
+}
+
+/* btn como @utility para poder ser reaproveitado via @apply (Tailwind v4) */
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3
+         text-[12px] font-bold uppercase tracking-[0.1em] transition duration-300;
+}
+
+@layer components {
+  .wrap { @apply mx-auto w-full max-w-[1440px] px-5 sm:px-8; }
+
+  .display { @apply font-serif font-normal leading-[1.05] tracking-normal text-deep; }
+  .display em { @apply text-rose italic; }
+
+  .selo {
+    @apply inline-block font-mono text-[10px] uppercase tracking-[0.22em] text-rose;
+  }
+
+  .btn-escuro { @apply btn bg-deep text-white hover:bg-ink; }
+  .btn-noite  { @apply btn bg-night text-white hover:bg-deep; }
+  .btn-claro  { @apply btn border border-line bg-white text-ink hover:border-mute2; }
+
+  .cartao { @apply rounded-card border border-line bg-white; }
+
+  .pilula {
+    @apply inline-flex items-center rounded-full bg-white/95 px-3 py-1
+           font-mono text-[10px] uppercase tracking-[0.14em] text-deep backdrop-blur;
+  }
+
+  /* fica dentro da pílula cinza da nav: o hover é branco + sombra, como na
+     referência, senão o realce sumiria contra o fundo do próprio grupo */
+  .link-nav {
+    @apply rounded-full px-4 py-2 font-mono text-[11px] uppercase tracking-[0.1em]
+           text-mute transition duration-300 hover:bg-white hover:text-deep hover:shadow-sm;
+  }
+
+  .campo {
+    @apply w-full rounded-full border border-line bg-white px-5 py-3 text-sm
+           text-ink placeholder-mute2 transition duration-300
+           focus:border-rose focus:outline-none focus:ring-4 focus:ring-rose/10;
+  }
+
+  .meta { @apply font-mono text-[11px] uppercase tracking-[0.1em] text-mute2; }
+
+  .js .rv { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+  .js .rv-in { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .rv { opacity: 1; transform: none; transition: none; }
+}
+
+@keyframes desliza { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@utility marquee { animation: desliza 30s linear infinite; }
+
+/* "Sabores do mundo": só a cozinha escolhida mostra o subtítulo e o cartão
+   do pino. Sem JavaScript os subtítulos aparecem todos e o mapa fica só com
+   o primeiro cartão, para os cartões não se sobreporem. */
+.js [data-cozinha][aria-pressed="false"] .rotulo-cozinha { display: none; }
+.js [data-pino]:not([data-ativo]) .pino-cartao { display: none; }
+html:not(.js) .pino-extra { display: none; }

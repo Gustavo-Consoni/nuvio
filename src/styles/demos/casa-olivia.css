@@ -1,0 +1,22 @@
+/* Cardápio e página de links da Casa Olívia (DemoOlivia.astro). Tailwind
+   próprio, separado do global.css do site: ver src/layouts/DemoSite.astro. */
+@import "tailwindcss" source(none);
+@import "./comum.css";
+
+@source "../../layouts/DemoOlivia.astro";
+@source "../../pages/demos/casa-olivia";
+
+@theme {
+  --font-serif: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans:  "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-papel:  #f6efe4;
+  --color-cartao: #fffaf2;
+  --color-tinta:  #2a211b;
+  --color-terra:  #b4532f;
+  --color-oliva:  #5d6a38;
+}
+
+@layer base {
+  body { @apply bg-papel text-tinta font-sans antialiased; }
+}

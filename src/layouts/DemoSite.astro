@@ -1,0 +1,30 @@
+---
+/**
+ * Layout dos sites demo completos (src/pages/demos/<nome>/index.astro).
+ *
+ * Não usa o Base.astro: cada demo traz o próprio Tailwind, com tema, fontes e
+ * cores próprios, em src/styles/demos/<nome>.css (importado pela página). Com
+ * o global.css junto, os dois temas brigariam pelas mesmas variáveis
+ * (`--font-sans`, `--color-*`) e pelo estilo do <body>.
+ */
+import Documento from "./Documento.astro";
+import ClasseJs from "../components/ClasseJs.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  /** Nome do negócio fictício: vai no <title> e no og:site_name. */
+  marca: string;
+  /** Folha do Google Fonts com as fontes do tema da demo. */
+  fontes: string;
+  corTema: string;
+  /** Logo do negócio fictício, quando ele tem um. Sem isso, os ícones do site. */
+  icone?: string;
+  class?: string;
+}
+---
+
+<Documento {...Astro.props}>
+  <ClasseJs slot="head" />
+  <slot />
+</Documento>

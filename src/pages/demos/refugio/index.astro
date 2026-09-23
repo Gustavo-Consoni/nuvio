@@ -1,92 +1,67 @@
-<!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Noor | Refúgio no deserto em Erg Chigaga, Marrocos</title>
-  <meta name="description" content="Dezoito suítes no fim da estrada, entre as dunas de Erg Chigaga. Hammam, jantar na areia, caravana ao entardecer e um dos céus mais limpos do planeta." />
-  <meta name="theme-color" content="#0a0f1e" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Noor | Refúgio no deserto" />
-  <meta property="og:description" content="Dezoito suítes entre as dunas de Erg Chigaga, no sul do Marrocos." />
+---
+/**
+ * Site demo do Noor, hotel fictício no deserto. Tema próprio em
+ * src/styles/demos/refugio.css (ver src/layouts/DemoSite.astro).
+ */
+import DemoSite from "../../../layouts/DemoSite.astro";
+import "../../../styles/demos/refugio.css";
+---
 
-  <link rel="icon" href="./static/images/logo.svg" type="image/svg+xml" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
-
-  <script>
-    document.documentElement.classList.add('js');
-    setTimeout(function () { if (!window.Alpine) document.documentElement.classList.remove('js'); }, 3000);
-  </script>
-
-  <link rel="stylesheet" href="./static/output.css" />
-  <!-- Fonte base fluida, igual à do site principal (html em src/styles/global.css). -->
-  <style>
-    html {
-      text-size-adjust: 100%;
-      -webkit-text-size-adjust: 100%;
-      font-size: clamp(12px, 4vw, 16px);
-    }
-  </style>
-  <script defer src="./app.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-</head>
-
-<body x-data="noor()" class="overflow-x-hidden">
+<DemoSite
+  title="Refúgio no deserto em Erg Chigaga, Marrocos"
+  marca="Noor"
+  description="Dezoito suítes no fim da estrada, entre as dunas de Erg Chigaga. Hammam, jantar na areia, caravana ao entardecer e um dos céus mais limpos do planeta."
+  fontes="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap"
+  corTema="#0a0f1e"
+  icone="/demos/refugio/static/images/logo.svg"
+  class="overflow-x-hidden">
 
   <!-- ================= NAVEGAÇÃO =================
        A barra troca de clima junto com a página: transparente sobre o hero,
-       areia depois que rola, azul-noite a partir da faixa de transição. -->
-  <header class="fixed inset-x-0 top-0 z-100 py-4 transition-all duration-500"
-          :class="rolou ? (noite ? 'bg-noite/92 backdrop-blur-lg border-b border-ouro/12'
-                                 : 'bg-areia/92 backdrop-blur-lg border-b border-ouro/12') : ''">
+       areia depois que rola, azul-noite a partir da faixa de transição.
+       O script liga `data-rolou` e, com ele, `data-dia` ou `data-noite`;
+       `data-claro` (dia, com o menu fechado) pinta o texto de marrom. -->
+  <header data-header
+          class="group fixed inset-x-0 top-0 z-100 py-4 transition-all duration-500 data-rolou:border-b data-rolou:border-ouro/12 data-rolou:backdrop-blur-lg data-dia:bg-areia/92 data-noite:bg-noite/92">
     <div class="wrap flex items-center justify-between gap-6">
       <a href="#topo"
-         class="font-display text-[1.1rem] tracking-[0.15em] transition-colors duration-500"
-         :class="rolou && !noite ? 'text-marrom' : 'text-creme drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]'">NOOR</a>
+         class="font-display text-[1.1rem] tracking-[0.15em] text-creme drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)] transition-colors duration-500 group-data-claro:text-marrom group-data-claro:drop-shadow-none">NOOR</a>
 
       <nav class="hidden items-center gap-8 md:flex">
-        <a href="#historia"     class="text-[0.78rem] tracking-[0.06em] opacity-85 transition duration-300 hover:opacity-100" :class="rolou && !noite ? 'text-marrom' : 'text-creme drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]'">História</a>
-        <a href="#suites"       class="text-[0.78rem] tracking-[0.06em] opacity-85 transition duration-300 hover:opacity-100" :class="rolou && !noite ? 'text-marrom' : 'text-creme drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]'">Suítes</a>
-        <a href="#bemestar"     class="text-[0.78rem] tracking-[0.06em] opacity-85 transition duration-300 hover:opacity-100" :class="rolou && !noite ? 'text-marrom' : 'text-creme drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]'">Bem-estar</a>
-        <a href="#mesa"         class="text-[0.78rem] tracking-[0.06em] opacity-85 transition duration-300 hover:opacity-100" :class="rolou && !noite ? 'text-marrom' : 'text-creme drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]'">Mesa</a>
-        <a href="#experiencias" class="text-[0.78rem] tracking-[0.06em] opacity-85 transition duration-300 hover:opacity-100" :class="rolou && !noite ? 'text-marrom' : 'text-creme drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]'">Experiências</a>
+        <a href="#historia"     class="text-[0.78rem] tracking-[0.06em] opacity-85 transition duration-300 hover:opacity-100 text-creme drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)] group-data-claro:text-marrom group-data-claro:drop-shadow-none">História</a>
+        <a href="#suites"       class="text-[0.78rem] tracking-[0.06em] opacity-85 transition duration-300 hover:opacity-100 text-creme drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)] group-data-claro:text-marrom group-data-claro:drop-shadow-none">Suítes</a>
+        <a href="#bemestar"     class="text-[0.78rem] tracking-[0.06em] opacity-85 transition duration-300 hover:opacity-100 text-creme drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)] group-data-claro:text-marrom group-data-claro:drop-shadow-none">Bem-estar</a>
+        <a href="#mesa"         class="text-[0.78rem] tracking-[0.06em] opacity-85 transition duration-300 hover:opacity-100 text-creme drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)] group-data-claro:text-marrom group-data-claro:drop-shadow-none">Mesa</a>
+        <a href="#experiencias" class="text-[0.78rem] tracking-[0.06em] opacity-85 transition duration-300 hover:opacity-100 text-creme drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)] group-data-claro:text-marrom group-data-claro:drop-shadow-none">Experiências</a>
       </nav>
 
-      <a href="#reservar" class="btn-linha hidden md:inline-flex"
-         :class="rolou && !noite ? 'border-terracota/30 text-terracota hover:border-terracota hover:bg-terracota/8' : ''">Reservar</a>
+      <a href="#reservar" class="btn-linha hidden md:inline-flex group-data-claro:border-terracota/30 group-data-claro:text-terracota group-data-claro:hover:border-terracota group-data-claro:hover:bg-terracota/8">Reservar</a>
 
-      <button @click="menu = !menu" :aria-expanded="menu" aria-label="Abrir menu"
-              class="relative z-101 h-5 w-7 cursor-pointer md:hidden">
-        <span class="absolute left-0 block h-px w-full transition-all duration-300"
-              :class="[menu ? 'top-[9px] rotate-45' : 'top-0', rolou && !noite && !menu ? 'bg-marrom' : 'bg-creme']"></span>
-        <span class="absolute left-0 top-[9px] block h-px w-full transition-all duration-300"
-              :class="[menu ? 'opacity-0' : 'opacity-100', rolou && !noite && !menu ? 'bg-marrom' : 'bg-creme']"></span>
-        <span class="absolute left-0 block h-px w-full transition-all duration-300"
-              :class="[menu ? 'top-[9px] -rotate-45' : 'top-[18px]', rolou && !noite && !menu ? 'bg-marrom' : 'bg-creme']"></span>
+      <button type="button" data-menu-botao aria-controls="menu-mobile" aria-expanded="false" aria-label="Abrir menu"
+              class="group/menu relative z-101 h-5 w-7 cursor-pointer md:hidden">
+        <span class="absolute left-0 top-0 block h-px w-full bg-creme transition-all duration-300 group-data-claro:bg-marrom group-aria-expanded/menu:top-[9px] group-aria-expanded/menu:rotate-45"></span>
+        <span class="absolute left-0 top-[9px] block h-px w-full bg-creme opacity-100 transition-all duration-300 group-data-claro:bg-marrom group-aria-expanded/menu:opacity-0"></span>
+        <span class="absolute left-0 top-[18px] block h-px w-full bg-creme transition-all duration-300 group-data-claro:bg-marrom group-aria-expanded/menu:top-[9px] group-aria-expanded/menu:-rotate-45"></span>
       </button>
     </div>
   </header>
 
-  <!-- menu de tela cheia no celular -->
-  <div x-show="menu" x-cloak x-transition.opacity.duration.400ms
-       class="fixed inset-0 z-99 flex flex-col items-center justify-center gap-7 bg-noite/96 backdrop-blur-xl md:hidden">
-    <a href="#historia"     @click="menu = false" class="font-display text-[1.6rem] font-light tracking-[0.06em] text-creme transition duration-300 hover:text-ouro">História</a>
-    <a href="#suites"       @click="menu = false" class="font-display text-[1.6rem] font-light tracking-[0.06em] text-creme transition duration-300 hover:text-ouro">Suítes</a>
-    <a href="#bemestar"     @click="menu = false" class="font-display text-[1.6rem] font-light tracking-[0.06em] text-creme transition duration-300 hover:text-ouro">Bem-estar</a>
-    <a href="#mesa"         @click="menu = false" class="font-display text-[1.6rem] font-light tracking-[0.06em] text-creme transition duration-300 hover:text-ouro">Mesa</a>
-    <a href="#experiencias" @click="menu = false" class="font-display text-[1.6rem] font-light tracking-[0.06em] text-creme transition duration-300 hover:text-ouro">Experiências</a>
-    <a href="#reservar"     @click="menu = false" class="btn-linha mt-4">Reservar</a>
+  <!-- menu de tela cheia no celular (aparece com `data-aberto`, ver .sobreposto) -->
+  <div id="menu-mobile"
+       class="sobreposto fixed inset-0 z-99 flex flex-col items-center justify-center gap-7 bg-noite/96 backdrop-blur-xl md:hidden">
+    <a href="#historia" class="font-display text-[1.6rem] font-light tracking-[0.06em] text-creme transition duration-300 hover:text-ouro">História</a>
+    <a href="#suites" class="font-display text-[1.6rem] font-light tracking-[0.06em] text-creme transition duration-300 hover:text-ouro">Suítes</a>
+    <a href="#bemestar" class="font-display text-[1.6rem] font-light tracking-[0.06em] text-creme transition duration-300 hover:text-ouro">Bem-estar</a>
+    <a href="#mesa" class="font-display text-[1.6rem] font-light tracking-[0.06em] text-creme transition duration-300 hover:text-ouro">Mesa</a>
+    <a href="#experiencias" class="font-display text-[1.6rem] font-light tracking-[0.06em] text-creme transition duration-300 hover:text-ouro">Experiências</a>
+    <a href="#reservar" class="btn-linha mt-4">Reservar</a>
   </div>
 
   <!-- ================= HERO ================= -->
   <section id="topo" class="relative flex h-screen items-center justify-center overflow-hidden">
-    <img src="./static/images/hero.webp" alt="Pátio do Noor ao entardecer, com a areia levantada pelo vento"
+    <img src="/demos/refugio/static/images/hero.webp" alt="Pátio do Noor ao entardecer, com a areia levantada pelo vento"
          width="1600" height="1100" fetchpriority="high"
-         class="foto-tratada absolute inset-0" x-ref="fundoHero" />
+         class="foto-tratada absolute inset-0" data-paralaxe />
     <div class="veu-hero absolute inset-0"></div>
 
     <div class="relative z-2 flex flex-col items-center gap-3 px-6 text-center">
@@ -109,37 +84,37 @@
 
     <div class="wrap relative">
       <div class="grid items-center gap-15 lg:grid-cols-[1fr_1.15fr]">
-        <div class="rv-lado" x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
+        <div class="rv-lado" data-revelar data-margem="-10%">
           <span class="rotulo">Nossa história</span>
           <h2 class="titulo mb-6">Levantado onde a estrada de terra acaba</h2>
           <p class="texto mb-4">O Noor começou como uma teimosia: hospedar pouca gente por vez, no lugar mais silencioso que a gente conseguisse alcançar de carro. Erguemos cada parede em taipa, com pedreiros de M'Hamid, no ritmo antigo de quem levanta casa para durar. Portas de cedro, teto de palma, cal que devolve o calor quando o sol cai.</p>
           <p class="texto">Aqui a paisagem não é enfeite: é ela que organiza o dia. A luz decide a hora do café, o vento decide o caminho da caminhada e o céu, quando escurece, decide que a noite ainda vai render mais um pouco.</p>
         </div>
 
-        <div class="rv relative overflow-hidden rounded-xl" x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
-          <img src="./static/images/historia.webp" alt="Muro de taipa ocre do Noor recortado pela sombra do fim da tarde"
+        <div class="rv relative overflow-hidden rounded-xl" data-revelar data-margem="-10%">
+          <img src="/demos/refugio/static/images/historia.webp" alt="Muro de taipa ocre do Noor recortado pela sombra do fim da tarde"
                width="1000" height="1250" loading="lazy" class="foto-tratada aspect-4/5" />
           <span class="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] bg-linear-to-b from-transparent to-areia/60"></span>
         </div>
       </div>
 
-      <!-- números: o valor final está no HTML, o Alpine só anima a contagem -->
+      <!-- números: o valor final está no HTML, o script só anima a contagem -->
       <div class="escada mt-20 grid grid-cols-2 gap-6 border-t border-ouro/15 pt-10 md:grid-cols-4"
-           x-intersect.once="$el.classList.add('rv-in')">
+           data-revelar>
         <div class="text-center">
-          <span class="block font-display text-[1.8rem] font-light tracking-[-0.02em] text-marrom" x-init="conta($el)">2016</span>
+          <span class="block font-display text-[1.8rem] font-light tracking-[-0.02em] text-marrom" data-contar>2016</span>
           <span class="mt-1 block text-[0.68rem] uppercase tracking-[0.1em] text-marrom-med">Aberto desde</span>
         </div>
         <div class="text-center">
-          <span class="block font-display text-[1.8rem] font-light tracking-[-0.02em] text-marrom" x-init="conta($el)">18</span>
+          <span class="block font-display text-[1.8rem] font-light tracking-[-0.02em] text-marrom" data-contar>18</span>
           <span class="mt-1 block text-[0.68rem] uppercase tracking-[0.1em] text-marrom-med">Suítes</span>
         </div>
         <div class="text-center">
-          <span class="block font-display text-[1.8rem] font-light tracking-[-0.02em] text-marrom" x-init="conta($el)">140</span>
+          <span class="block font-display text-[1.8rem] font-light tracking-[-0.02em] text-marrom" data-contar>140</span>
           <span class="mt-1 block text-[0.68rem] uppercase tracking-[0.1em] text-marrom-med">Hectares</span>
         </div>
         <div class="text-center">
-          <span class="block font-display text-[1.8rem] font-light tracking-[-0.02em] text-marrom" x-init="conta($el)">40</span>
+          <span class="block font-display text-[1.8rem] font-light tracking-[-0.02em] text-marrom" data-contar>40</span>
           <span class="mt-1 block text-[0.68rem] uppercase tracking-[0.1em] text-marrom-med">Km até o asfalto</span>
         </div>
       </div>
@@ -151,16 +126,16 @@
     <div class="pointer-events-none absolute bottom-0 right-[10%] h-125 w-125 bg-[radial-gradient(ellipse,rgba(196,87,42,0.04),transparent_70%)]"></div>
 
     <div class="wrap relative">
-      <div class="rv" x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
+      <div class="rv" data-revelar data-margem="-10%">
         <span class="rotulo">Acomodações</span>
         <h2 class="titulo mb-12">Onde o deserto vira quarto</h2>
       </div>
 
-      <div class="escada grid gap-6 sm:grid-cols-2 lg:grid-cols-3" x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
+      <div class="escada grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-revelar data-margem="-10%">
 
         <article class="cartao-suite group">
           <div class="relative aspect-4/3 overflow-hidden">
-            <img src="./static/images/suite-areia.webp" alt="Suíte Areia, com banheira aberta para o terraço"
+            <img src="/demos/refugio/static/images/suite-areia.webp" alt="Suíte Areia, com banheira aberta para o terraço"
                  width="800" height="600" loading="lazy"
                  class="foto-tratada transition-transform duration-600 ease-suave group-hover:scale-105" />
             <span class="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] bg-linear-to-b from-transparent to-white/50"></span>
@@ -174,7 +149,7 @@
 
         <article class="cartao-suite group">
           <div class="relative aspect-4/3 overflow-hidden">
-            <img src="./static/images/suite-oasis.webp" alt="Suíte Oásis, com piscina privativa entre as tamareiras"
+            <img src="/demos/refugio/static/images/suite-oasis.webp" alt="Suíte Oásis, com piscina privativa entre as tamareiras"
                  width="800" height="600" loading="lazy"
                  class="foto-tratada transition-transform duration-600 ease-suave group-hover:scale-105" />
             <span class="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] bg-linear-to-b from-transparent to-white/50"></span>
@@ -188,7 +163,7 @@
 
         <article class="cartao-suite group sm:col-span-2 sm:mx-auto sm:max-w-100 lg:col-span-1 lg:max-w-none">
           <div class="relative aspect-4/3 overflow-hidden">
-            <img src="./static/images/suite-riad.webp" alt="Suíte Riad, em azul profundo, com arcos e mosaico no piso"
+            <img src="/demos/refugio/static/images/suite-riad.webp" alt="Suíte Riad, em azul profundo, com arcos e mosaico no piso"
                  width="800" height="600" loading="lazy"
                  class="foto-tratada transition-transform duration-600 ease-suave group-hover:scale-105" />
             <span class="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] bg-linear-to-b from-transparent to-white/50"></span>
@@ -205,7 +180,7 @@
   </section>
 
   <!-- ================= TRANSIÇÃO DIA/NOITE =================
-       A faixa é o eixo da página: daqui para baixo tudo é noite. O app.js
+       A faixa é o eixo da página: daqui para baixo tudo é noite. O script
        usa o topo desta seção para virar o clima da barra de navegação. -->
   <section id="transicao" class="faixa-noite campo-estrelas relative flex h-screen items-center justify-center overflow-hidden">
     <div class="relative z-2 flex flex-col items-center px-6 text-center">
@@ -222,8 +197,8 @@
     <div class="pointer-events-none absolute -top-50 -right-25 h-150 w-150 bg-[radial-gradient(ellipse,rgba(212,168,83,0.06),transparent_70%)]"></div>
 
     <div class="wrap relative">
-      <div class="rv relative mb-15 overflow-hidden rounded-2xl" x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
-        <img src="./static/images/hammam.webp" alt="Banheira de pedra do hammam, coberta de pétalas e folhas de eucalipto"
+      <div class="rv relative mb-15 overflow-hidden rounded-2xl" data-revelar data-margem="-10%">
+        <img src="/demos/refugio/static/images/hammam.webp" alt="Banheira de pedra do hammam, coberta de pétalas e folhas de eucalipto"
              width="1600" height="700" loading="lazy" class="foto-tratada aspect-16/9 md:aspect-16/7" />
         <div class="absolute inset-0 flex max-w-full flex-col justify-center bg-linear-to-r from-noite/92 via-noite/60 to-transparent p-8 md:max-w-[60%] md:p-14 lg:max-w-[50%]">
           <span class="rotulo">Bem-estar</span>
@@ -232,7 +207,7 @@
         </div>
       </div>
 
-      <div class="escada grid gap-6 md:grid-cols-3" x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
+      <div class="escada grid gap-6 md:grid-cols-3" data-revelar data-margem="-10%">
 
         <article class="cartao-noite flex flex-col p-8">
           <span class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-ouro/15 bg-ouro/10 text-ouro">
@@ -270,16 +245,16 @@
     <div class="pointer-events-none absolute left-[-5%] top-[20%] h-125 w-125 bg-[radial-gradient(ellipse,rgba(196,87,42,0.05),transparent_70%)]"></div>
 
     <div class="wrap relative">
-      <div class="rv" x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
+      <div class="rv" data-revelar data-margem="-10%">
         <span class="rotulo">A mesa</span>
         <h2 class="titulo mb-12">Jantar servido debaixo das estrelas</h2>
       </div>
 
       <div class="escada grid min-h-105 gap-5 lg:grid-cols-[1.3fr_1fr] lg:grid-rows-2"
-           x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
+           data-revelar data-margem="-10%">
 
         <div class="relative min-h-70 overflow-hidden rounded-2xl lg:row-span-2">
-          <img src="./static/images/mesa.webp" alt="Prato do jantar servido no terraço do Noor"
+          <img src="/demos/refugio/static/images/mesa.webp" alt="Prato do jantar servido no terraço do Noor"
                width="1100" height="760" loading="lazy" class="foto-tratada absolute inset-0" />
           <span class="veu-mesa absolute inset-0"></span>
           <div class="absolute inset-x-0 bottom-0 z-2 p-8">
@@ -305,16 +280,16 @@
   <!-- ================= EXPERIÊNCIAS ================= -->
   <section id="experiencias" class="noite relative bg-noite pt-20 pb-30 text-creme">
     <div class="wrap relative">
-      <div class="rv" x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
+      <div class="rv" data-revelar data-margem="-10%">
         <span class="rotulo">Experiências</span>
         <h2 class="titulo mb-12">Escritas na areia</h2>
       </div>
 
-      <div class="escada flex flex-col gap-6" x-intersect.once.margin.-10%="$el.classList.add('rv-in')">
+      <div class="escada flex flex-col gap-6" data-revelar data-margem="-10%">
 
         <article class="cartao-noite grid items-center gap-8 p-5 sm:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] hover:translate-x-1">
           <div class="relative aspect-3/2 overflow-hidden rounded-[10px]">
-            <img src="./static/images/exp-duna.webp" alt="Dunas de Erg Chigaga na luz baixa do fim da tarde"
+            <img src="/demos/refugio/static/images/exp-duna.webp" alt="Dunas de Erg Chigaga na luz baixa do fim da tarde"
                  width="800" height="533" loading="lazy" class="foto-tratada" />
             <span class="pointer-events-none absolute inset-x-0 bottom-0 h-[25%] bg-linear-to-b from-transparent to-noite/40"></span>
           </div>
@@ -330,7 +305,7 @@
 
         <article class="cartao-noite grid items-center gap-8 p-5 sm:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] hover:translate-x-1">
           <div class="relative aspect-3/2 overflow-hidden rounded-[10px]">
-            <img src="./static/images/exp-estrelas.webp" alt="Lua crescente e estrelas sobre o deserto"
+            <img src="/demos/refugio/static/images/exp-estrelas.webp" alt="Lua crescente e estrelas sobre o deserto"
                  width="800" height="533" loading="lazy" class="foto-tratada" />
             <span class="pointer-events-none absolute inset-x-0 bottom-0 h-[25%] bg-linear-to-b from-transparent to-noite/40"></span>
           </div>
@@ -346,7 +321,7 @@
 
         <article class="cartao-noite grid items-center gap-8 p-5 sm:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] hover:translate-x-1">
           <div class="relative aspect-3/2 overflow-hidden rounded-[10px]">
-            <img src="./static/images/exp-amanhecer.webp" alt="Capim seco e névoa dourada na primeira luz do dia"
+            <img src="/demos/refugio/static/images/exp-amanhecer.webp" alt="Capim seco e névoa dourada na primeira luz do dia"
                  width="800" height="533" loading="lazy" class="foto-tratada" />
             <span class="pointer-events-none absolute inset-x-0 bottom-0 h-[25%] bg-linear-to-b from-transparent to-noite/40"></span>
           </div>
@@ -366,7 +341,7 @@
 
   <!-- ================= RESERVAR ================= -->
   <section id="reservar" class="noite relative flex min-h-[80vh] items-center justify-center overflow-hidden bg-noite text-creme">
-    <img src="./static/images/reserva.webp" alt="" width="1600" height="890" loading="lazy"
+    <img src="/demos/refugio/static/images/reserva.webp" alt="" width="1600" height="890" loading="lazy"
          class="absolute inset-0 h-full w-full object-cover" style="filter: saturate(0.7) contrast(1.1)" />
     <div class="absolute inset-0 bg-noite/75"></div>
 
@@ -375,28 +350,28 @@
       <h2 class="mb-4 font-display text-[clamp(2rem,5vw,3.2rem)] font-light tracking-[-0.02em] text-creme">Comece a jornada</h2>
       <p class="mb-9 text-[0.88rem] text-creme/60">Duas noites bastam para entender. Três, para não querer ir embora.</p>
 
-      <!-- novalidate: sem isso o browser engole o submit e o handler do Alpine nunca roda -->
-      <form novalidate @submit.prevent="enviar" class="mx-auto grid gap-3 text-left sm:grid-cols-2">
+      <!-- novalidate: a validação e as mensagens são do script -->
+      <form data-reserva novalidate class="mx-auto grid gap-3 text-left sm:grid-cols-2">
         <div class="sm:col-span-2">
           <label for="nome" class="sr-only">Nome</label>
-          <input id="nome" name="nome" type="text" x-model="form.nome" placeholder="Seu nome"
+          <input id="nome" name="nome" type="text" placeholder="Seu nome"
                  class="w-full rounded-[2px] border border-ouro/25 bg-white/5 px-4 py-3.5 text-[0.85rem] text-creme placeholder:text-creme/40 transition duration-300 focus:border-ouro focus:outline-none" />
         </div>
         <div>
           <label for="email" class="sr-only">E-mail</label>
-          <input id="email" name="email" type="email" x-model="form.email" placeholder="Seu e-mail"
+          <input id="email" name="email" type="email" placeholder="Seu e-mail"
                  class="w-full rounded-[2px] border border-ouro/25 bg-white/5 px-4 py-3.5 text-[0.85rem] text-creme placeholder:text-creme/40 transition duration-300 focus:border-ouro focus:outline-none" />
         </div>
         <div>
           <label for="chegada" class="sr-only">Chegada</label>
-          <input id="chegada" name="chegada" type="date" x-model="form.chegada"
+          <input id="chegada" name="chegada" type="date"
                  class="w-full rounded-[2px] border border-ouro/25 bg-white/5 px-4 py-3.5 text-[0.85rem] text-creme transition duration-300 focus:border-ouro focus:outline-none" />
         </div>
         <div class="sm:col-span-2">
-          <button type="submit" class="btn-cheio w-full" x-text="enviando ? 'Enviando…' : 'Reservar estadia'">Reservar estadia</button>
+          <button type="submit" class="btn-cheio w-full">Reservar estadia</button>
         </div>
-        <p x-show="erro" x-cloak x-text="erro" class="text-[0.78rem] text-terracota sm:col-span-2"></p>
-        <p x-show="enviado" x-cloak class="text-[0.78rem] text-ouro sm:col-span-2">Pedido recebido. Respondemos em até um dia útil com as datas disponíveis.</p>
+        <p data-erro hidden class="text-[0.78rem] text-terracota sm:col-span-2"></p>
+        <p data-enviado hidden class="animate-surge motion-reduce:animate-none text-[0.78rem] text-ouro sm:col-span-2">Pedido recebido. Respondemos em até um dia útil com as datas disponíveis.</p>
       </form>
 
       <div class="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-8">
@@ -435,10 +410,81 @@
         </div>
       </div>
       <div class="border-t border-white/6 pt-6 text-center">
-        <p class="text-[0.68rem] tracking-[0.06em] text-creme/35">© <span x-text="new Date().getFullYear()">2026</span> Noor. Projeto demonstrativo.</p>
+        <p class="text-[0.68rem] tracking-[0.06em] text-creme/35">© {new Date().getFullYear()} Noor. Projeto demonstrativo.</p>
       </div>
     </div>
   </footer>
 
-</body>
-</html>
+</DemoSite>
+
+<script>
+  import { aCadaPagina } from "../../../scripts/pagina";
+  import { contar, emailValido, esperar, menu, paralaxe, revelar } from "../../../scripts/demos";
+
+  aCadaPagina((signal) => {
+    barra(signal);
+    revelar(signal);
+    contar(signal);
+    paralaxe(document.querySelector<HTMLElement>("[data-paralaxe]"), 0.25, signal);
+    reserva(signal);
+  });
+
+  /** A faixa de transição é o divisor: quando o topo dela passa por baixo da
+   *  barra, tudo dali para a frente é noite e a barra inverte junto. */
+  function barra(signal: AbortSignal) {
+    const header = document.querySelector<HTMLElement>("[data-header]");
+    const faixa = document.getElementById("transicao");
+    if (!header) return;
+    let menuAberto = false;
+
+    const pintar = () => {
+      const rolou = window.scrollY > 40;
+      const noite = !!faixa && faixa.getBoundingClientRect().top < 80;
+      header.toggleAttribute("data-rolou", rolou);
+      header.toggleAttribute("data-dia", rolou && !noite);
+      header.toggleAttribute("data-noite", rolou && noite);
+      header.toggleAttribute("data-claro", rolou && !noite && !menuAberto);
+    };
+
+    menu(signal, 768, (aberto) => {
+      menuAberto = aberto;
+      pintar();
+    });
+    window.addEventListener("scroll", pintar, { passive: true, signal });
+  }
+
+  function reserva(signal: AbortSignal) {
+    const form = document.querySelector<HTMLFormElement>("[data-reserva]");
+    if (!form) return;
+    const valor = (nome: string) => (form.elements.namedItem(nome) as HTMLInputElement).value.trim();
+    const erro = form.querySelector<HTMLElement>("[data-erro]")!;
+    const enviado = form.querySelector<HTMLElement>("[data-enviado]")!;
+    const botao = form.querySelector<HTMLButtonElement>("[type=submit]")!;
+
+    const mostrarErro = (msg: string) => {
+      erro.textContent = msg;
+      erro.hidden = !msg;
+    };
+
+    form.addEventListener(
+      "submit",
+      async (e) => {
+        e.preventDefault();
+        enviado.hidden = true;
+        if (!valor("nome")) return mostrarErro("Escreva seu nome para a gente saber quem chega.");
+        if (!emailValido(valor("email"))) return mostrarErro("Confira o e-mail: é por ele que respondemos.");
+        if (!valor("chegada")) return mostrarErro("Escolha a data de chegada.");
+        mostrarErro("");
+        botao.textContent = "Enviando…";
+        // Demo: o envio é simulado. Num site real, troque a espera por um
+        // fetch para Formspree, Web3Forms ou um webhook.
+        await esperar(900, signal).catch(() => {});
+        if (signal.aborted) return;
+        botao.textContent = "Reservar estadia";
+        form.reset();
+        enviado.hidden = false;
+      },
+      { signal },
+    );
+  }
+</script>

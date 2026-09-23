@@ -1,0 +1,242 @@
+/* Tema do Noor (src/pages/demos/refugio/index.astro). Tailwind próprio,
+   separado do global.css do site: ver src/layouts/DemoSite.astro. */
+@import "tailwindcss" source(none);
+@import "./comum.css";
+
+@source "../../pages/demos/refugio/index.astro";
+
+/* ---------------------------------------------------------------
+   Noor: tokens do refúgio no deserto.
+   A página atravessa dois climas: as primeiras seções em areia (dia)
+   e, depois da faixa de transição, tudo em azul-noite. Os dois
+   conjuntos de cor convivem no mesmo arquivo de propósito.
+   Cormorant Garamond nos títulos, Inter no corpo.
+   --------------------------------------------------------------- */
+@theme {
+  --font-display: "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-sans:    "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-areia:      #f5ede0;   /* fundo das seções de dia */
+  --color-areia-esc:  #e8dcc8;
+  --color-areia-med:  #d9ccba;
+  --color-terracota:  #c4572a;   /* rótulo e preço no dia */
+  --color-ouro:       #d4a853;   /* acento, o mesmo nos dois climas */
+  --color-ouro-cl:    #e8d5b0;
+  --color-marrom:     #2c1810;   /* texto no dia */
+  --color-marrom-med: #5c4033;
+  --color-noite:      #0a0f1e;   /* fundo das seções de noite */
+  --color-noite-cl:   #141b2d;
+  --color-noite-med:  #1e2640;
+  --color-creme:      #f0e6d6;   /* texto na noite */
+
+  --ease-suave: cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+@layer base {
+  html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+  body { @apply bg-areia text-marrom font-sans font-light antialiased; }
+  ::selection { @apply bg-ouro/30 text-marrom; }
+
+  /* grão sobre a página inteira, como no material impresso */
+  body::before {
+    content: "";
+    position: fixed; inset: 0; z-index: 90;
+    pointer-events: none; opacity: 0.035;
+    background-repeat: repeat; background-size: 256px;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* botão como @utility para poder ser reaproveitado com @apply (Tailwind v4) */
+@utility btn {
+  @apply inline-flex cursor-pointer items-center justify-center gap-2 text-[0.72rem]
+         font-medium uppercase tracking-[0.16em] transition-all duration-500;
+}
+
+@layer components {
+  .wrap { @apply mx-auto w-full max-w-[1200px] px-6; }
+
+  /* ---------- tipografia de seção ---------- */
+  .rotulo {
+    @apply mb-4 inline-block text-[0.72rem] font-medium uppercase tracking-[0.12em] text-terracota;
+  }
+  .noite .rotulo { @apply text-ouro; }
+
+  .titulo {
+    @apply font-display text-[clamp(1.7rem,3.4vw,2.4rem)] font-light leading-tight
+           tracking-[-0.02em] text-marrom;
+  }
+  .noite .titulo { @apply text-creme; }
+
+  .texto { @apply text-[0.86rem] leading-[1.75] text-marrom-med; }
+  .noite .texto { @apply text-creme/60; }
+
+  .risco { @apply h-px w-20 bg-linear-to-r from-transparent via-ouro to-transparent; }
+
+  /* ---------- botões ---------- */
+  .btn-vidro {
+    @apply btn border-0 bg-white/8 px-11 py-4 text-ouro-cl backdrop-blur-sm
+           hover:bg-ouro/15;
+  }
+  .btn-cheio {
+    @apply btn rounded-[2px] bg-linear-135 from-ouro to-terracota px-13 py-4.5
+           text-[0.78rem] tracking-[0.14em] text-white
+           hover:-translate-y-0.5 hover:shadow-[0_12px_40px] hover:shadow-ouro/30;
+  }
+  .btn-linha {
+    @apply btn border border-ouro/40 px-5 py-2 text-ouro-cl hover:border-ouro hover:bg-ouro/15;
+  }
+
+  /* ---------- cartões ---------- */
+  /* raio de 12px em todos os cartões, como no sistema original */
+  .cartao-suite {
+    @apply overflow-hidden rounded-xl border border-ouro/10 bg-white/50
+           transition-all duration-500 ease-suave
+           hover:-translate-y-1 hover:shadow-[0_16px_48px] hover:shadow-marrom/8;
+  }
+  .cartao-noite {
+    @apply rounded-xl border border-ouro/10 bg-white/3 transition-all duration-400 ease-suave
+           hover:border-ouro/25 hover:shadow-[0_12px_40px] hover:shadow-ouro/8;
+  }
+
+  .foto-tratada { @apply h-full w-full object-cover; filter: saturate(0.85) contrast(1.05); }
+
+  /* ---------- faixa de transição dia/noite ---------- */
+  /* véu do hero: preto no topo e areia no pé, para a foto entrar na seção
+     seguinte sem emenda visível */
+  .veu-hero {
+    background-image: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.1) 40%,
+      rgba(245, 237, 224, 0.35) 78%, var(--color-areia) 100%);
+  }
+
+  /* véu do cartão grande da mesa: escurece só a metade de baixo, onde fica o texto */
+  .veu-mesa {
+    background-image: linear-gradient(to top, rgba(10, 15, 30, 0.92) 0%, rgba(10, 15, 30, 0.4) 35%, transparent 60%);
+  }
+
+  .faixa-noite {
+    background-image: linear-gradient(to bottom,
+      var(--color-areia) 0%, var(--color-areia-esc) 15%, #8b6f4e 30%,
+      #4a3a2e 45%, #1e1b2e 65%, var(--color-noite) 85%);
+  }
+
+  /* Estrelas em CSS, não em JS: sem script a faixa continua estrelada.
+     Duas camadas com brilhos de tamanhos e ritmos diferentes. */
+  .campo-estrelas::before,
+  .campo-estrelas::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    animation: brilha 5s ease-in-out infinite;
+  }
+  .campo-estrelas::after { animation-duration: 7s; animation-delay: 1.4s; }
+
+  @keyframes brilha { 0%, 100% { opacity: 0.25 } 50% { opacity: 0.9 } }
+
+  .campo-estrelas::before {
+    background-image:
+      radial-gradient(circle 1px at 32.4% 43.8%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 65.1% 38.7%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 53.6% 57.8%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 5.8% 67.0%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 3.7% 62.2%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 7.0% 39.9%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 42.5% 87.7%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 12.4% 48.5%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 62.7% 95.6%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 57.7% 59.8%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 97.6% 37.0%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 85.8% 52.8%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 14.4% 41.7%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 30.8% 87.0%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 18.1% 71.8%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 63.9% 58.2%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 54.8% 38.1%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 6.0% 47.4%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 68.0% 61.8%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 31.4% 72.1%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 45.3% 53.5%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 79.4% 79.4%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 24.4% 71.3%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 52.5% 90.9%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 72.9% 52.7%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 98.0% 41.7%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 41.8% 83.2%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 15.2% 65.8%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 3.9% 77.4%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 76.5% 71.2%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 87.5% 54.4%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 69.5% 72.6%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 58.0% 63.7%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 84.0% 95.4%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 47.4% 77.2%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 6.1% 79.6%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 64.7% 98.6%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 82.2% 52.5%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 38.6% 77.5%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 2.3% 64.0%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 16.8% 41.6%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 5.9% 83.9%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 12.9% 50.1%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 39.1% 90.6%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 8.1% 63.2%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1px at 54.9% 91.4%, var(--color-ouro-cl) 99%, transparent 100%);
+  }
+  .campo-estrelas::after {
+    background-image:
+      radial-gradient(circle 1.5px at 81.9% 90.1%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 27.8% 64.1%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 35.9% 91.3%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 95.8% 48.8%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 17.6% 53.5%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 23.3% 68.1%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 58.9% 55.2%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 0.4% 64.3%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 36.9% 72.8%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 95.3% 80.0%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 51.5% 75.8%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 67.6% 43.1%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 90.0% 85.2%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 87.5% 86.3%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 39.2% 63.1%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 10.4% 76.8%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 6.2% 43.9%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 20.9% 49.4%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 34.0% 43.0%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 0.0% 48.8%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 10.1% 61.1%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 2.6% 90.7%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 61.4% 48.6%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 25.2% 60.1%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 36.4% 47.1%, var(--color-ouro-cl) 99%, transparent 100%),
+      radial-gradient(circle 1.5px at 84.9% 97.6%, var(--color-ouro-cl) 99%, transparent 100%);
+  }
+
+  /* ---------- revelação ao rolar ---------- */
+  .js .rv { opacity: 0; translate: 0 26px; transition: opacity .8s var(--ease-suave), translate .8s var(--ease-suave); }
+  .js .rv-in { opacity: 1; translate: none; }
+  .js .rv-lado { opacity: 0; translate: -26px 0; transition: opacity .8s var(--ease-suave), translate .8s var(--ease-suave); }
+  .js .rv-lado.rv-in { opacity: 1; translate: none; }
+
+  /* escada: os filhos entram em sequência quando o pai é revelado */
+  .js .escada > * { opacity: 0; translate: 0 22px; transition: opacity .6s var(--ease-suave), translate .6s var(--ease-suave); }
+  .js .escada.rv-in > * { opacity: 1; translate: none; }
+  .js .escada.rv-in > *:nth-child(2) { transition-delay: .12s; }
+  .js .escada.rv-in > *:nth-child(3) { transition-delay: .24s; }
+  .js .escada.rv-in > *:nth-child(4) { transition-delay: .36s; }
+
+  /* ---------- menu de tela cheia no celular ---------- */
+  /* Some sem `data-aberto`, com ou sem JavaScript: sem script ele cobriria
+     a página sem ter como fechar. */
+  .sobreposto { transition: opacity 400ms ease, visibility 400ms ease; }
+  .sobreposto:not([data-aberto]) { opacity: 0; visibility: hidden; }
+
+  /* ---------- indicador de rolagem ---------- */
+  .risco-rolar { animation: pulsa 2s ease-in-out infinite; transform-origin: top; }
+  @keyframes pulsa { 0%, 100% { scale: 1 0.3; opacity: .3 } 50% { scale: 1 1; opacity: 1 } }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .rv, .js .rv-lado, .js .escada > * { opacity: 1; translate: none; transition: none; }
+  .campo-estrelas::before, .campo-estrelas::after, .risco-rolar { animation: none; }
+  .sobreposto { transition: none; }
+}

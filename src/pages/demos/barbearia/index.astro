@@ -1,44 +1,24 @@
-<!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BLADE &amp; CO. | Barbearia Premium</title>
-  <meta name="description" content="Barbearia premium onde a técnica tradicional encontra o corte contemporâneo. Corte exclusivo, barbear com toalha quente e cuidado de barba." />
-  <meta name="theme-color" content="#0a0a0a" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="BLADE &amp; CO. | Barbearia Premium" />
-  <meta property="og:description" content="Onde o ofício encontra a tradição. Agende sua cadeira." />
+---
+/**
+ * Site demo da Blade & Co., barbearia fictícia. Mesma barbearia do catálogo
+ * de cortes e da página de links (cortes.astro, links.astro), mas com tema
+ * próprio: src/styles/demos/barbearia.css.
+ */
+import DemoSite from "../../../layouts/DemoSite.astro";
+import { fontesBlade } from "../../../data/demo-barbearia";
+import "../../../styles/demos/barbearia.css";
+---
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-
-  <script>
-    document.documentElement.classList.add('js');
-    setTimeout(function () { if (!window.Alpine) document.documentElement.classList.remove('js'); }, 3000);
-  </script>
-
-  <link rel="stylesheet" href="./static/output.css" />
-  <!-- Fonte base fluida, igual à do site principal (html em src/styles/global.css). -->
-  <style>
-    html {
-      text-size-adjust: 100%;
-      -webkit-text-size-adjust: 100%;
-      font-size: clamp(12px, 4vw, 16px);
-    }
-  </style>
-  <script defer src="./app.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-</head>
-
-<body x-data="blade()">
+<DemoSite
+  title="Barbearia Premium"
+  marca="BLADE & CO."
+  description="Barbearia premium onde a técnica tradicional encontra o corte contemporâneo. Corte exclusivo, barbear com toalha quente e cuidado de barba."
+  fontes={fontesBlade}
+  corTema="#0a0a0a">
 
   <!-- ================= HEADER ================= -->
-  <header class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
-          :class="scrolled ? 'border-b border-line bg-void/95 backdrop-blur-md py-4' : 'py-7'">
+  <header data-header
+          class="fixed inset-x-0 top-0 z-50 py-7 transition-all duration-300 data-rolou:border-b data-rolou:border-line data-rolou:bg-void/95 data-rolou:py-4 data-rolou:backdrop-blur-md">
     <div class="mx-auto flex w-full max-w-[1600px] items-center justify-between gap-8 px-6 sm:px-10 lg:px-12">
       <a href="#topo" class="font-display text-2xl uppercase tracking-[0.18em] text-bone">
         Blade <span class="font-serif text-lg italic tracking-normal text-gold">&amp;</span> Co.
@@ -54,21 +34,23 @@
 
       <a href="#agendar" class="btn-linha hidden lg:inline-flex">Agendar agora</a>
 
-      <button @click="menu = !menu" :aria-expanded="menu" aria-label="Abrir menu"
-              class="grid h-10 w-10 cursor-pointer place-items-center border border-line text-bone lg:hidden">
-        <svg x-show="!menu" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
-        <svg x-show="menu" x-cloak style="display: none" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+      <button type="button" data-menu-botao aria-controls="menu-mobile" aria-expanded="false" aria-label="Abrir menu"
+              class="group grid h-10 w-10 cursor-pointer place-items-center border border-line text-bone lg:hidden">
+        <svg class="h-4 w-4 group-aria-expanded:hidden" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="hidden h-4 w-4 group-aria-expanded:block" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
     </div>
 
-    <div x-show="menu" x-collapse x-cloak style="display: none" class="lg:hidden">
+    <div id="menu-mobile" class="recolhe lg:hidden">
+      <div>
       <div class="mx-auto w-full max-w-[1600px] space-y-1 border-t border-line px-6 pt-6 mt-6 sm:px-10 lg:px-12">
-        <a href="#historia"   @click="menu = false" class="block py-3 text-[11px] uppercase tracking-[0.2em] text-mute hover:text-gold">Nossa história</a>
-        <a href="#servicos"   @click="menu = false" class="block py-3 text-[11px] uppercase tracking-[0.2em] text-mute hover:text-gold">Serviços</a>
-        <a href="#galeria"    @click="menu = false" class="block py-3 text-[11px] uppercase tracking-[0.2em] text-mute hover:text-gold">Galeria</a>
-        <a href="#barbeiros"  @click="menu = false" class="block py-3 text-[11px] uppercase tracking-[0.2em] text-mute hover:text-gold">Barbeiros</a>
-        <a href="#avaliacoes" @click="menu = false" class="block py-3 text-[11px] uppercase tracking-[0.2em] text-mute hover:text-gold">Avaliações</a>
-        <a href="#agendar"    @click="menu = false" class="btn-gold mt-4 w-full">Agendar agora</a>
+        <a href="#historia" class="block py-3 text-[11px] uppercase tracking-[0.2em] text-mute hover:text-gold">Nossa história</a>
+        <a href="#servicos" class="block py-3 text-[11px] uppercase tracking-[0.2em] text-mute hover:text-gold">Serviços</a>
+        <a href="#galeria" class="block py-3 text-[11px] uppercase tracking-[0.2em] text-mute hover:text-gold">Galeria</a>
+        <a href="#barbeiros" class="block py-3 text-[11px] uppercase tracking-[0.2em] text-mute hover:text-gold">Barbeiros</a>
+        <a href="#avaliacoes" class="block py-3 text-[11px] uppercase tracking-[0.2em] text-mute hover:text-gold">Avaliações</a>
+        <a href="#agendar" class="btn-gold mt-4 w-full">Agendar agora</a>
+      </div>
       </div>
     </div>
   </header>
@@ -105,7 +87,7 @@
       </div>
 
       <div class="foto min-h-[55vh] lg:min-h-screen">
-        <img src="./static/images/hero.webp" alt="Mestre barbeiro finalizando um corte" width="900" height="1250" decoding="async" fetchpriority="high" class="img-hero absolute inset-0 h-full w-full object-cover" />
+        <img src="/demos/barbearia/static/images/hero.webp" alt="Mestre barbeiro finalizando um corte" width="900" height="1250" decoding="async" fetchpriority="high" class="img-hero absolute inset-0 h-full w-full object-cover" />
         <div class="absolute inset-0 bg-void/25"></div>
         <div class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-void to-transparent"></div>
       </div>
@@ -142,17 +124,17 @@
   <section id="historia" class="py-24 lg:py-40">
     <div class="wrap grid gap-14 lg:grid-cols-2 lg:gap-24">
 
-      <div class="rv relative pb-[16%]" x-intersect.once="$el.classList.add('rv-in')">
+      <div class="rv relative pb-[16%]" data-revelar>
         <span class="pointer-events-none absolute -top-8 right-12 select-none font-display text-[10rem] leading-none text-gold/[0.06]">B&amp;C</span>
         <div class="foto relative z-10 aspect-[0.82] w-[72%]">
-          <img src="./static/images/interior.webp" alt="Interior da barbearia" width="700" height="854" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 hover:grayscale-0" />
+          <img src="/demos/barbearia/static/images/interior.webp" alt="Interior da barbearia" width="700" height="854" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 hover:grayscale-0" />
         </div>
         <div class="foto absolute bottom-0 right-0 z-20 aspect-square w-[55%] ring-[5px] ring-void">
-          <img src="./static/images/ferramentas.webp" alt="Ferramentas de barbeiro sobre a bancada" width="660" height="660" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 hover:grayscale-0" />
+          <img src="/demos/barbearia/static/images/ferramentas.webp" alt="Ferramentas de barbeiro sobre a bancada" width="660" height="660" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 hover:grayscale-0" />
         </div>
       </div>
 
-      <div class="flex flex-col justify-center rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 120)">
+      <div class="flex flex-col justify-center rv" data-revelar data-atraso="120">
         <p class="rotulo">Nossa história</p>
         <h2 class="titulo mt-7">Mais que uma<br />barbearia.<br />Um <em>Legado</em>.</h2>
         <p class="mt-8 text-[0.95rem] leading-[1.9] text-mute">
@@ -168,15 +150,15 @@
 
         <div class="mt-10 grid grid-cols-3 gap-12 border-t border-gold/15 pt-10">
           <div>
-            <p class="num-stat">7</p>
+            <p class="num-stat" data-contar>7</p>
             <p class="mt-1 text-[0.7rem] uppercase tracking-[0.2em] text-mute2">Anos de casa</p>
           </div>
           <div>
-            <p class="num-stat">12k</p>
+            <p class="num-stat" data-contar>12k</p>
             <p class="mt-1 text-[0.7rem] uppercase tracking-[0.2em] text-mute2">Cortes feitos</p>
           </div>
           <div>
-            <p class="num-stat">4.9</p>
+            <p class="num-stat" data-contar>4.9</p>
             <p class="mt-1 text-[0.7rem] uppercase tracking-[0.2em] text-mute2">Nota no Google</p>
           </div>
         </div>
@@ -188,7 +170,7 @@
   <section id="servicos" class="py-24 lg:pt-32 lg:pb-40">
     <div class="wrap">
       <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-        <div class="rv" x-intersect.once="$el.classList.add('rv-in')">
+        <div class="rv" data-revelar>
           <p class="rotulo">O que oferecemos</p>
           <h2 class="titulo mt-7">Nossos serviços<br /><em>Premium</em></h2>
         </div>
@@ -295,32 +277,32 @@
   <!-- ================= GALERIA ================= -->
   <section id="galeria" class="pb-24 lg:pb-40">
     <div class="wrap">
-      <div class="rv text-center" x-intersect.once="$el.classList.add('rv-in')">
+      <div class="rv text-center" data-revelar>
         <p class="rotulo rotulo-centro">Nosso trabalho</p>
         <h2 class="titulo mt-7">O <em>Ofício</em> em detalhes</h2>
       </div>
 
       <div class="mt-20 grid gap-6 sm:grid-cols-3">
         <div class="foto group aspect-[4/3]">
-          <img src="./static/images/degrade.webp" alt="Degradê clássico em execução" width="800" height="600" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[40%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" />
+          <img src="/demos/barbearia/static/images/degrade.webp" alt="Degradê clássico em execução" width="800" height="600" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[40%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" />
           <div class="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-void/80 to-transparent to-60% p-8 opacity-0 transition duration-300 group-hover:opacity-100 max-lg:opacity-100"><span class="font-display text-lg uppercase tracking-[0.15em] text-bone">Degradê de precisão</span></div>
         </div>
         <div class="foto group aspect-[4/3]">
-          <img src="./static/images/barba.webp" alt="Cuidado e modelagem da barba" width="800" height="600" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[40%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" />
+          <img src="/demos/barbearia/static/images/barba.webp" alt="Cuidado e modelagem da barba" width="800" height="600" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[40%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" />
           <div class="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-void/80 to-transparent to-60% p-8 opacity-0 transition duration-300 group-hover:opacity-100 max-lg:opacity-100"><span class="font-display text-lg uppercase tracking-[0.15em] text-bone">Arte da barba</span></div>
         </div>
         <div class="foto group aspect-[4/3]">
-          <img src="./static/images/toalha.webp" alt="Barbear com toalha quente" width="800" height="600" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[40%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" />
+          <img src="/demos/barbearia/static/images/toalha.webp" alt="Barbear com toalha quente" width="800" height="600" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[40%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" />
           <div class="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-void/80 to-transparent to-60% p-8 opacity-0 transition duration-300 group-hover:opacity-100 max-lg:opacity-100"><span class="font-display text-lg uppercase tracking-[0.15em] text-bone">Ritual da toalha quente</span></div>
         </div>
       </div>
       <div class="mt-6 grid gap-6 sm:grid-cols-2">
         <div class="foto group aspect-[4/3]">
-          <img src="./static/images/atmosfera.webp" alt="Atmosfera da barbearia" width="1000" height="750" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[40%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" />
+          <img src="/demos/barbearia/static/images/atmosfera.webp" alt="Atmosfera da barbearia" width="1000" height="750" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[40%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" />
           <div class="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-void/80 to-transparent to-60% p-8 opacity-0 transition duration-300 group-hover:opacity-100 max-lg:opacity-100"><span class="font-display text-lg uppercase tracking-[0.15em] text-bone">A experiência</span></div>
         </div>
         <div class="foto group aspect-[4/3]">
-          <img src="./static/images/estilizacao.webp" alt="Detalhes da finalização" width="1000" height="750" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[40%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" />
+          <img src="/demos/barbearia/static/images/estilizacao.webp" alt="Detalhes da finalização" width="1000" height="750" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[40%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" />
           <div class="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-void/80 to-transparent to-60% p-8 opacity-0 transition duration-300 group-hover:opacity-100 max-lg:opacity-100"><span class="font-display text-lg uppercase tracking-[0.15em] text-bone">Toques finais</span></div>
         </div>
       </div>
@@ -330,15 +312,15 @@
   <!-- ================= BARBEIROS ================= -->
   <section id="barbeiros" class="bg-surface py-24 lg:pt-32 lg:pb-40">
     <div class="wrap">
-      <div class="rv" x-intersect.once="$el.classList.add('rv-in')">
+      <div class="rv" data-revelar>
         <p class="rotulo">A equipe</p>
         <h2 class="titulo mt-7">Conheça nossos <em>Mestres</em><br />barbeiros</h2>
       </div>
 
       <div class="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        <article class="rv" x-intersect.once="$el.classList.add('rv-in')">
+        <article class="rv" data-revelar>
           <div class="foto aspect-[3/4]">
-            <img src="./static/images/barbeiro-1.webp" alt="Jonas Ribeiro, barbeiro da Blade & Co." width="640" height="800" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover transition duration-500 lg:grayscale lg:hover:grayscale-0" />
+            <img src="/demos/barbearia/static/images/barbeiro-1.webp" alt="Jonas Ribeiro, barbeiro da Blade & Co." width="640" height="800" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover transition duration-500 lg:grayscale lg:hover:grayscale-0" />
           </div>
           <div class="flex items-start justify-between gap-4 py-6">
             <div>
@@ -349,9 +331,9 @@
           </div>
         </article>
 
-        <article class="rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 120)">
+        <article class="rv" data-revelar data-atraso="120">
           <div class="foto aspect-[3/4]">
-            <img src="./static/images/barbeiro-2.webp" alt="Marcelo Chagas, barbeiro da Blade & Co." width="640" height="800" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover transition duration-500 lg:grayscale lg:hover:grayscale-0" />
+            <img src="/demos/barbearia/static/images/barbeiro-2.webp" alt="Marcelo Chagas, barbeiro da Blade & Co." width="640" height="800" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover transition duration-500 lg:grayscale lg:hover:grayscale-0" />
           </div>
           <div class="flex items-start justify-between gap-4 py-6">
             <div>
@@ -362,9 +344,9 @@
           </div>
         </article>
 
-        <article class="rv" x-intersect.once="setTimeout(() => $el.classList.add('rv-in'), 240)">
+        <article class="rv" data-revelar data-atraso="240">
           <div class="foto aspect-[3/4]">
-            <img src="./static/images/barbeiro-3.webp" alt="Diego Alencar, barbeiro da Blade & Co." width="640" height="800" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover transition duration-500 lg:grayscale lg:hover:grayscale-0" />
+            <img src="/demos/barbearia/static/images/barbeiro-3.webp" alt="Diego Alencar, barbeiro da Blade & Co." width="640" height="800" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover transition duration-500 lg:grayscale lg:hover:grayscale-0" />
           </div>
           <div class="flex items-start justify-between gap-4 py-6">
             <div>
@@ -386,7 +368,7 @@
                  whitespace-nowrap font-display text-[20vw] leading-none text-gold/[0.03]">Avaliações</span>
 
     <div class="wrap relative">
-      <div class="rv text-center" x-intersect.once="$el.classList.add('rv-in')">
+      <div class="rv text-center" data-revelar>
         <p class="rotulo rotulo-centro">Depoimentos</p>
         <h2 class="titulo mt-7">O que nossos <em>Clientes</em> dizem</h2>
       </div>
@@ -394,7 +376,7 @@
       <!-- um depoimento por vez, trocado pelos dots. Sem JS o CSS não esconde
            nada (a regra depende da classe .js), então os três ficam visíveis. -->
       <div class="mx-auto mt-16 max-w-3xl text-center">
-        <figure class="depoimento" :class="{ 'depoimento-ativo': avaliacao === 0 }">
+        <figure class="depoimento" data-depoimento data-ativo>
           <div class="flex justify-center gap-1.5 text-gold"><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg></div>
           <blockquote class="mt-8 font-serif text-xl italic leading-relaxed text-cream sm:text-2xl">
             Marquei às 14h e às 14h fui atendido. Parece pouco, mas depois de anos
@@ -406,7 +388,7 @@
           </figcaption>
         </figure>
 
-        <figure class="depoimento" :class="{ 'depoimento-ativo': avaliacao === 1 }">
+        <figure class="depoimento" data-depoimento>
           <div class="flex justify-center gap-1.5 text-gold"><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg></div>
           <blockquote class="mt-8 font-serif text-xl italic leading-relaxed text-cream sm:text-2xl">
             Nunca tinha feito barbear na navalha. Saí de lá entendendo por que
@@ -418,7 +400,7 @@
           </figcaption>
         </figure>
 
-        <figure class="depoimento" :class="{ 'depoimento-ativo': avaliacao === 2 }">
+        <figure class="depoimento" data-depoimento>
           <div class="flex justify-center gap-1.5 text-gold"><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg><svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg></div>
           <blockquote class="mt-8 font-serif text-xl italic leading-relaxed text-cream sm:text-2xl">
             Levei meu filho de sete anos e trataram ele igual trataram a mim.
@@ -431,15 +413,15 @@
         </figure>
 
         <div class="js-only mt-12 justify-center gap-3">
-          <button type="button" @click="verDepoimento(0)" :aria-current="avaliacao === 0"
+          <button type="button" data-ver-depoimento="0" aria-current="true"
                   aria-label="Ver o primeiro depoimento"
-                  class="dot" :class="avaliacao === 0 && 'dot-ativo'"></button>
-          <button type="button" @click="verDepoimento(1)" :aria-current="avaliacao === 1"
+                  class="dot"></button>
+          <button type="button" data-ver-depoimento="1" aria-current="false"
                   aria-label="Ver o segundo depoimento"
-                  class="dot" :class="avaliacao === 1 && 'dot-ativo'"></button>
-          <button type="button" @click="verDepoimento(2)" :aria-current="avaliacao === 2"
+                  class="dot"></button>
+          <button type="button" data-ver-depoimento="2" aria-current="false"
                   aria-label="Ver o terceiro depoimento"
-                  class="dot" :class="avaliacao === 2 && 'dot-ativo'"></button>
+                  class="dot"></button>
         </div>
       </div>
     </div>
@@ -449,12 +431,12 @@
   <section id="agendar" class="py-24 lg:py-40">
     <div class="wrap grid items-center gap-16 lg:grid-cols-2">
 
-      <div class="rv" x-intersect.once="$el.classList.add('rv-in')">
+      <div class="rv" data-revelar>
         <!-- moldura dourada deslocada, como no layout original -->
         <div class="relative">
           <span class="pointer-events-none absolute left-5 top-5 h-full w-full border border-gold"></span>
           <div class="foto relative aspect-[1.11]">
-            <img src="./static/images/cadeira.webp" alt="Cadeira e salão da Blade &amp; Co." width="1000" height="900"
+            <img src="/demos/barbearia/static/images/cadeira.webp" alt="Cadeira e salão da Blade &amp; Co." width="1000" height="900"
                  loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" />
           </div>
         </div>
@@ -463,49 +445,48 @@
       <div>
         <p class="rotulo">Reserve seu horário</p>
         <h2 class="titulo mt-7">Agende sua <em>Visita</em></h2>
-        <!-- o painel de sucesso precisa nascer escondido mesmo sem JavaScript,
-             por isso o display inline: o x-cloak só é desligado sob a classe .js -->
-        <div x-show="form.sent" x-cloak x-transition.duration.300ms style="display: none"
-             class="mt-10 flex flex-col justify-center border border-gold/30 p-10 text-center">
+        <!-- nasce com `hidden`: sem JavaScript o pedido nunca é enviado -->
+        <div data-enviado hidden
+             class="animate-surge motion-reduce:animate-none mt-10 flex flex-col justify-center border border-gold/30 p-10 text-center">
           <span class="mx-auto text-3xl text-gold">✓</span>
           <h3 class="mt-6 font-display text-2xl uppercase tracking-[0.1em] text-bone">Pedido enviado</h3>
           <p class="mt-4 text-sm leading-relaxed text-mute">
-            Obrigado, <span class="text-cream" x-text="form.nome.split(' ')[0]"></span>.
+            Obrigado, <span class="text-cream" data-primeiro-nome></span>.
             Confirmamos seu horário por WhatsApp ainda hoje.
           </p>
-          <button @click="resetForm()" class="btn-linha mx-auto mt-8">Fazer outro pedido</button>
+          <button type="button" data-novo-pedido class="btn-linha mx-auto mt-8">Fazer outro pedido</button>
         </div>
 
-        <form x-show="!form.sent" @submit.prevent="enviar()" novalidate class="mt-10 space-y-8">
+        <form data-agendamento novalidate class="mt-10 space-y-8">
           <div class="grid gap-8 sm:grid-cols-2">
             <div>
               <label for="nome" class="block text-[0.65rem] uppercase tracking-[0.25em] text-mute">Nome</label>
-              <input id="nome" type="text" x-model="form.nome" placeholder="João" class="campo mt-2" :class="erros.nome && '!border-red-500/70'" />
-              <p x-show="erros.nome" x-cloak class="mt-2 text-[11px] text-red-400" x-text="erros.nome"></p>
+              <input id="nome" type="text" name="nome" placeholder="João" class="campo mt-2 aria-invalid:border-red-500/70" />
+              <p data-erro="nome" hidden class="mt-2 text-[11px] text-red-400"></p>
             </div>
             <div>
               <label for="sobrenome" class="block text-[0.65rem] uppercase tracking-[0.25em] text-mute">Sobrenome</label>
-              <input id="sobrenome" type="text" x-model="form.sobrenome" placeholder="Silva" class="campo mt-2" :class="erros.sobrenome && '!border-red-500/70'" />
-              <p x-show="erros.sobrenome" x-cloak class="mt-2 text-[11px] text-red-400" x-text="erros.sobrenome"></p>
+              <input id="sobrenome" type="text" name="sobrenome" placeholder="Silva" class="campo mt-2 aria-invalid:border-red-500/70" />
+              <p data-erro="sobrenome" hidden class="mt-2 text-[11px] text-red-400"></p>
             </div>
           </div>
 
           <div class="grid gap-8 sm:grid-cols-2">
             <div>
               <label for="email" class="block text-[0.65rem] uppercase tracking-[0.25em] text-mute">E-mail</label>
-              <input id="email" type="email" x-model="form.email" placeholder="joao@email.com" class="campo mt-2" :class="erros.email && '!border-red-500/70'" />
-              <p x-show="erros.email" x-cloak class="mt-2 text-[11px] text-red-400" x-text="erros.email"></p>
+              <input id="email" type="email" name="email" placeholder="joao@email.com" class="campo mt-2 aria-invalid:border-red-500/70" />
+              <p data-erro="email" hidden class="mt-2 text-[11px] text-red-400"></p>
             </div>
             <div>
               <label for="tel" class="block text-[0.65rem] uppercase tracking-[0.25em] text-mute">Telefone</label>
-              <input id="tel" type="tel" x-model="form.tel" @input="mascara()" maxlength="15" placeholder="(11) 99999-9999" class="campo mt-2" :class="erros.tel && '!border-red-500/70'" />
-              <p x-show="erros.tel" x-cloak class="mt-2 text-[11px] text-red-400" x-text="erros.tel"></p>
+              <input id="tel" type="tel" name="tel" maxlength="15" placeholder="(11) 99999-9999" class="campo mt-2 aria-invalid:border-red-500/70" />
+              <p data-erro="tel" hidden class="mt-2 text-[11px] text-red-400"></p>
             </div>
           </div>
 
           <div>
             <label for="servico" class="block text-[0.65rem] uppercase tracking-[0.25em] text-mute">Selecionar serviço</label>
-            <select id="servico" x-model="form.servico" class="campo mt-2">
+            <select id="servico" name="servico" class="campo mt-2">
               <option class="bg-surface">Corte exclusivo &middot; R$ 45</option>
               <option class="bg-surface">Barbear na navalha &middot; R$ 55</option>
               <option class="bg-surface">Modelagem de barba &middot; R$ 35</option>
@@ -519,7 +500,7 @@
 
           <div>
             <label for="barbeiro" class="block text-[0.65rem] uppercase tracking-[0.25em] text-mute">Barbeiro preferido</label>
-            <select id="barbeiro" x-model="form.barbeiro" class="campo mt-2">
+            <select id="barbeiro" name="barbeiro" class="campo mt-2">
               <option class="bg-surface">Sem preferência</option>
               <option class="bg-surface">Jonas Ribeiro</option>
               <option class="bg-surface">Marcelo Chagas</option>
@@ -530,19 +511,19 @@
           <div class="grid gap-8 sm:grid-cols-2">
             <div>
               <label for="data" class="block text-[0.65rem] uppercase tracking-[0.25em] text-mute">Data</label>
-              <input id="data" type="date" x-model="form.data" class="campo mt-2 [color-scheme:dark]" :class="erros.data && '!border-red-500/70'" />
-              <p x-show="erros.data" x-cloak class="mt-2 text-[11px] text-red-400" x-text="erros.data"></p>
+              <input id="data" type="date" name="data" class="campo mt-2 [color-scheme:dark] aria-invalid:border-red-500/70" />
+              <p data-erro="data" hidden class="mt-2 text-[11px] text-red-400"></p>
             </div>
             <div>
               <label for="hora" class="block text-[0.65rem] uppercase tracking-[0.25em] text-mute">Horário</label>
-              <input id="hora" type="time" x-model="form.hora" class="campo mt-2 [color-scheme:dark]" :class="erros.hora && '!border-red-500/70'" />
-              <p x-show="erros.hora" x-cloak class="mt-2 text-[11px] text-red-400" x-text="erros.hora"></p>
+              <input id="hora" type="time" name="hora" class="campo mt-2 [color-scheme:dark] aria-invalid:border-red-500/70" />
+              <p data-erro="hora" hidden class="mt-2 text-[11px] text-red-400"></p>
             </div>
           </div>
 
-          <button type="submit" :disabled="form.loading"
+          <button type="submit"
                   class="btn-gold w-full cursor-pointer py-[1.2rem] text-[0.75rem] tracking-[0.25em] disabled:opacity-60">
-            <span x-text="form.loading ? 'Enviando…' : 'Confirmar agendamento'">Confirmar agendamento</span>
+            <span data-rotulo-envio>Confirmar agendamento</span>
             <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
           </button>
 
@@ -570,12 +551,12 @@
     </div>
 
     <div class="grid grid-cols-2 gap-[3px] sm:grid-cols-3 lg:grid-cols-6">
-        <a href="#" class="foto group aspect-square"><img src="./static/images/insta-1.webp" alt="Post do Instagram" width="420" height="420" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /><span class="pointer-events-none absolute inset-0 transition duration-300 group-hover:bg-gold/20"></span></a>
-        <a href="#" class="foto group aspect-square"><img src="./static/images/insta-2.webp" alt="Post do Instagram" width="420" height="420" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /><span class="pointer-events-none absolute inset-0 transition duration-300 group-hover:bg-gold/20"></span></a>
-        <a href="#" class="foto group aspect-square"><img src="./static/images/insta-3.webp" alt="Post do Instagram" width="420" height="420" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /><span class="pointer-events-none absolute inset-0 transition duration-300 group-hover:bg-gold/20"></span></a>
-        <a href="#" class="foto group aspect-square"><img src="./static/images/insta-4.webp" alt="Post do Instagram" width="420" height="420" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /><span class="pointer-events-none absolute inset-0 transition duration-300 group-hover:bg-gold/20"></span></a>
-        <a href="#" class="foto group aspect-square"><img src="./static/images/insta-5.webp" alt="Post do Instagram" width="420" height="420" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /><span class="pointer-events-none absolute inset-0 transition duration-300 group-hover:bg-gold/20"></span></a>
-        <a href="#" class="foto group aspect-square"><img src="./static/images/insta-6.webp" alt="Post do Instagram" width="420" height="420" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /><span class="pointer-events-none absolute inset-0 transition duration-300 group-hover:bg-gold/20"></span></a>
+        <a href="#" class="foto group aspect-square"><img src="/demos/barbearia/static/images/insta-1.webp" alt="Post do Instagram" width="420" height="420" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /><span class="pointer-events-none absolute inset-0 transition duration-300 group-hover:bg-gold/20"></span></a>
+        <a href="#" class="foto group aspect-square"><img src="/demos/barbearia/static/images/insta-2.webp" alt="Post do Instagram" width="420" height="420" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /><span class="pointer-events-none absolute inset-0 transition duration-300 group-hover:bg-gold/20"></span></a>
+        <a href="#" class="foto group aspect-square"><img src="/demos/barbearia/static/images/insta-3.webp" alt="Post do Instagram" width="420" height="420" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /><span class="pointer-events-none absolute inset-0 transition duration-300 group-hover:bg-gold/20"></span></a>
+        <a href="#" class="foto group aspect-square"><img src="/demos/barbearia/static/images/insta-4.webp" alt="Post do Instagram" width="420" height="420" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /><span class="pointer-events-none absolute inset-0 transition duration-300 group-hover:bg-gold/20"></span></a>
+        <a href="#" class="foto group aspect-square"><img src="/demos/barbearia/static/images/insta-5.webp" alt="Post do Instagram" width="420" height="420" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /><span class="pointer-events-none absolute inset-0 transition duration-300 group-hover:bg-gold/20"></span></a>
+        <a href="#" class="foto group aspect-square"><img src="/demos/barbearia/static/images/insta-6.webp" alt="Post do Instagram" width="420" height="420" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-500 group-hover:scale-105 group-hover:grayscale-0" /><span class="pointer-events-none absolute inset-0 transition duration-300 group-hover:bg-gold/20"></span></a>
     </div>
   </section>
 
@@ -641,7 +622,7 @@
 
       <div class="flex flex-col gap-4 border-t border-gold/10 pt-8 sm:flex-row sm:items-center sm:justify-between sm:pr-24">
         <p class="text-[0.75rem] tracking-[0.1em] text-mute2">
-          © <span x-text="new Date().getFullYear()">2026</span> Blade &amp; Co. Projeto demonstrativo.
+          © {new Date().getFullYear()} Blade &amp; Co. Projeto demonstrativo.
         </p>
         <div class="flex gap-8">
           <a href="#" class="text-[0.75rem] text-mute2 transition duration-300 hover:text-gold">Política de privacidade</a>
@@ -656,5 +637,118 @@
     <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 016.988 2.898 9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413"/></svg>
   </a>
 
-</body>
-</html>
+</DemoSite>
+
+<script>
+  import { aCadaPagina } from "../../../scripts/pagina";
+  import {
+    contar,
+    emailValido,
+    esperar,
+    mascaraTelefone,
+    menu,
+    paralaxe,
+    revelar,
+    rolagem,
+    semMovimento,
+  } from "../../../scripts/demos";
+
+  aCadaPagina((signal) => {
+    rolagem(document.querySelectorAll("[data-header]"), signal);
+    menu(signal, 1024);
+    revelar(signal);
+    contar(signal);
+    paralaxe(document.querySelector<HTMLElement>(".img-hero"), 0.15, signal);
+    depoimentos(signal);
+    agendamento(signal);
+  });
+
+  /** Um depoimento por vez. Trocam sozinhos a cada 5s; um clique no dot
+   *  reinicia a contagem para o visitante não perder o que escolheu. */
+  function depoimentos(signal: AbortSignal) {
+    const figuras = [...document.querySelectorAll<HTMLElement>("[data-depoimento]")];
+    const dots = [...document.querySelectorAll<HTMLElement>("[data-ver-depoimento]")];
+    let atual = 0;
+    let giro: ReturnType<typeof setInterval> | undefined;
+
+    const ver = (i: number) => {
+      atual = i;
+      figuras.forEach((f, j) => f.toggleAttribute("data-ativo", j === i));
+      dots.forEach((d, j) => d.setAttribute("aria-current", String(j === i)));
+    };
+    const rodar = () => {
+      if (semMovimento()) return;
+      clearInterval(giro);
+      giro = setInterval(() => ver((atual + 1) % figuras.length), 5000);
+    };
+
+    dots.forEach((d, i) => d.addEventListener("click", () => (ver(i), rodar()), { signal }));
+    rodar();
+    signal.addEventListener("abort", () => clearInterval(giro));
+  }
+
+  function agendamento(signal: AbortSignal) {
+    const form = document.querySelector<HTMLFormElement>("[data-agendamento]");
+    const enviado = document.querySelector<HTMLElement>("[data-enviado]");
+    if (!form || !enviado) return;
+    const campo = (nome: string) => form.elements.namedItem(nome) as HTMLInputElement;
+    const valor = (nome: string) => campo(nome).value.trim();
+    const botao = form.querySelector<HTMLButtonElement>("[type=submit]")!;
+    const rotulo = form.querySelector<HTMLElement>("[data-rotulo-envio]")!;
+
+    const mostrarErros = (erros: Record<string, string>) =>
+      form.querySelectorAll<HTMLElement>("[data-erro]").forEach((p) => {
+        const nome = p.dataset.erro!;
+        const msg = erros[nome];
+        p.textContent = msg ?? "";
+        p.hidden = !msg;
+        if (msg) campo(nome).setAttribute("aria-invalid", "true");
+        else campo(nome).removeAttribute("aria-invalid");
+      });
+
+    const validar = () => {
+      const erros: Record<string, string> = {};
+      if (valor("nome").length < 2) erros.nome = "Informe seu nome.";
+      if (valor("sobrenome").length < 2) erros.sobrenome = "Informe seu sobrenome.";
+      if (!emailValido(valor("email"))) erros.email = "E-mail inválido.";
+      if (valor("tel").replace(/\D/g, "").length < 10) erros.tel = "Telefone com DDD.";
+      if (!valor("data")) erros.data = "Escolha uma data.";
+      if (!valor("hora")) erros.hora = "Escolha um horário.";
+      mostrarErros(erros);
+      return !Object.keys(erros).length;
+    };
+
+    campo("tel").addEventListener("input", () => (campo("tel").value = mascaraTelefone(campo("tel").value)), { signal });
+
+    form.addEventListener(
+      "submit",
+      async (e) => {
+        e.preventDefault();
+        if (!validar()) return;
+        botao.disabled = true;
+        rotulo.textContent = "Enviando…";
+        // Demo: o envio é simulado. Num site real, troque a espera por um
+        // fetch para Formspree, Web3Forms ou um webhook.
+        await esperar(1000, signal).catch(() => {});
+        if (signal.aborted) return;
+        botao.disabled = false;
+        rotulo.textContent = "Confirmar agendamento";
+        enviado.querySelector("[data-primeiro-nome]")!.textContent = valor("nome").split(" ")[0];
+        form.hidden = true;
+        enviado.hidden = false;
+      },
+      { signal },
+    );
+
+    enviado.querySelector("[data-novo-pedido]")?.addEventListener(
+      "click",
+      () => {
+        form.reset();
+        mostrarErros({});
+        enviado.hidden = true;
+        form.hidden = false;
+      },
+      { signal },
+    );
+  }
+</script>

@@ -4,6 +4,7 @@
  * (`barbearia.astro`), então todas nunca saem de sincronia.
  */
 import Base from "../../layouts/Base.astro";
+import ClasseJs from "../ClasseJs.astro";
 import Header from "./Header.astro";
 import Hero from "./Hero.astro";
 import Segmentos from "./Segmentos.astro";
@@ -29,16 +30,7 @@ const { conteudo = conteudoPadrao, title, description } = Astro.props;
 ---
 
 <Base title={title} description={description}>
-  <!-- Marca que o JS está ativo. O CSS só esconde conteúdo (menu,
-       .reveal) quando esta classe existe; se os scripts não subirem em 3s
-       ela sai e a página aparece inteira, sem interação mas legível.
-       Quem marca o `data-pronto` é src/scripts/pagina.ts. -->
-  <script is:inline slot="head">
-    document.documentElement.classList.add("js");
-    setTimeout(function () {
-      if (!("pronto" in document.documentElement.dataset)) document.documentElement.classList.remove("js");
-    }, 3000);
-  </script>
+  <ClasseJs slot="head" />
 
   <Header links={nav} />
   <main>

@@ -1,14 +1,15 @@
 ---
 /**
  * Layout das páginas demo da Blade & Co. (barbearia fictícia): catálogo de
- * cortes e página de links. Visual igual ao do demo estático em
- * public/demos/barbearia (cores `blade-*` e fontes no global.css).
+ * cortes e página de links. Mesmo tema do site demo da barbearia
+ * (styles/demos/blade-tema.css), no CSS próprio blade.css.
  *
  * Toda página daqui leva a faixa "Projeto demonstrativo": demo nunca pode
  * parecer trabalho de cliente real.
  */
-import Base from "./Base.astro";
-import { blade } from "../data/demo-barbearia";
+import DemoSite from "./DemoSite.astro";
+import { blade, fontesBlade } from "../data/demo-barbearia";
+import "../styles/demos/blade.css";
 import { site } from "../config";
 
 interface Props {
@@ -19,18 +20,17 @@ const { title, description } = Astro.props;
 
 ---
 
-<Base title={title} description={description} marca={blade.nome}>
-  <link slot="head" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@1,400;1,500&family=Inter:wght@400;500;600&display=swap" />
+<DemoSite title={title} description={description} marca={blade.nome} fontes={fontesBlade} corTema="#0a0a0a">
 
-  <div class="flex flex-col bg-blade-void min-h-screen font-inter text-blade-cream">
+  <div class="flex flex-col bg-void min-h-screen font-sans text-cream">
     <div class="flex-1">
       <slot />
     </div>
 
     <p class="px-4 py-8 border-white/5 border-t text-[11px] text-white/35 text-center">
       Projeto demonstrativo feito pela{" "}
-      <a href="/" target="_top" class="text-blade-gold/80 hover:text-blade-gold underline underline-offset-2">{site.name}</a>.
+      <a href="/" target="_top" class="text-gold/80 hover:text-gold underline underline-offset-2">{site.name}</a>.
       A Blade & Co. é uma barbearia fictícia.
     </p>
   </div>
-</Base>
+</DemoSite>
