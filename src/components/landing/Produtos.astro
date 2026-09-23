@@ -10,7 +10,7 @@ import { produtos, reais } from "../../data/landing";
     <div class="mx-auto max-w-4xl text-left sm:text-center reveal">
       <span class="eyebrow">Produtos</span>
       <h2 class="mt-4 h-section">Cinco peças, cada uma num lugar</h2>
-      <p class="mx-auto mt-4 max-w-2xl text-slate-400 text-lg">Leve só o que falta, ou junte as peças que fazem sentido para o seu negócio.</p>
+      <p class="mx-auto mt-4 max-w-2xl text-slate-400 text-lg">Leve só o que falta, ou junte as peças que fazem sentido para o seu negócio. Pagamento único, sem mensalidade, e tudo pronto em até 7 dias.</p>
     </div>
 
     <div class="gap-4 grid sm:grid-cols-2 lg:grid-cols-6 mt-16">
@@ -41,7 +41,9 @@ import { produtos, reais } from "../../data/landing";
                   <span class="font-display font-extrabold text-white text-2xl">R$ {reais(p.preco)}</span>
                   {p.unidade && <span> {p.unidade}</span>}
                 </p>
-                {p.extra && <p class="mt-1 text-slate-500 text-xs">{p.extra}</p>}
+                {/* Linha sempre presente (vazia quando não há extra) para os
+                    preços dos cards lado a lado ficarem na mesma altura. */}
+                <p class="mt-1 text-slate-500 text-xs" aria-hidden={p.extra ? undefined : "true"}>{p.extra ?? " "}</p>
               </div>
             </div>
           </article>

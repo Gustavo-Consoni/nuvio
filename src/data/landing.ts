@@ -10,6 +10,8 @@
  * aparência. Cinco produtos, cada um com seu preço
  * no card. A venda fecha na visita: a página apoia a conversa (mostrada no
  * celular) e serve para indicação, então é visual, direta e com preço claro.
+ * Sem mensalidade (pagamento único), entrega em até 7 dias, 30 dias de
+ * ajustes de texto grátis. Site e linktree ficam no domínio .com.br do cliente.
  *
  * Regras de escrita: nunca usar travessão nem meia-risca; em intervalos,
  * "Dias 2 a 4"; em títulos, o separador aceito é `|`. Não citar "NFC" no
@@ -33,6 +35,7 @@ export const precos = {
   google: 200,
   linktree: 250,
   plaquinha: 150,
+  plaquinhaKit3: 360,
   cartao: 100,
   cartaoKit3: 240,
   sitePagina: 1000,
@@ -92,7 +95,7 @@ export const produtos = [
     icone: "📍",
     nome: "Google Meu Negócio",
     onde: "No Google e no Maps",
-    texto: "Criamos ou arrumamos seu perfil: fotos, horário, serviços e contato. É ele que aparece quando procuram pelo seu negócio.",
+    texto: "Seu negócio aparece para quem procura o seu serviço por perto, não só para quem já sabe o seu nome. Criamos ou arrumamos o perfil completo.",
     itens: ["Criação ou ajuste completo", "Fotos, horários e serviços", "Link direto de avaliação"],
     preco: precos.google,
     unidade: null,
@@ -102,8 +105,8 @@ export const produtos = [
     icone: "🔗",
     nome: "Linktree customizado",
     onde: "No link da bio",
-    texto: "Uma página de links com a sua identidade, sem a marca de ninguém. Os botões que importam, na ordem que importa.",
-    itens: ["Visual com a sua marca", "Agendar, WhatsApp, cardápio e mapa", "Funciona no Instagram e no WhatsApp"],
+    texto: "O Linktree comum é igual para todo mundo. O seu tem cara de site: suas cores, suas fotos e os botões na ordem que importa.",
+    itens: ["Visual feito para a sua marca", "Agendar, WhatsApp, cardápio e mapa", "No seu domínio, sem mensalidade"],
     preco: precos.linktree,
     unidade: null,
     extra: null,
@@ -112,17 +115,17 @@ export const produtos = [
     icone: "⭐",
     nome: "Plaquinha de balcão",
     onde: "No caixa",
-    texto: "O cliente encosta o celular e abre o link que você quiser. O mais comum: a tela de avaliar seu negócio no Google.",
-    itens: ["Arte personalizada", "Abre avaliação, site ou linktree", "Sem app, em iPhone e Android"],
+    texto: "O cliente encosta o celular e abre o link que você quiser. O mais comum é a avaliação no Google: mais avaliações ajudam seu negócio a subir no Maps.",
+    itens: ["Arte padrão com QR code ou personalizada", "Abre avaliação, site ou linktree", "Sem app, em iPhone e Android"],
     preco: precos.plaquinha,
-    unidade: null,
-    extra: null,
+    unidade: "cada",
+    extra: `kit com 3 por R$ ${reais(precos.plaquinhaKit3)}`,
   },
   {
     icone: "💳",
     nome: "Cartão de aproximação",
     onde: "Na espera, na mesa ou na carteira",
-    texto: "Mesmo toque da plaquinha, no formato de cartão. Fica na sala de espera abrindo o cardápio, ou vai com o cliente.",
+    texto: "Mesmo toque da plaquinha, no formato de cartão. Fica na espera abrindo o cardápio, vai com o cliente ou vira o seu cartão de visita.",
     itens: ["Arte frente e verso", "Abre cardápio, site, linktree ou avaliação", "Sem app, em iPhone e Android"],
     preco: precos.cartao,
     unidade: "cada",
@@ -131,9 +134,9 @@ export const produtos = [
   {
     icone: "🌐",
     nome: "Site",
-    onde: "Em qualquer lugar",
-    texto: "De uma página, como um cardápio de cortes ou serviços com foto e preço, até um site completo com várias páginas.",
-    itens: ["Cardápio de qualquer serviço ou produto", "Pensado para o celular", "Botão de agendar ou pedir"],
+    onde: "No seu endereço .com.br",
+    texto: "Feito do zero com a cara da sua empresa. De uma página, como um cardápio de serviços com foto e preço, até um site completo com as páginas que você quiser.",
+    itens: ["Layout e páginas do seu jeito", "Botão de agendar ou pedir", "No seu domínio, sem mensalidade"],
     preco: precos.sitePagina,
     unidade: "uma página",
     extra: `várias páginas a partir de R$ ${reais(precos.siteVarias)}`,
@@ -230,7 +233,15 @@ export const projetos = [
 export const faq = [
   {
     pergunta: "Como funcionam o cartão e a plaquinha?",
-    resposta: "Os dois têm um chip com o seu link gravado. Quando o cliente aproxima o celular, aparece uma notificação na tela e um toque abre o link. Não precisa baixar aplicativo: funciona no iPhone (do XS em diante) e na maioria dos Android, que já vêm com a leitura por aproximação ligada.",
+    resposta: "Os dois têm um chip com o seu link gravado. Quando o cliente aproxima o celular, aparece uma notificação na tela e um toque abre o link. Não precisa baixar aplicativo: funciona no iPhone (do XS em diante) e na maioria dos Android, que já vêm com a leitura por aproximação ligada. A plaquinha com arte padrão também tem QR code, para quem prefere usar a câmera.",
+  },
+  {
+    pergunta: "Tem mensalidade?",
+    resposta: "Não. Você paga uma vez e pronto: site e linktree não têm custo de hospedagem. O único custo que se repete é o domínio .com.br, que fica no seu nome e é pago direto ao Registro.br (cerca de R$ 40 por ano).",
+  },
+  {
+    pergunta: "Em quanto tempo fica pronto?",
+    resposta: "Em até 7 dias. No Google Meu Negócio, a única espera que não depende da gente é a verificação do Google (veja abaixo).",
   },
   {
     pergunta: "O que o cartão e a plaquinha podem abrir?",
@@ -238,7 +249,11 @@ export const faq = [
   },
   {
     pergunta: "Qual a diferença do linktree customizado para o Linktree comum?",
-    resposta: "O comum tem a cara e a marca do Linktree, igual ao de todo mundo. O customizado é uma página só sua, com suas cores, sua logo e os botões na ordem que faz sentido para o seu negócio.",
+    resposta: "O comum tem a cara e a marca do Linktree, igual ao de todo mundo. O customizado é desenhado para o seu negócio, com suas cores, sua logo e suas fotos, no seu próprio endereço .com.br. Passa a impressão de um site, não de uma lista de botões.",
+  },
+  {
+    pergunta: "Qual a diferença entre o linktree e o site de uma página?",
+    resposta: "O linktree leva para outros lugares: WhatsApp, agenda, Instagram, avaliação. O site tem conteúdo próprio: seus serviços ou produtos com foto, descrição e preço, e um texto que apresenta o seu negócio.",
   },
   {
     pergunta: "Meu negócio ainda não está no Google. Tem problema?",
@@ -252,13 +267,17 @@ export const faq = [
     pergunta: "O que é o cardápio?",
     resposta: "Uma página com seus serviços ou produtos, com foto, descrição e preço. Na barbearia é o cardápio de cortes, na clínica o de tratamentos, na loja o de produtos. O cliente olha no celular enquanto espera ou antes de te chamar.",
   },
+  {
+    pergunta: "E se eu precisar mudar algo depois?",
+    resposta: "Nos 30 dias depois da entrega, ajustes de texto são por nossa conta. Depois disso, cada mudança tem um valor de acordo com o tamanho dela, combinado antes.",
+  },
 ];
 
 export const contato = {
   beneficios: [
     { icone: "🔎", titulo: "Diagnóstico gratuito", texto: "Olhamos seu Google, seu Instagram e seu balcão, sem compromisso." },
     { icone: "📱", titulo: "Você vê antes", texto: "Mostramos os exemplos funcionando no seu celular." },
-    { icone: "🤝", titulo: "Preço fechado", texto: "Você sabe o valor de cada item antes de decidir." },
+    { icone: "🤝", titulo: "Preço fechado, sem mensalidade", texto: "Você sabe o valor de cada item antes de decidir e paga uma vez só." },
   ],
   /** O primeiro vem selecionado no formulário. */
   tiposDeProjeto: [

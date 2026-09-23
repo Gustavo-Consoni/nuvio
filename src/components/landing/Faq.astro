@@ -1,5 +1,8 @@
 ---
 import { faq } from "../../data/landing";
+import { site } from "../../config";
+
+const whatsapp = `https://wa.me/${site.contact.whatsapp}?text=${encodeURIComponent(site.contact.whatsappMessage)}`;
 ---
 
 <section id="faq" class="relative py-16 lg:py-32">
@@ -9,7 +12,7 @@ import { faq } from "../../data/landing";
         <span class="eyebrow">FAQ</span>
         <h2 class="mt-4 h-section">Perguntas que sempre aparecem</h2>
         <p class="mt-4 text-slate-400">Não achou a sua? Chama no WhatsApp que a gente responde rápido.</p>
-        <a href="#contato" class="mt-8 btn-ghost">Tirar uma dúvida</a>
+        <a href={whatsapp} target="_blank" rel="noopener" class="mt-8 btn-primary">Tirar uma dúvida</a>
       </div>
 
       <!-- Acordeão sem JavaScript: <details> com o mesmo `name` abre um de

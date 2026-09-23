@@ -33,18 +33,18 @@ export const site = {
 
   /** Contato exibido no site (formulário, rodapé, botão flutuante). */
   contact: {
-    email: "contato@nuviostudio.com.br",
+    email: "nuviostudio721@gmail.com",
     /** Só dígitos, com DDI: é o que o wa.me espera. */
-    whatsapp: "5511999999999",
+    whatsapp: "5513991131555",
     /** Como o número aparece escrito na página. */
-    phoneDisplay: "(11) 99999-9999",
+    phoneDisplay: "(13) 99113-1555",
     /** Mensagem que já vem digitada ao abrir o WhatsApp pelo botão flutuante. */
-    whatsappMessage: "Olá! Quero um orçamento de site.",
+    whatsappMessage: "Olá! Vim pelo site da Nuvio e quero saber mais.",
   },
 
   /** Redes sociais do rodapé. `href: "#"` enquanto não houver perfil real. */
   socials: [
-    { name: "Instagram", href: "#" },
+    { name: "Instagram", href: "https://www.instagram.com/nuviostudio.br" },
     { name: "TikTok", href: "#" },
   ] as { name: "Instagram" | "TikTok"; href: string }[],
 

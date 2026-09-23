@@ -8,10 +8,12 @@ interface Props {
 const { links } = Astro.props;
 ---
 
-<!-- `data-rolou` é ligado pelo script quando a página desce 40px -->
+<!-- `data-rolou` é ligado pelo script quando a página desce 40px. A borda
+     existe sempre, transparente: se só aparecesse ao rolar, a transição
+     partiria de `currentColor` (quase branco) e piscaria. -->
 <header
   data-header
-  class="top-0 z-50 fixed inset-x-0 py-4 transition-all duration-300 data-rolou:border-b data-rolou:border-white/10 data-rolou:bg-ink-950/80 data-rolou:backdrop-blur-xl data-rolou:py-4">
+  class="top-0 z-50 fixed inset-x-0 py-4 border-b border-transparent transition-all duration-300 data-rolou:border-white/10 data-rolou:bg-ink-950/80 data-rolou:backdrop-blur-xl data-rolou:py-4">
   <div class="flex justify-between items-center gap-8 container-page">
     <Logo />
 

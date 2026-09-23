@@ -146,8 +146,13 @@ para o cliente é "cartão" e "plaquinha". "Cardápio" é qualquer lista de
 serviços ou produtos (cortes, tratamentos...), e é uma página do site.
 
 **A venda fecha na visita.** A página apoia a conversa (mostrada no celular) e
-serve para indicação: visual, direta e com preço claro. Sem garantia e sem
-mensalidade no texto.
+serve para indicação: visual, direta e com preço claro. Sem garantia no texto.
+
+**Condições (podem e devem aparecer no texto):** pagamento único, sem
+mensalidade; site e linktree sem custo de hospedagem, no domínio `.com.br` do
+cliente (só o domínio se renova, pago ao Registro.br); entrega em até 7 dias;
+30 dias de ajustes de texto grátis, depois cobrado pelo tamanho da mudança.
+Plaquinha tem arte padrão com QR code ou arte personalizada.
 
 **Preços:** fonte única em `precos` (`landing.ts`). Os cards de produto leem
 dali.
@@ -240,8 +245,8 @@ nem versionar.
 - **Formulário de contato só simula o envio** (bloqueante). O `submit` em
   `Contato.astro` precisa apontar para Formspree, Web3Forms ou um webhook; o
   `fetch` comentado mostra onde.
-- **Dados de exemplo da landing**: WhatsApp `5511999999999`, redes sociais com
-  `href="#"`.
+- **TikTok com `href="#"`** em `site.socials` (`src/config.ts`). As demos fictícias
+  (Blade & Co., Casa Olívia) usam o WhatsApp de exemplo `5511999999999`.
 - **Sem depoimentos.** A seção (carrossel em `Depoimentos.astro`) foi removida
   porque os textos eram inventados. Com depoimentos reais, recupere do git:
   `git show e444012:src/components/landing/Depoimentos.astro` (e o array
